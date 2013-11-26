@@ -4,15 +4,35 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical" >
+    
     <Button
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/menu_button"
-        android:text="@string/menu_button_string"/>
+        android:id="@+id/menus_menu_button"
+        android:text="@string/menus_button_string"
+        android:onClick="buttonPressed"
+        android:enabled="false"/>
     <Button
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/drinks_button"
-        android:text="@string/drink_button_string"/>
+        android:id="@+id/orders_menu_button"
+        android:text="@string/orders_button_string"
+        android:onClick="buttonPressed"/>
+    <Button
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_menu_button"
+        android:text="@string/profile_button_string"
+        android:onClick="buttonPressed"/>
+    <Button
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cart_menu_button"
+        android:text="@string/cart_button_string"
+        android:onClick="buttonPressed"/>
 
 </LinearLayout>
