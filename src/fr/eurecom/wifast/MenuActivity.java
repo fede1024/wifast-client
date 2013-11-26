@@ -55,7 +55,7 @@ public class MenuActivity extends FragmentActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_collection_demo);
+        this.setContentView(R.layout.activity_menu);
         overridePendingTransition(R.anim.push_down_in, R.anim.push_down_out);
 
         // Create an adapter that when requested, will return a fragment representing an object in the collection.
