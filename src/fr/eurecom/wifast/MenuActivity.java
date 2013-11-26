@@ -7,8 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.eurecom.wifast.library.network.JSONDownload;
-import fr.eurecom.wifast.menuitem.MenuItemArrayAdapter;
+import fr.eurecom.wifast.library.JSONDownload;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
@@ -115,16 +114,15 @@ public class MenuActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = new DemoObjectFragment();
+            Fragment fragment = new SwipeFragment();
             Bundle args = new Bundle();
-            args.putInt(DemoObjectFragment.ARG_OBJECT, i + 1); // Our object is just an integer :-P
+            args.putInt(SwipeFragment.ARG_OBJECT, i);
             fragment.setArguments(args);
             return fragment;
         }
 
         @Override
         public int getCount() {
-            // For this contrived example, we have a 100-object collection.
             return 4;
         }
 
@@ -133,96 +131,6 @@ public class MenuActivity extends FragmentActivity {
             return "OBJECT " + (position + 1);
         }
     }
-
-    /**
-     * A dummy fragment representing a section of the app, but that simply displays dummy text.
-     */
-    public static class DemoObjectFragment extends Fragment {
-
-        public static final String ARG_OBJECT = "object";
-        public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-    	private TextView textView;
-    	private JSONArray contactsList;
-    	private ListView listView;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-        	
-            View rootView = inflater.inflate(R.layout.fragment_collection_object, container, false);
-//            Bundle args = getArguments();
-//            ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-//                    Integer.toString(args.getInt(ARG_OBJECT)));
-            listView = (ListView) rootView.findViewById(R.id.listview);
-            System.out.println("---- listView: "+listView.toString());
-            String stringUrl = "http://wifast.herokuapp.com/getShops?lat=1&lon=2";
-    		//String stringUrl = "http://192.168.1.89:5000/getShops?lat=1&lon=2";
-    		ConnectivityManager connMgr = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-    		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-    		if (networkInfo != null && networkInfo.isConnected()) {
-    			Callback c = new MyCallBack();
-    			new JSONDownload(c).execute("GET", "JSONArray", stringUrl);
-    		} else {
-    			textView.setText("No network connection available.");
-    		}
-            return rootView;
-        }
-        
-        private class MyCallBack implements Callback {
-    		@Override
-    		public boolean handleMessage(Message msg) {
-    			contactsList = (JSONArray) msg.obj;
-    			ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
-
-    			try{
-    				//Get the element that holds the earthquakes ( JSONArray )
-
-    				//Loop the Array
-    				for(int i=0;i < contactsList.length();i++){						
-
-    					HashMap<String, String> map = new HashMap<String, String>();
-    					JSONObject e = contactsList.getJSONObject(i);
-
-    					map.put("id",  String.valueOf(i));
-    					map.put("name", e.getString("name"));
-    					map.put("dist", "Dist: " +  e.getString("dist"));
-    					mylist.add(map);
-    				}
-    			}catch(JSONException e)        {
-    				Log.e("log_tag", "Error parsing data "+e.toString());
-    			}
-    			System.out.println("---- mylst: "+mylist.toString());
-    			ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), mylist);
-    			System.out.println("---- adapter: "+adapter.toString());
-    			listView.setAdapter(adapter);
-
-    			listView.setTextFilterEnabled(true);
-    			listView.setOnItemClickListener(new OnItemClickListener() {
-    				@Override
-    				public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-    					final Object item = parent.getItemAtPosition(position);
-
-    					System.out.println("Ma che figo: " + id + item.toString());
-
-    				}
-    			});
-    			return false;
-    		}
-
-    	}
-
-    	public boolean isNetworkAvailable() {
-    		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-    		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-    		// if no network is available networkInfo will be null
-    		// otherwise check if we are connected
-    		if (networkInfo != null && networkInfo.isConnected()) {
-    			return true;
-    		}
-    		return false;
-    	}
-    }
-    
     
 
 }

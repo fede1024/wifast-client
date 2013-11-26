@@ -1,4 +1,4 @@
-package fr.eurecom.wifast.library.network;
+package fr.eurecom.wifast.library;
 
 import java.io.BufferedReader;
 import java.io.IOException;

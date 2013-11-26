@@ -1,4 +1,4 @@
-package fr.eurecom.wifi.library.image;
+package fr.eurecom.wifast.library;
 
 import java.io.BufferedInputStream;
 import java.io.File;

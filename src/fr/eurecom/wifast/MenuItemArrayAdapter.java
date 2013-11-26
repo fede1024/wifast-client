@@ -1,4 +1,4 @@
-package fr.eurecom.wifast.menuitem;
+package fr.eurecom.wifast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fr.eurecom.wifast.R;
-import fr.eurecom.wifi.library.image.ImageManager;
+import fr.eurecom.wifast.library.ImageManager;
 
 public class MenuItemArrayAdapter extends ArrayAdapter<HashMap<String, String>> {
 	private final Context context;
