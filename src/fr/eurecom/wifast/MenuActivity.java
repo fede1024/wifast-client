@@ -2,6 +2,7 @@ package fr.eurecom.wifast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,28 +108,55 @@ public class MenuActivity extends FragmentActivity {
      * representing an object in the collection.
      */
     public static class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
+    	private JSONArray keys;
 
         public DemoCollectionPagerAdapter(FragmentManager fm) {
             super(fm);
+            try {
+				keys = MainActivity.menu_json.getJSONArray("_keys");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
         }
 
         @Override
         public Fragment getItem(int i) {
+        	System.out.println("--- getItem: "+i);
+        	System.out.println("--- key: "+this.getKeyAtIndex(i));
             Fragment fragment = new SwipeFragment();
             Bundle args = new Bundle();
-            args.putInt(SwipeFragment.ARG_OBJECT, i);
+    		args.putString(SwipeFragment.ARG_TITLE, this.getKeyAtIndex(i));
             fragment.setArguments(args);
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return 4;
+        	int num;
+        	if (keys == null) {
+        		num = MainActivity.menu_json.length() - 1;
+        	} else {
+				num = keys.length();
+			}
+            return num;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "OBJECT " + (position + 1);
+        	String key = this.getKeyAtIndex(position);
+        	if (key.equals(""))
+        		return "Error";
+        	return key.substring(0, 1).toUpperCase() + key.substring(1);
+        }
+        
+        private String getKeyAtIndex(int position) {
+        	String key = "";
+        	try {
+				key = keys.getString(position);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            return key;
         }
     }
     

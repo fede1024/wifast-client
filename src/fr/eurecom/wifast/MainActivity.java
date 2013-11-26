@@ -43,6 +43,19 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prop = new Properties();
+		try {
+			Resources resources = this.getResources();
+			InputStream rawResource = resources.openRawResource(R.raw.wifast_properties);
+			prop.load(rawResource);
+			rawResource.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    prop.list(System.out);
+	    MainActivity.this.locationFound(true);
     }
     
     @Override
@@ -72,5 +85,40 @@ public class MainActivity extends Activity {
                 System.out.println("default");
         }
     }
+    
+    public void locationFound(boolean found) {
+    	if (found) {
+    		if (MainActivity.menu_json == null) {
+//    			ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+//    			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+    			String stringUrl = MainActivity.prop.getProperty("get_menu_url");
+//    			if (networkInfo != null && networkInfo.isConnected()) {
+    			Callback c = new MyCallBack();
+    			new JSONDownload(c).execute("GET", "JSONObject", stringUrl);
+//    			} else {
+//    				textView.setText("No network connection available.");
+//    			}
+    		} else {
+    			this.gotMenu(MainActivity.menu_json);
+    		}
+    	} else {
+    		System.out.println("AAAAAAAAAAAAAAA");
+    	}
+    }
+    
+    protected void gotMenu(JSONObject obj) {
+    	MainActivity.menu_json = obj;
+		Button menu_btn = (Button)findViewById(R.id.menus_menu_button);
+		menu_btn.setEnabled(true);
+    }
+    
+    private class MyCallBack implements Callback {
+		@Override
+		public boolean handleMessage(Message msg) {
+			MainActivity.this.gotMenu((JSONObject)msg.obj);
+    		return true;
+		}
+
+	}
 
 }

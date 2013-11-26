@@ -27,10 +27,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler.Callback;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +36,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import fr.eurecom.wifast.library.JSONDownload;
 
 public class SwipeFragment extends Fragment {
-	public static final String ARG_OBJECT = "object";
+	public static final String ARG_TITLE = "object";
     public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-	private TextView textView;
-	private JSONArray contactsList;
 	private ListView listView;
 
     @Override
@@ -53,67 +47,52 @@ public class SwipeFragment extends Fragment {
                              Bundle savedInstanceState) {
     	
         View rootView = inflater.inflate(R.layout.fragment_swipe_collection, container, false);
-//        Bundle args = getArguments();
-//        ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-//                Integer.toString(args.getInt(ARG_OBJECT)));
-        listView = (ListView) rootView.findViewById(R.id.listview);
-        System.out.println("---- listView: "+listView.toString());
-        String stringUrl = "http://wifast.herokuapp.com/getShops?lat=1&lon=2";
-		//String stringUrl = "http://192.168.1.89:5000/getShops?lat=1&lon=2";
-		ConnectivityManager connMgr = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		if (networkInfo != null && networkInfo.isConnected()) {
-			Callback c = new MyCallBack();
-			new JSONDownload(c).execute("GET", "JSONArray", stringUrl);
-		} else {
-			textView.setText("No network connection available.");
+        Bundle args = getArguments();
+        String title = args.getString(SwipeFragment.ARG_TITLE);
+        JSONArray listArray;
+		try {
+			listArray = MainActivity.menu_json.getJSONArray(title);
+        
+	        listView = (ListView) rootView.findViewById(R.id.listview);
+	        ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
+	
+			//Get the element that holds the earthquakes ( JSONArray )
+
+			//Loop the Array
+			for(int i=0;i < listArray.length();i++){						
+
+				HashMap<String, String> map = new HashMap<String, String>();
+				JSONObject e = listArray.getJSONObject(i);
+
+				map.put("id",  String.valueOf(i));
+				map.put("name", e.getString("name"));
+				map.put("dist", "Dist: " +  e.getString("desc"));
+				mylist.add(map);
+			}
+			Context context = getActivity();
+			if (context != null) {
+				ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), mylist);
+				listView.setAdapter(adapter);
+		
+				listView.setTextFilterEnabled(true);
+				listView.setOnItemClickListener(new OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+						final Object item = parent.getItemAtPosition(position);
+		
+						System.out.println("Ma che figo: " + id + item.toString());
+		
+					}
+				});
+				TextView v = (TextView)rootView.findViewById(R.id.listTextView);
+				v.setVisibility(View.GONE);
+			}
+		} catch (JSONException e1) {
+			e1.printStackTrace();
 		}
         return rootView;
     }
     
-    private class MyCallBack implements Callback {
-		@Override
-		public boolean handleMessage(Message msg) {
-			contactsList = (JSONArray) msg.obj;
-			ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
-
-			try{
-				//Get the element that holds the earthquakes ( JSONArray )
-
-				//Loop the Array
-				for(int i=0;i < contactsList.length();i++){						
-
-					HashMap<String, String> map = new HashMap<String, String>();
-					JSONObject e = contactsList.getJSONObject(i);
-
-					map.put("id",  String.valueOf(i));
-					map.put("name", e.getString("name"));
-					map.put("dist", "Dist: " +  e.getString("dist"));
-					mylist.add(map);
-				}
-			}catch(JSONException e)        {
-				Log.e("log_tag", "Error parsing data "+e.toString());
-			}
-			System.out.println("---- mylst: "+mylist.toString());
-			ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), mylist);
-			System.out.println("---- adapter: "+adapter.toString());
-			listView.setAdapter(adapter);
-
-			listView.setTextFilterEnabled(true);
-			listView.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-					final Object item = parent.getItemAtPosition(position);
-
-					System.out.println("Ma che figo: " + id + item.toString());
-
-				}
-			});
-			return false;
-		}
-
-	}
-
 	public boolean isNetworkAvailable() {
 		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
