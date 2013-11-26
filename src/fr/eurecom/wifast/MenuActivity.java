@@ -125,7 +125,7 @@ public class MenuActivity extends FragmentActivity {
         @Override
         public int getCount() {
             // For this contrived example, we have a 100-object collection.
-            return 100;
+            return 4;
         }
 
         @Override
