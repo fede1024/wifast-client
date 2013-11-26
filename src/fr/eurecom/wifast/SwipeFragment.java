@@ -84,8 +84,8 @@ public class SwipeFragment extends Fragment {
 		
 					}
 				});
-				TextView v = (TextView)rootView.findViewById(R.id.listTextView);
-				v.setVisibility(View.GONE);
+//				TextView v = (TextView)rootView.findViewById(R.id.listTextView);
+//				v.setVisibility(View.GONE);
 			}
 		} catch (JSONException e1) {
 			e1.printStackTrace();

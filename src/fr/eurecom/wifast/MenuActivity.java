@@ -1,22 +1,11 @@
 package fr.eurecom.wifast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import fr.eurecom.wifast.library.JSONDownload;
 import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Message;
-import android.os.Handler.Callback;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -24,16 +13,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * Created by daniele on 24/11/13.
@@ -57,7 +39,6 @@ public class MenuActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_menu);
-        overridePendingTransition(R.anim.push_down_in, R.anim.push_down_out);
 
         // Create an adapter that when requested, will return a fragment representing an object in the collection.
         //
@@ -77,6 +58,13 @@ public class MenuActivity extends FragmentActivity {
         //return inflater.inflate(R.layout.fragment_swipe, container, false);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -98,6 +86,7 @@ public class MenuActivity extends FragmentActivity {
                     // navigate up to the hierarchical parent activity.
                     NavUtils.navigateUpTo(this, upIntent);
                 }
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
                 return true;
         }
         return super.onOptionsItemSelected(item);

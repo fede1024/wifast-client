@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
                 System.out.println("menu_button");
                 Intent intent = new Intent(this, MenuActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.orders_menu_button:
                 System.out.println("orders_button");
