@@ -45,7 +45,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<HashMap<String, String>> 
 		flv.setText(name);
 		slv.setText(curr.get("dist"));
 
-		String img = "" + position%10 + ".jpg";
+		String img = "" + position%10 + ".jpg"; // TODO fixme of course
 		String path = ImageManager.getCachedImage(img, context);
 		
 		if(path != null)

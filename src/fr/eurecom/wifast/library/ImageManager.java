@@ -31,15 +31,13 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 		String outFile = null;
 
 		try {
-	        System.out.println("ricevo " + imageCode);
 			URL url = new URL("http://s3-eu-west-1.amazonaws.com/fede1024-app/pic/" + imageCode[0]);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setReadTimeout(10000 /* milliseconds */);
-			conn.setConnectTimeout(15000 /* milliseconds */);
+			conn.setReadTimeout(30000);
+			conn.setConnectTimeout(15000);
 			conn.setRequestMethod("GET");
 			conn.setDoInput(true);
 			
-			System.out.println("Provo con " + url);
 			// Starts the query
 			conn.connect();
 			is = conn.getInputStream();
@@ -52,23 +50,24 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 	            baf.append((byte) current);
 	        }
 
-	        //String outFile = Environment.getExternalStorageDirectory() + "/" + imageCode[0];
 	        outFile = context.getExternalFilesDir(null) + "/" + imageCode[0];
 	        
 	        FileOutputStream fos = new FileOutputStream(outFile);
 	        fos.write(baf.toByteArray());
 	        fos.flush();
 	        fos.close();
-	        
-	        System.out.println("Completato " + outFile);
 		} catch(IOException e){
+			System.out.println("ImageManager error!");
 			e.printStackTrace();
+			return null;
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
 				} catch(IOException e){
+					System.out.println("ImageManager error on close!");
 					e.printStackTrace();
+					return null;
 				}
 			}
 		}
@@ -93,22 +92,4 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 		this.callback.handleMessage(m);
 	}
 	
-	/* Checks if external storage is available for read and write */
-	public boolean isExternalStorageWritable() {
-	    String state = Environment.getExternalStorageState();
-	    if (Environment.MEDIA_MOUNTED.equals(state)) {
-	        return true;
-	    }
-	    return false;
-	}
-
-	/* Checks if external storage is available to at least read */
-	public boolean isExternalStorageReadable() {
-	    String state = Environment.getExternalStorageState();
-	    if (Environment.MEDIA_MOUNTED.equals(state) ||
-	        Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-	        return true;
-	    }
-	    return false;
-	}
 }

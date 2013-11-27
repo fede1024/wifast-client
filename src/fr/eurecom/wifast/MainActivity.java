@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.json.JSONObject;
+import fr.eurecom.wifast.library.Order;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import fr.eurecom.wifast.library.JSONDownload;
 public class MainActivity extends Activity {
 	public static Properties prop;
 	public static JSONObject menu_json;
+	public static Order currentOrder;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
