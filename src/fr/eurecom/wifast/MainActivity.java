@@ -16,6 +16,8 @@
 
 package fr.eurecom.wifast;
 
+import fr.eurecom.wifast.library.Order;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +57,8 @@ import android.widget.Button;
  */
 public class MainActivity extends Activity {
     private Button[] btns;
+    public static Order currentOrder;
+    
     private OnClickListener myListener = new OnClickListener() {
         public void onClick(View v) {
             switch (v.getId()) {
