@@ -5,7 +5,6 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:icon="@drawable/shopping_trolley"
-        android:title="@string/cart_button_string"
-        android: />
+        android:title="@string/cart_button_string" />
     
 </menu>
