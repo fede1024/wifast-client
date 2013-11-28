@@ -98,7 +98,7 @@ public class MainActivity extends Activity {
 //    			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
     			String stringUrl = MainActivity.prop.getProperty("get_menu_url");
 //    			if (networkInfo != null && networkInfo.isConnected()) {
-    			Callback c = new MyCallBack();
+    			Callback c = new JSONMenuDownloadedCallback();
     			new JSONDownload(c).execute("GET", "JSONObject", stringUrl);
 //    			} else {
 //    				textView.setText("No network connection available.");
@@ -116,12 +116,14 @@ public class MainActivity extends Activity {
 		menu_btn.setEnabled(true);
     }
         
-    private class MyCallBack implements Callback {
+    private class JSONMenuDownloadedCallback implements Callback {
 		@Override
 		public boolean handleMessage(Message msg) {
 			JSONObject obj = (JSONObject)msg.obj;
 			try {
 				MainActivity.types = obj.getJSONArray("types");
+				MainActivity.menu_map = new HashMap<String, JSONObject>();
+				
 				JSONArray items = obj.getJSONArray("items");
 				for (int i=0; i<items.length(); i++) {
 					JSONObject tmp = items.getJSONObject(i);
@@ -134,7 +136,5 @@ public class MainActivity extends Activity {
 			MainActivity.this.gotMenu();
     		return true;
 		}
-
 	}
-
 }

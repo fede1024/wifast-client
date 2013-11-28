@@ -21,9 +21,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-/**
- * Created by daniele on 24/11/13.
- */
 public class MenuActivity extends FragmentActivity {
 
     /**
@@ -129,41 +126,23 @@ public class MenuActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int i) {
         	System.out.println("--- getItem: "+i);
-        	System.out.println("--- key: "+this.getKeyAtIndex(i));
+        	System.out.println("--- key: "+titles.get(i));
             Fragment fragment = new SwipeFragment();
             Bundle args = new Bundle();
-    		args.putString(SwipeFragment.ARG_TITLE, this.getKeyAtIndex(i));
+    		args.putString(SwipeFragment.ARG_TITLE, titles.get(i));
+    		args.putSerializable(SwipeFragment.ARG_LIST, list.get(i));
             fragment.setArguments(args);
             return fragment;
         }
 
         @Override
         public int getCount() {
-        	int num;
-        	if (keys == null) {
-        		num = MainActivity.menu_json.length() - 1;
-        	} else {
-				num = keys.length();
-			}
-            return num;
+    		return titles.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-        	String key = this.getKeyAtIndex(position);
-        	if (key.equals(""))
-        		return "Error";
-        	return key.substring(0, 1).toUpperCase() + key.substring(1);
-        }
-        
-        private String getKeyAtIndex(int position) {
-        	String key = "";
-        	try {
-				key = keys.getString(position);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-            return key;
+        	return titles.get(position);
         }
     }
     

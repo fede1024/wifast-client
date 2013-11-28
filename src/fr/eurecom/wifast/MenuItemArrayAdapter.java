@@ -54,7 +54,6 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
 		
 		add.setOnClickListener(new AddCartOnClickListener(name));
 		item.setOnClickListener(new MoreInfoOnClickListener(name));
