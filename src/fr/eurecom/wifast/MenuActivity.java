@@ -125,12 +125,15 @@ public class MenuActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int i) {
+        	JSONArray array;
         	System.out.println("--- getItem: "+i);
         	System.out.println("--- key: "+titles.get(i));
             Fragment fragment = new SwipeFragment();
             Bundle args = new Bundle();
     		args.putString(SwipeFragment.ARG_TITLE, titles.get(i));
-    		args.putSerializable(SwipeFragment.ARG_LIST, list.get(i));
+    		//args.putSerializable(SwipeFragment.ARG_LIST, list.get(i));
+    		array = new JSONArray(list.get(i));
+    		args.putString(SwipeFragment.ARG_LIST, array.toString());
             fragment.setArguments(args);
             return fragment;
         }

@@ -49,7 +49,15 @@ public class SwipeFragment extends Fragment {
     	
         View rootView = inflater.inflate(R.layout.fragment_swipe_collection, container, false);
         Bundle args = getArguments();
-		ArrayList<JSONObject> items = (ArrayList<JSONObject>)args.getSerializable(SwipeFragment.ARG_LIST);
+		ArrayList<JSONObject> items = new ArrayList<JSONObject>();
+        try {
+			JSONArray tmpArray = new JSONArray(args.getString(SwipeFragment.ARG_LIST));
+			for (int i = 0; i < tmpArray.length(); i++)
+				items.add((JSONObject)tmpArray.get(i));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         listView = (ListView) rootView.findViewById(R.id.listview);
 	
