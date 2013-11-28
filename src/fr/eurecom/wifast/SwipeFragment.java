@@ -18,6 +18,7 @@ package fr.eurecom.wifast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,10 +36,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class SwipeFragment extends Fragment {
-	public static final String ARG_TITLE = "object";
+	public static final String ARG_TITLE = "title";
+	public static final String ARG_LIST = "items_list";
     public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 	private ListView listView;
 
@@ -48,58 +49,26 @@ public class SwipeFragment extends Fragment {
     	
         View rootView = inflater.inflate(R.layout.fragment_swipe_collection, container, false);
         Bundle args = getArguments();
-        String title = args.getString(SwipeFragment.ARG_TITLE);
-        JSONArray listArray;
-		try {
-			listArray = MainActivity.menu_json.getJSONArray(title);
-        
-	        listView = (ListView) rootView.findViewById(R.id.listview);
-	        ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
-	
-			//Get the element that holds the earthquakes ( JSONArray )
-
-			//Loop the Array
-			for(int i=0;i < listArray.length();i++){						
-
-				HashMap<String, String> map = new HashMap<String, String>();
-				JSONObject e = listArray.getJSONObject(i);
-
-				map.put("id",  String.valueOf(i));
-				map.put("name", e.getString("name"));
-				map.put("dist", "Dist: " +  e.getString("desc"));
-				mylist.add(map);
-			}
-			Context context = getActivity();
-			if (context != null) {
-				ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), mylist);
-				listView.setAdapter(adapter);
-		
-				listView.setTextFilterEnabled(true);
-				listView.setOnItemClickListener(new OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-						final Object item = parent.getItemAtPosition(position);
-		
-						System.out.println("Ma che figo: " + id + item.toString());
-		
-					}
-				});
-//				TextView v = (TextView)rootView.findViewById(R.id.listTextView);
-//				v.setVisibility(View.GONE);
-			}
-		} catch (JSONException e1) {
-			e1.printStackTrace();
+		ArrayList<JSONObject> items = new ArrayList<JSONObject>();
+        try {
+			JSONArray tmpArray = new JSONArray(args.getString(SwipeFragment.ARG_LIST));
+			for (int i = 0; i < tmpArray.length(); i++)
+				items.add((JSONObject)tmpArray.get(i));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+        
+        listView = (ListView) rootView.findViewById(R.id.listview);
+	
+		Context context = getActivity();
+		if (context != null) {
+			ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), items);
+			listView.setAdapter(adapter);
+	
+			listView.setTextFilterEnabled(true);
+		}
+
         return rootView;
     }
-    
-	public boolean isNetworkAvailable() {
-		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-		// if no network is available networkInfo will be null
-		// otherwise check if we are connected
-		if (networkInfo != null && networkInfo.isConnected()) {
-			return true;
-		}
-		return false;
-	}}
+}

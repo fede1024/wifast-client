@@ -19,10 +19,12 @@ package fr.eurecom.wifast;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Properties;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import fr.eurecom.wifast.library.Order;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,8 +40,8 @@ import fr.eurecom.wifast.library.JSONDownload;
 
 public class MainActivity extends Activity {
 	public static Properties prop;
-	public static JSONObject menu_json;
-	public static Order currentOrder;
+	public static JSONArray types;
+	public static HashMap<String, JSONObject> menu_map;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,37 +93,48 @@ public class MainActivity extends Activity {
     
     public void locationFound(boolean found) {
     	if (found) {
-    		if (MainActivity.menu_json == null) {
+    		if (MainActivity.menu_map == null) {
 //    			ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 //    			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
     			String stringUrl = MainActivity.prop.getProperty("get_menu_url");
 //    			if (networkInfo != null && networkInfo.isConnected()) {
-    			Callback c = new MyCallBack();
+    			Callback c = new JSONMenuDownloadedCallback();
     			new JSONDownload(c).execute("GET", "JSONObject", stringUrl);
 //    			} else {
 //    				textView.setText("No network connection available.");
 //    			}
     		} else {
-    			this.gotMenu(MainActivity.menu_json);
+    			this.gotMenu();
     		}
     	} else {
     		System.out.println("AAAAAAAAAAAAAAA");
     	}
     }
     
-    protected void gotMenu(JSONObject obj) {
-    	MainActivity.menu_json = obj;
+    protected void gotMenu() {
 		Button menu_btn = (Button)findViewById(R.id.menus_menu_button);
 		menu_btn.setEnabled(true);
     }
-    
-    private class MyCallBack implements Callback {
+        
+    private class JSONMenuDownloadedCallback implements Callback {
 		@Override
 		public boolean handleMessage(Message msg) {
-			MainActivity.this.gotMenu((JSONObject)msg.obj);
+			JSONObject obj = (JSONObject)msg.obj;
+			try {
+				MainActivity.types = obj.getJSONArray("types");
+				MainActivity.menu_map = new HashMap<String, JSONObject>();
+				
+				JSONArray items = obj.getJSONArray("items");
+				for (int i=0; i<items.length(); i++) {
+					JSONObject tmp = items.getJSONObject(i);
+					MainActivity.menu_map.put(tmp.getString("name"), tmp);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+			MainActivity.this.gotMenu();
     		return true;
 		}
-
 	}
-
 }

@@ -1,7 +1,11 @@
 package fr.eurecom.wifast;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -17,9 +21,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-/**
- * Created by daniele on 24/11/13.
- */
 public class MenuActivity extends FragmentActivity {
 
     /**
@@ -97,12 +98,26 @@ public class MenuActivity extends FragmentActivity {
      * representing an object in the collection.
      */
     public static class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
-    	private JSONArray keys;
-
+    	private ArrayList<ArrayList<JSONObject>> list;
+    	private ArrayList<String> titles;
         public DemoCollectionPagerAdapter(FragmentManager fm) {
             super(fm);
             try {
-				keys = MainActivity.menu_json.getJSONArray("_keys");
+            	this.list = new ArrayList<ArrayList<JSONObject>>();
+            	this.titles = new ArrayList<String>();
+            	for (int i=0; i<MainActivity.types.length(); i++) {
+            		ArrayList<JSONObject> l = new ArrayList<JSONObject>();
+            		JSONObject obj = MainActivity.types.getJSONObject(i);
+            		this.titles.add(obj.getString("title"));
+            		String type = obj.getString("name");
+            		Iterator<JSONObject> it = MainActivity.menu_map.values().iterator();
+            		while (it.hasNext()) {
+            			JSONObject tmp = (JSONObject)it.next();
+            			if (tmp.getString("type").equals(type))
+            				l.add(tmp);
+            		}
+            		this.list.add(l);
+            	}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -110,42 +125,27 @@ public class MenuActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int i) {
+        	JSONArray array;
         	System.out.println("--- getItem: "+i);
-        	System.out.println("--- key: "+this.getKeyAtIndex(i));
+        	System.out.println("--- key: "+titles.get(i));
             Fragment fragment = new SwipeFragment();
             Bundle args = new Bundle();
-    		args.putString(SwipeFragment.ARG_TITLE, this.getKeyAtIndex(i));
+    		args.putString(SwipeFragment.ARG_TITLE, titles.get(i));
+    		//args.putSerializable(SwipeFragment.ARG_LIST, list.get(i));
+    		array = new JSONArray(list.get(i));
+    		args.putString(SwipeFragment.ARG_LIST, array.toString());
             fragment.setArguments(args);
             return fragment;
         }
 
         @Override
         public int getCount() {
-        	int num;
-        	if (keys == null) {
-        		num = MainActivity.menu_json.length() - 1;
-        	} else {
-				num = keys.length();
-			}
-            return num;
+    		return titles.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-        	String key = this.getKeyAtIndex(position);
-        	if (key.equals(""))
-        		return "Error";
-        	return key.substring(0, 1).toUpperCase() + key.substring(1);
-        }
-        
-        private String getKeyAtIndex(int position) {
-        	String key = "";
-        	try {
-				key = keys.getString(position);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-            return key;
+        	return titles.get(position);
         }
     }
     
