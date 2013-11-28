@@ -1,7 +1,11 @@
 package fr.eurecom.wifast;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -97,12 +101,26 @@ public class MenuActivity extends FragmentActivity {
      * representing an object in the collection.
      */
     public static class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
-    	private JSONArray keys;
-
+    	private ArrayList<ArrayList<JSONObject>> list;
+    	private ArrayList<String> titles;
         public DemoCollectionPagerAdapter(FragmentManager fm) {
             super(fm);
             try {
-				keys = MainActivity.menu_json.getJSONArray("_keys");
+            	this.list = new ArrayList<ArrayList<JSONObject>>();
+            	this.titles = new ArrayList<String>();
+            	for (int i=0; i<MainActivity.types.length(); i++) {
+            		ArrayList<JSONObject> l = new ArrayList<JSONObject>();
+            		JSONObject obj = MainActivity.types.getJSONObject(i);
+            		this.titles.add(obj.getString("title"));
+            		String type = obj.getString("name");
+            		Iterator<JSONObject> it = MainActivity.menu_map.values().iterator();
+            		while (it.hasNext()) {
+            			JSONObject tmp = (JSONObject)it.next();
+            			if (tmp.getString("type").equals(type))
+            				l.add(tmp);
+            		}
+            		this.list.add(l);
+            	}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

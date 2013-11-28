@@ -1,7 +1,9 @@
 package fr.eurecom.wifast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,23 +14,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import fr.eurecom.wifast.R;
 import fr.eurecom.wifast.library.ImageManager;
 
-public class MenuItemArrayAdapter extends ArrayAdapter<HashMap<String, String>> {
+public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	private final Context context;
-	private final ArrayList<HashMap<String, String>> values;
+//	private final ArrayList<JSONObject> values;
 	private boolean ready[];
 
-	public MenuItemArrayAdapter(Context context, ArrayList<HashMap<String, String>> values) {
+	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values) {
 		super(context, R.layout.list_item, values);
 		this.context = context;
-		this.values = values;
+//		this.values = values;
 		ready = new boolean[getCount()];
 		for(int i = 0; i < getCount(); i++) ready[i] = false;
 	}
@@ -45,11 +45,17 @@ public class MenuItemArrayAdapter extends ArrayAdapter<HashMap<String, String>> 
 		ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
 		RelativeLayout item = (RelativeLayout) convertView.findViewById(R.id.list_item);
 		
-		HashMap<String, String> curr = getItem(position);
-		String name = curr.get("name");
+		JSONObject curr = getItem(position);
+		String name = "";
+		try {
+			name = curr.getString("name");
+			flv.setText(name);
+			slv.setText(curr.getString("descr"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 
-		flv.setText(name);
-		slv.setText(curr.get("dist"));
+		
 		add.setOnClickListener(new AddCartOnClickListener(name));
 		item.setOnClickListener(new MoreInfoOnClickListener(name));
 

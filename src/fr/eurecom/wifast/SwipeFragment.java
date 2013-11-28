@@ -18,6 +18,7 @@ package fr.eurecom.wifast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +36,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class SwipeFragment extends Fragment {
 	public static final String ARG_TITLE = "object";
@@ -49,8 +49,13 @@ public class SwipeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_swipe_collection, container, false);
         Bundle args = getArguments();
         String title = args.getString(SwipeFragment.ARG_TITLE);
-        JSONArray listArray;
 		try {
+			ArrayList<JSONObject> myList = new ArrayList<JSONObject>();
+			Iterator<JSONObject> it = MainActivity.menu_map.values().iterator();
+			while (it.hasNext()) {
+				
+			}
+			
 			listArray = MainActivity.menu_json.getJSONArray(title);
         
 	        listView = (ListView) rootView.findViewById(R.id.listview);
@@ -59,7 +64,7 @@ public class SwipeFragment extends Fragment {
 			//Get the element that holds the earthquakes ( JSONArray )
 
 			//Loop the Array
-			for(int i=0;i < listArray.length();i++){						
+			for(int i=0;i < listArray.length();i++){
 
 				HashMap<String, String> map = new HashMap<String, String>();
 				JSONObject e = listArray.getJSONObject(i);
