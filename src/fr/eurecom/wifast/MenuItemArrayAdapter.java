@@ -50,7 +50,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		try {
 			name = curr.getString("name");
 			flv.setText(name);
-			slv.setText(curr.getString("descr"));
+			slv.setText(curr.getString("desc"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
