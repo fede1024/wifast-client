@@ -1,8 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="100dp"
     android:id="@+id/list_item"
+    android:layout_width="fill_parent"
+    android:background="?android:selectableItemBackground"
+    android:layout_height="100dp"
     android:padding="6dip" >
+
     <!-- android:layout_height="?android:attr/listPreferredItemHeight" -->
 
     <ImageView
@@ -27,7 +29,6 @@
         <ProgressBar
             style="@style/ImageProgressIndicator"
             android:minWidth="16dip" />
-
     </RelativeLayout>
 
     <TextView
@@ -43,6 +44,7 @@
         android:textSize="16sp" />
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/icon"
@@ -54,16 +56,19 @@
         <TextView
             android:id="@+id/secondLine"
             android:layout_width="0dp"
-            android:layout_height="36dp"
+            android:layout_height="58dp"
             android:layout_weight="0.61"
             android:text="Description"
             android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/addItemButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add" />
+        <ImageButton
+            android:id="@+id/addToCartButton"
+            android:background="?android:selectableItemBackground"
+            android:layout_width="50dp"
+            android:layout_height="56dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/shopping_trolley_add" />
+
     </LinearLayout>
 
 </RelativeLayout>

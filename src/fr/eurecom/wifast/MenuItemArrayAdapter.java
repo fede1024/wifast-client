@@ -9,8 +9,11 @@ import android.os.Handler.Callback;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,11 +42,16 @@ public class MenuItemArrayAdapter extends ArrayAdapter<HashMap<String, String>> 
 		
 		TextView flv = (TextView) convertView.findViewById(R.id.firstLine);
 		TextView slv = (TextView) convertView.findViewById(R.id.secondLine);
-
+		ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
+		RelativeLayout item = (RelativeLayout) convertView.findViewById(R.id.list_item);
+		
 		HashMap<String, String> curr = getItem(position);
 		String name = curr.get("name");
+
 		flv.setText(name);
 		slv.setText(curr.get("dist"));
+		add.setOnClickListener(new AddCartOnClickListener(name));
+		item.setOnClickListener(new MoreInfoOnClickListener(name));
 
 		String img = "" + position%10 + ".jpg"; // TODO fixme of course
 		String path = ImageManager.getCachedImage(img, context);
@@ -91,4 +99,30 @@ public class MenuItemArrayAdapter extends ArrayAdapter<HashMap<String, String>> 
 			return false;
 		}
 	}
+
+	private class AddCartOnClickListener implements OnClickListener {
+		String id;
+
+		public AddCartOnClickListener(String id) {
+			this.id = id;
+		}
+
+		@Override
+		public void onClick(View v) {
+			System.out.println("Add this " + id);
+		}
+	}
+
+	private class MoreInfoOnClickListener implements OnClickListener {
+		String id;
+
+		public MoreInfoOnClickListener(String id) {
+			this.id = id;
+		}
+
+		@Override
+		public void onClick(View v) {
+			System.out.println("More info on this " + id);
+		}
+	  }
 }
