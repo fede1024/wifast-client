@@ -4,10 +4,11 @@
     <string name="app_name">WiFast</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-	<string name="action_search">Search</string>
+    <string name="action_search">Search</string>
     <string name="menus_button_string">Menu</string>
     <string name="orders_button_string">Orders</string>
     <string name="profile_button_string">Profile</string>
     <string name="cart_button_string">Cart</string>
-    
+    <string name="title_activity_shopslist_dialog">Select a Shop</string>
+
 </resources>

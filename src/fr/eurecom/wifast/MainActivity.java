@@ -36,16 +36,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+import fr.eurecom.wifast.library.CurrentLocation;
 import fr.eurecom.wifast.library.JSONDownload;
 
 public class MainActivity extends Activity {
 	public static Properties prop;
-	public static JSONArray types;
+	public static JSONArray types, shops;
 	public static HashMap<String, JSONObject> menu_map;
+	
+	private CurrentLocation location;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.activity_main);
         prop = new Properties();
 		try {
@@ -59,7 +63,12 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	    prop.list(System.out);
-	    MainActivity.this.locationFound(true);
+	    
+	    
+	    /* Get the nearest shops depending on the GPS position */
+        location = new CurrentLocation(this);
+	    JSONShopsCallback c = new JSONShopsCallback();    
+        location.getJSONShops(c);
     }
     
     @Override
@@ -115,17 +124,45 @@ public class MainActivity extends Activity {
 		Button menu_btn = (Button)findViewById(R.id.menus_menu_button);
 		menu_btn.setEnabled(true);
     }
+    
+    private class JSONShopsCallback implements Callback {
+		@Override
+		public boolean handleMessage(Message msg) {
+			MainActivity.shops  = (JSONArray) msg.obj;
+			try {
+				int shops_len = MainActivity.shops.length();
+				
+				if(shops_len > 1) {
+					ShopsListDialog dialog = ShopsListDialog.newInstance(R.string.title_activity_shopslist_dialog);
+					
+					for(int i=0; i<shops_len; i++)
+						dialog.addShop(MainActivity.shops.get(i).toString());
+					
+					dialog.show(getFragmentManager(), "dialog");
+					
+					/*String currentShop = dialog.getCorrectShop();
+					System.out.println(currentShop);*/
+				    MainActivity.this.locationFound(true);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+    		return true;
+		}
+	}
         
     private class JSONMenuDownloadedCallback implements Callback {
 		@Override
 		public boolean handleMessage(Message msg) {
-			JSONObject obj = (JSONObject)msg.obj;
+    		JSONObject obj = (JSONObject)msg.obj;
 			try {
 				MainActivity.types = obj.getJSONArray("types");
 				MainActivity.menu_map = new HashMap<String, JSONObject>();
+				int items_len;
 				
 				JSONArray items = obj.getJSONArray("items");
-				for (int i=0; i<items.length(); i++) {
+				items_len = items.length();
+				for (int i=0; i<items_len; i++) {
 					JSONObject tmp = items.getJSONObject(i);
 					MainActivity.menu_map.put(tmp.getString("name"), tmp);
 				}
