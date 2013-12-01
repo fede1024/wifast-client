@@ -22,13 +22,11 @@ import fr.eurecom.wifast.library.ImageManager;
 
 public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	private final Context context;
-//	private final ArrayList<JSONObject> values;
 	private boolean ready[];
 
 	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values) {
 		super(context, R.layout.list_item, values);
 		this.context = context;
-//		this.values = values;
 		ready = new boolean[getCount()];
 		for(int i = 0; i < getCount(); i++) ready[i] = false;
 	}
@@ -47,10 +45,16 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		
 		JSONObject curr = getItem(position);
 		String name = "";
+		String image = "";
+		String descr = "";
 		try {
 			name = curr.getString("name");
+			image = curr.getString("image");
+			descr = curr.getString("description");
 			flv.setText(name);
-			slv.setText(curr.getString("desc"));
+			if(descr.length() > 60)
+				descr = descr.substring(0, 57) + "...";
+			slv.setText(descr);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -58,15 +62,14 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		add.setOnClickListener(new AddCartOnClickListener(name));
 		item.setOnClickListener(new MoreInfoOnClickListener(name));
 
-		String img = "" + position%10 + ".jpg"; // TODO fixme of course
-		String path = ImageManager.getCachedImage(img, context);
+		String path = ImageManager.getCachedImage(image, context);
 		
 		if(path != null)
 			setImage(path, convertView);
 		else {
 			hideImage(convertView);
 			Callback c = new ImageCallBack(convertView, name);
-			new ImageManager(c, context).execute(img);
+			new ImageManager(c, context).execute(image);
 		}
 
 		return convertView;

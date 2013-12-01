@@ -17,6 +17,8 @@
 package fr.eurecom.wifast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -49,6 +51,8 @@ public class SwipeFragment extends Fragment {
     	
         View rootView = inflater.inflate(R.layout.fragment_swipe_collection, container, false);
         Bundle args = getArguments();
+        
+        // Transform a JSONArray into a ArrayList<JSONObject>
 		ArrayList<JSONObject> items = new ArrayList<JSONObject>();
         try {
 			JSONArray tmpArray = new JSONArray(args.getString(SwipeFragment.ARG_LIST));
@@ -58,6 +62,20 @@ public class SwipeFragment extends Fragment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
+        // Sort items by name
+        Collections.sort(items, new Comparator<JSONObject>() {
+            @Override
+            public int compare(JSONObject j1, JSONObject j2) {
+                try {
+					return j1.getString("name").compareToIgnoreCase(j2.getString("name"));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                return 0;
+            }
+        });
         
         listView = (ListView) rootView.findViewById(R.id.listview);
 	

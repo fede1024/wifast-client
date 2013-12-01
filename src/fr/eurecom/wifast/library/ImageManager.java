@@ -10,6 +10,8 @@ import java.net.URL;
 
 import org.apache.http.util.ByteArrayBuffer;
 
+import fr.eurecom.wifast.MainActivity;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -19,10 +21,12 @@ import android.os.Message;
 public class ImageManager extends AsyncTask<String, Void, String> {
 	private Callback callback;
 	private Context context;
+	private String imagesUrl;
 	
 	public ImageManager(Callback cb, Context con){
 		callback = cb;
 		context = con;
+		imagesUrl = MainActivity.prop.getProperty("images_url");
 	}
 	
 	@Override
@@ -31,7 +35,7 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 		String outFile = null;
 
 		try {
-			URL url = new URL("http://s3-eu-west-1.amazonaws.com/fede1024-app/pic/" + imageCode[0]);
+			URL url = new URL(imagesUrl + imageCode[0] + ".jpg");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(30000);
 			conn.setConnectTimeout(15000);
@@ -50,14 +54,14 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 	            baf.append((byte) current);
 	        }
 
-	        outFile = context.getExternalFilesDir(null) + "/" + imageCode[0];
+	        outFile = context.getExternalFilesDir(null) + "/" + imageCode[0] + ".jpg";
 	        
 	        FileOutputStream fos = new FileOutputStream(outFile);
 	        fos.write(baf.toByteArray());
 	        fos.flush();
 	        fos.close();
 		} catch(IOException e){
-			System.out.println("ImageManager error!");
+			System.out.println("ImageManager error!" + imageCode[0]);
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -75,7 +79,7 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 	}
 	
 	public static String getCachedImage(String image, Context context){
-		String path = context.getExternalFilesDir(null) + "/" + image;
+		String path = context.getExternalFilesDir(null) + "/" + image + ".jpg";
 		File f = new File(path);
 		if (f.exists())
 			return path;
@@ -88,7 +92,10 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String result) {
 		Message m = new Message();
 		m.obj = result;
-		System.out.println("New image cached: " + result);
+		if(result != null)
+			System.out.println("New image cached: " + result);
+		else
+			System.out.println("Error downloading image.");
 		this.callback.handleMessage(m);
 	}
 	
