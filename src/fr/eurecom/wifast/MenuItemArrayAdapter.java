@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fr.eurecom.wifast.library.ImageManager;
+import fr.eurecom.wifast.library.Order;
 
 public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	private final Context context;
@@ -118,6 +119,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		@Override
 		public void onClick(View v) {
 			System.out.println("Add this " + id);
+			Order.getCurrentOrder().addItem(this.id);
 		}
 	}
 

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import fr.eurecom.wifast.library.Order;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
@@ -89,6 +90,9 @@ public class MenuActivity extends FragmentActivity {
                 }
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
                 return true;
+            case R.id.cart_menu_button:
+            	System.out.println("Cart menu button");
+            	Order.getCurrentOrder().sendToServer();
         }
         return super.onOptionsItemSelected(item);
     }
