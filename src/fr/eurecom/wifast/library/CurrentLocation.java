@@ -31,27 +31,36 @@ public class CurrentLocation {
 		ConnectivityManager connMgr = (ConnectivityManager)this.myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isConnected()) {
-			String searchURL = serverURL+"?lat="+currentLocation.getLatitude()+"&lon="+currentLocation.getLongitude();
+			String searchURL  = "";
+			if(currentLocation != null)
+				searchURL = serverURL+"?lat="+currentLocation.getLatitude()+"&lon="+currentLocation.getLongitude();
+			else {
+				System.out.println("ERROR: location null!!!");
+				 searchURL = serverURL;
+			}
 			System.out.println("Searching URL: "+searchURL);
 			new JSONDownload(c).execute("GET", "JSONArray", searchURL);
 		} else
 			showSettingsAlert("Network");
-		
 	}
 
 	private Location getLocation() {
-		LocationManager locationManger;
-		Location location;
-		locationManger = (LocationManager) this.myContext.getSystemService(Context.LOCATION_SERVICE);
-
-		location = null;
+		Location location = null;
+		LocationManager locationManager = (LocationManager) this.myContext.getSystemService(Context.LOCATION_SERVICE);
 
 		/* checking if settings to get position in the phone are enabled */
-		if(locationManger.isProviderEnabled(LocationManager.GPS_PROVIDER))
-			location = locationManger.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		else if(locationManger.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-			location = locationManger.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		else
+		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+			location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			System.out.println(">>>>>>G " + location);
+		}
+		
+		if(location == null && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			System.out.println(">>>>>>N " + location);
+		}
+		
+		// TODO: Add locking alert and stop app
+		if(location == null)
 			showSettingsAlert("GPS");
 		
 		lastLocation = location;
