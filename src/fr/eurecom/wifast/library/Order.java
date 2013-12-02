@@ -1,9 +1,6 @@
 package fr.eurecom.wifast.library;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.os.Handler.Callback;
 import fr.eurecom.wifast.MainActivity;
 
 public class Order {
@@ -35,7 +31,6 @@ public class Order {
 		return Order.current_order;
 	}
 	
-	//What is it???
 	public Integer get(String key){
 		Integer n = items.get(key);
 		
@@ -59,6 +54,22 @@ public class Order {
 			total += value;
 		
 		return total;
+	}
+	
+	public JSONArray getOrderArray() {
+		JSONArray arr = new JSONArray();
+		Enumeration<String> en = this.items.keys();
+		while (en.hasMoreElements()) {
+			String key = en.nextElement();
+			try {
+				JSONObject obj = new JSONObject(MainActivity.menu_map.get(key).toString());
+				obj.put("count", this.get(key));
+				arr.put(obj);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}			
+		}
+		return arr;
 	}
 	
 	public void sendToServer() {
@@ -123,6 +134,9 @@ public class Order {
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(String result) {
+			System.out.println("Order sent!");
+			Order.current_order = null;
+			Order.this.items = null;
 		}
 	}
 }

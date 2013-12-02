@@ -39,12 +39,15 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			convertView = inflater.inflate(R.layout.list_item, parent, false);
 		}
 		
+		JSONObject curr = getItem(position);
 		TextView flv = (TextView) convertView.findViewById(R.id.firstLine);
 		TextView slv = (TextView) convertView.findViewById(R.id.secondLine);
 		ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
+		
+		
 		RelativeLayout item = (RelativeLayout) convertView.findViewById(R.id.list_item);
 		
-		JSONObject curr = getItem(position);
+		
 		String name = "";
 		String image = "";
 		String descr = "";
@@ -60,9 +63,21 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			e.printStackTrace();
 		}
 		
-		add.setOnClickListener(new AddCartOnClickListener(name));
+		try {
+			int count = Integer.parseInt(curr.get("count").toString());
+			//count is present --> order view 
+			TextView cnt = (TextView) convertView.findViewById(R.id.countCartLabel);
+			cnt.setText(Integer.toString(count));
+			cnt.setVisibility(View.VISIBLE);
+			slv.setVisibility(View.INVISIBLE);
+			add.setVisibility(View.INVISIBLE);
+		} catch (JSONException e1) {
+			//count is not present --> menu view
+			add.setOnClickListener(new AddCartOnClickListener(name));
+		}
+		
 		item.setOnClickListener(new MoreInfoOnClickListener(name));
-
+		
 		String path = ImageManager.getCachedImage(image, context);
 		
 		if(path != null)
@@ -72,7 +87,6 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			Callback c = new ImageCallBack(convertView, name);
 			new ImageManager(c, context).execute(image);
 		}
-
 		return convertView;
 	}
 	

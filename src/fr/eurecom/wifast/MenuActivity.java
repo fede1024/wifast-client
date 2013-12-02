@@ -92,7 +92,8 @@ public class MenuActivity extends FragmentActivity {
                 return true;
             case R.id.cart_menu_button:
             	System.out.println("Cart menu button");
-            	Order.getCurrentOrder().sendToServer();
+            	Intent intent = new Intent(this, CartActivity.class);
+            	startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

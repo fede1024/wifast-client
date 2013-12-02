@@ -32,8 +32,11 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import fr.eurecom.wifast.library.JSONDownload;
@@ -69,13 +72,25 @@ public class MainActivity extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.cart_menu_button:
+            	System.out.println("Cart menu button");
+            	Intent intent = new Intent(this, CartActivity.class);
+            	startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
     public void buttonPressed(View view) {
+    	Intent intent;
         switch (view.getId()) {
             case R.id.menus_menu_button:
                 System.out.println("menu_button");
-                Intent intent = new Intent(this, MenuActivity.class);
+                intent = new Intent(this, MenuActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+//                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.orders_menu_button:
                 System.out.println("orders_button");
@@ -85,6 +100,8 @@ public class MainActivity extends Activity {
                 break;
             case R.id.cart_menu_button:
                 System.out.println("drinks_button");
+                intent = new Intent(this, CartActivity.class);
+                startActivity(intent);
                 break;
             default:
                 System.out.println("default");

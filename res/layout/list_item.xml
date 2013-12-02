@@ -68,6 +68,14 @@
             android:layout_height="56dp"
             android:scaleType="fitCenter"
             android:src="@drawable/shopping_trolley_add" />
+        
+        <TextView
+            android:id="@+id/countCartLabel"
+            android:layout_width="50dp"
+            android:layout_height="56dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+        
 
     </LinearLayout>
 
