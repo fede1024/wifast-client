@@ -1,2 +1,3 @@
 get_menu_url=http://wifast.herokuapp.com/api/getMenu
 images_url=http://s3-eu-west-1.amazonaws.com/fede1024-app/images/
+send_order_url=http://192.168.1.89:5000/api/newOrder

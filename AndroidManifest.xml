@@ -28,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name="fr.eurecom.wifast.MenuActivity"></activity>
+        <activity android:name="fr.eurecom.wifast.CartActivity"></activity>
     </application>
 
 </manifest>

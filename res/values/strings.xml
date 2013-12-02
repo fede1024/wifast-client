@@ -9,5 +9,6 @@
     <string name="orders_button_string">Orders</string>
     <string name="profile_button_string">Profile</string>
     <string name="cart_button_string">Cart</string>
+    <string name="finish_order_button_string">Pay</string>
     
 </resources>
