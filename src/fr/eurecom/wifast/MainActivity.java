@@ -27,8 +27,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -36,7 +39,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
-import fr.eurecom.wifast.library.CurrentLocation;
+import android.widget.TextView;
+import fr.eurecom.wifast.library.ShopListManager;
 import fr.eurecom.wifast.library.JSONDownload;
 
 public class MainActivity extends Activity {
@@ -44,7 +48,7 @@ public class MainActivity extends Activity {
 	public static JSONArray types, shops;
 	public static HashMap<String, JSONObject> menu_map;
 	
-	private CurrentLocation location;
+	private ShopListManager shopManager;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +67,28 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	    prop.list(System.out);
-	    
-	    
-	    /* Get the nearest shops depending on the GPS position */
-        location = new CurrentLocation(this);
-	    JSONShopsCallback c = new JSONShopsCallback();    
-        location.getJSONShops(c);
+
+	    MainActivity.this.locationFound(true);		// Start menu download
+
+        shopManager = new ShopListManager(this);	// Start getting shop list
     }
+    
+    public void onResume(){
+    	super.onResume();
+        if(shopManager.checkLocationEnabled() == false){
+		    Intent intent = new Intent(this, EnableSettingsDialog.class);
+		    this.startActivity(intent);
+        }
+        else{
+		    /* Get the nearest shops depending on the GPS position */
+	    	if (shopManager.locationIsValid() == false){ // ADD: or shop list not downloaded
+				shopManager.updateLocation();
+			    JSONShopsCallback c = new JSONShopsCallback();    
+		        shopManager.getJSONShops(c);
+	    	}
+    	}
+    }
+    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,7 +157,8 @@ public class MainActivity extends Activity {
 					for(int i=0; i<shops_len; i++)
 						dialog.addShop(MainActivity.shops.get(i).toString());
 					
-					dialog.show(getFragmentManager(), "dialog");
+					// FIXME if the activity is closed it crashes IllegalSTateException: activity has been destroyed
+					dialog.show(getFragmentManager(), "dialog"); 
 					
 					/*String currentShop = dialog.getCorrectShop();
 					System.out.println(currentShop);*/
