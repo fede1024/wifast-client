@@ -14,7 +14,6 @@ import fr.eurecom.wifast.MainActivity;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.os.Handler.Callback;
 import android.os.Message;
 

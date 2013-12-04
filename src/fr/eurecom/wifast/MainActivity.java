@@ -32,23 +32,26 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+import fr.eurecom.wifast.library.ShopListManager;
 import fr.eurecom.wifast.library.JSONDownload;
 
 public class MainActivity extends Activity {
 	public static Properties prop;
-	public static JSONArray types;
+	public static JSONArray types, shops;
 	public static HashMap<String, JSONObject> menu_map;
+	
+	private ShopListManager shopManager;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.activity_main);
         prop = new Properties();
 		try {
@@ -62,8 +65,29 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	    prop.list(System.out);
-	    MainActivity.this.locationFound(true);
+
+	    MainActivity.this.locationFound(true);			// Start menu download
+
+	    if(shopManager == null)
+	        shopManager = new ShopListManager(this);	// Start getting shop list
     }
+    
+    public void onResume(){
+    	super.onResume();
+        if(shopManager.checkLocationEnabled() == false){
+		    Intent intent = new Intent(this, EnableSettingsDialog.class);
+		    this.startActivity(intent);
+        }
+        else{
+		    /* Get the nearest shops depending on the GPS position */
+	    	if (shopManager.locationIsValid() == false){ // ADD: or shop list not downloaded
+				shopManager.updateLocation();
+			    JSONShopsCallback c = new JSONShopsCallback();    
+		        shopManager.getJSONShops(c);
+	    	}
+    	}
+    }
+    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,17 +156,56 @@ public class MainActivity extends Activity {
 		Button menu_btn = (Button)findViewById(R.id.menus_menu_button);
 		menu_btn.setEnabled(true);
     }
+    
+    private class JSONShopsCallback implements Callback {
+		@Override
+		public boolean handleMessage(Message msg) {
+			
+			if(msg.obj == null)
+				return false;
+			
+			MainActivity.shops  = (JSONArray) msg.obj;
+			
+			try {
+				int shops_len = MainActivity.shops.length();
+				
+				if(shops_len > 1) {
+					ShopsListDialog dialog = ShopsListDialog.newInstance(R.string.title_activity_shopslist_dialog);
+					
+					for(int i=0; i<shops_len; i++)
+						dialog.addShop(MainActivity.shops.get(i).toString());
+					
+					if(getFragmentManager() != null)
+						dialog.show(getFragmentManager(), "dialog"); 
+					
+					/*String currentShop = dialog.getCorrectShop();
+					System.out.println(currentShop);*/
+				    MainActivity.this.locationFound(true);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+    		return true;
+		}
+	}
         
     private class JSONMenuDownloadedCallback implements Callback {
 		@Override
 		public boolean handleMessage(Message msg) {
-			JSONObject obj = (JSONObject)msg.obj;
+			if (msg.obj == null){
+				Toast.makeText(getApplicationContext(), "Error downloading menu.", Toast.LENGTH_LONG).show();
+				return false;
+			}
+			
+    		JSONObject obj = (JSONObject)msg.obj;
 			try {
 				MainActivity.types = obj.getJSONArray("types");
 				MainActivity.menu_map = new HashMap<String, JSONObject>();
+				int items_len;
 				
 				JSONArray items = obj.getJSONArray("items");
-				for (int i=0; i<items.length(); i++) {
+				items_len = items.length();
+				for (int i=0; i<items_len; i++) {
 					JSONObject tmp = items.getJSONObject(i);
 					MainActivity.menu_map.put(tmp.getString("name"), tmp);
 				}

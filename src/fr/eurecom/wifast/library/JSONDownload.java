@@ -59,8 +59,8 @@ public class JSONDownload extends AsyncTask<String, Void, String> {
 		try {
 			URL url = new URL(myurl);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setReadTimeout(10000 /* milliseconds */);
-			conn.setConnectTimeout(15000 /* milliseconds */);
+			conn.setReadTimeout(30000 /* milliseconds */);
+			conn.setConnectTimeout(45000 /* milliseconds */);
 			conn.setRequestMethod(HTTPRequest);
 			conn.setDoInput(true);
 			// Starts the query

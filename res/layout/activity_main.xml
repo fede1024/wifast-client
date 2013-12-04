@@ -1,38 +1,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:orientation="vertical" >
-    
+    android:paddingRight="16dp" >
+
     <Button
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/menus_menu_button"
-        android:text="@string/menus_button_string"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:enabled="false"
         android:onClick="buttonPressed"
-        android:enabled="false"/>
+        android:text="@string/menus_button_string" />
+
     <Button
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/orders_menu_button"
-        android:text="@string/orders_button_string"
-        android:onClick="buttonPressed"/>
-    <Button
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:onClick="buttonPressed"
+        android:text="@string/orders_button_string" />
+
+    <Button
         android:id="@+id/profile_menu_button"
-        android:text="@string/profile_button_string"
-        android:onClick="buttonPressed"/>
-    <Button
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:onClick="buttonPressed"
+        android:text="@string/profile_button_string" />
+
+    <Button
         android:id="@+id/cart_menu_button"
-        android:text="@string/cart_button_string"
-        android:onClick="buttonPressed"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:onClick="buttonPressed"
+        android:text="@string/cart_button_string" />
 
 </LinearLayout>
