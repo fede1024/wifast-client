@@ -10,7 +10,7 @@ import java.net.URL;
 
 import org.apache.http.util.ByteArrayBuffer;
 
-import fr.eurecom.wifast.MainActivity;
+import fr.eurecom.wifast.WiFastApp;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -25,7 +25,7 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 	public ImageManager(Callback cb, Context con){
 		callback = cb;
 		context = con;
-		imagesUrl = MainActivity.prop.getProperty("images_url");
+		imagesUrl = WiFastApp.getProperty("images_url");
 	}
 	
 	@Override

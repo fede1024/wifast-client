@@ -10,7 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler.Callback;
 import android.provider.Settings;
-import fr.eurecom.wifast.MainActivity;
+import fr.eurecom.wifast.WiFastApp;
 
 public class ShopListManager {
 	private String serverURL;
@@ -19,7 +19,7 @@ public class ShopListManager {
 	
 	public ShopListManager(Context context) {
 		this.myContext = context;			
-		serverURL = MainActivity.prop.getProperty("server_url")+"getShops";
+		serverURL = WiFastApp.getProperty("server_url")+"getShops";
 	}
 
 	public boolean getJSONShops(Callback c) {

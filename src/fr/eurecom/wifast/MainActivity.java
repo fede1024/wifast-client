@@ -16,11 +16,7 @@
 
 package fr.eurecom.wifast;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +24,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -38,52 +33,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import fr.eurecom.wifast.library.ShopListManager;
 import fr.eurecom.wifast.library.JSONDownload;
 
 public class MainActivity extends Activity {
-	public static Properties prop;
-	public static JSONArray types, shops;
-	public static HashMap<String, JSONObject> menu_map;
-	
-	private ShopListManager shopManager;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        //this.appState = ((WiFastApp)getApplicationContext());
+        
         setContentView(R.layout.activity_main);
-        prop = new Properties();
-		try {
-			Resources resources = this.getResources();
-			InputStream rawResource = resources.openRawResource(R.raw.wifast_properties);
-			prop.load(rawResource);
-			rawResource.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    prop.list(System.out);
 
-	    MainActivity.this.locationFound(true);			// Start menu download
-
-	    if(shopManager == null)
-	        shopManager = new ShopListManager(this);	// Start getting shop list
+	    locationFound(true);			// Start menu download FIXME strange name
     }
     
     public void onResume(){
     	super.onResume();
-        if(shopManager.checkLocationEnabled() == false){
+        if(WiFastApp.shopManager.checkLocationEnabled() == false){
 		    Intent intent = new Intent(this, EnableSettingsDialog.class);
 		    this.startActivity(intent);
         }
         else{
 		    /* Get the nearest shops depending on the GPS position */
-	    	if (shopManager.locationIsValid() == false){ // ADD: or shop list not downloaded
-				shopManager.updateLocation();
+	    	if (WiFastApp.shopManager.locationIsValid() == false){ // ADD: or shop list not downloaded
+				WiFastApp.shopManager.updateLocation();
 			    JSONShopsCallback c = new JSONShopsCallback();    
-		        shopManager.getJSONShops(c);
+		        WiFastApp.shopManager.getJSONShops(c);
 	    	}
     	}
     }
@@ -134,10 +110,10 @@ public class MainActivity extends Activity {
     
     public void locationFound(boolean found) {
     	if (found) {
-    		if (MainActivity.menu_map == null) {
+    		if (WiFastApp.menu_map == null) {
 //    			ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 //    			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-    			String stringUrl = MainActivity.prop.getProperty("get_menu_url");
+    			String stringUrl = WiFastApp.getProperty("get_menu_url");
 //    			if (networkInfo != null && networkInfo.isConnected()) {
     			Callback c = new JSONMenuDownloadedCallback();
     			new JSONDownload(c).execute("GET", "JSONObject", stringUrl);
@@ -164,23 +140,23 @@ public class MainActivity extends Activity {
 			if(msg.obj == null)
 				return false;
 			
-			MainActivity.shops  = (JSONArray) msg.obj;
+			WiFastApp.shops  = (JSONArray) msg.obj;
 			
 			try {
-				int shops_len = MainActivity.shops.length();
+				int shops_len = WiFastApp.shops.length();
 				
 				if(shops_len > 1) {
 					ShopsListDialog dialog = ShopsListDialog.newInstance(R.string.title_activity_shopslist_dialog);
 					
 					for(int i=0; i<shops_len; i++)
-						dialog.addShop(MainActivity.shops.get(i).toString());
+						dialog.addShop(WiFastApp.shops.get(i).toString());
 					
 					if(getFragmentManager() != null)
 						dialog.show(getFragmentManager(), "dialog"); 
 					
 					/*String currentShop = dialog.getCorrectShop();
 					System.out.println(currentShop);*/
-				    MainActivity.this.locationFound(true);
+				    locationFound(true);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -199,21 +175,21 @@ public class MainActivity extends Activity {
 			
     		JSONObject obj = (JSONObject)msg.obj;
 			try {
-				MainActivity.types = obj.getJSONArray("types");
-				MainActivity.menu_map = new HashMap<String, JSONObject>();
+				WiFastApp.types = obj.getJSONArray("types");
+				WiFastApp.menu_map = new HashMap<String, JSONObject>();
 				int items_len;
 				
 				JSONArray items = obj.getJSONArray("items");
 				items_len = items.length();
 				for (int i=0; i<items_len; i++) {
 					JSONObject tmp = items.getJSONObject(i);
-					MainActivity.menu_map.put(tmp.getString("name"), tmp);
+					WiFastApp.menu_map.put(tmp.getString("name"), tmp);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			
-			MainActivity.this.gotMenu();
+			gotMenu();
     		return true;
 		}
 	}

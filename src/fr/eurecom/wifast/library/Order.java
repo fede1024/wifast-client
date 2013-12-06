@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import fr.eurecom.wifast.MainActivity;
+import fr.eurecom.wifast.WiFastApp;
 
 public class Order {
 	private static Order current_order;
@@ -62,7 +62,7 @@ public class Order {
 		while (en.hasMoreElements()) {
 			String key = en.nextElement();
 			try {
-				JSONObject obj = new JSONObject(MainActivity.menu_map.get(key).toString());
+				JSONObject obj = new JSONObject(WiFastApp.menu_map.get(key).toString());
 				obj.put("count", this.get(key));
 				arr.put(obj);
 			} catch (JSONException e) {
@@ -110,7 +110,7 @@ public class Order {
 			System.out.println("in doInBackground");
 			// params comes from the execute() call: params[0] is the url.
 			try {
-				URL url = new URL(MainActivity.prop.getProperty("send_order_url"));
+				URL url = new URL(WiFastApp.getProperty("send_order_url"));
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setReadTimeout(10000 /* milliseconds */);
 				conn.setConnectTimeout(15000 /* milliseconds */);

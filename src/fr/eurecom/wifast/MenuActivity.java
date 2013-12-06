@@ -110,12 +110,12 @@ public class MenuActivity extends FragmentActivity {
             try {
             	this.list = new ArrayList<ArrayList<JSONObject>>();
             	this.titles = new ArrayList<String>();
-            	for (int i=0; i<MainActivity.types.length(); i++) {
+            	for (int i=0; i<WiFastApp.types.length(); i++) {
             		ArrayList<JSONObject> l = new ArrayList<JSONObject>();
-            		JSONObject obj = MainActivity.types.getJSONObject(i);
+            		JSONObject obj = WiFastApp.types.getJSONObject(i);
             		this.titles.add(obj.getString("title"));
             		String type = obj.getString("name");
-            		Iterator<JSONObject> it = MainActivity.menu_map.values().iterator();
+            		Iterator<JSONObject> it = WiFastApp.menu_map.values().iterator();
             		while (it.hasNext()) {
             			JSONObject tmp = (JSONObject)it.next();
             			if (tmp.getString("type").equals(type))
