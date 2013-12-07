@@ -41,11 +41,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //this.appState = ((WiFastApp)getApplicationContext());
-        
         setContentView(R.layout.activity_main);
-
-	    locationFound(true);			// Start menu download FIXME strange name
     }
     
     public void onResume(){
@@ -90,7 +86,6 @@ public class MainActivity extends Activity {
                 System.out.println("menu_button");
                 intent = new Intent(this, MenuActivity.class);
                 startActivity(intent);
-//                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.orders_menu_button:
                 System.out.println("orders_button");
@@ -108,30 +103,6 @@ public class MainActivity extends Activity {
         }
     }
     
-    public void locationFound(boolean found) {
-    	if (found) {
-    		if (WiFastApp.menu_map == null) {
-//    			ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-//    			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-    			String stringUrl = WiFastApp.getProperty("get_menu_url");
-//    			if (networkInfo != null && networkInfo.isConnected()) {
-    			Callback c = new JSONMenuDownloadedCallback();
-    			new JSONDownload(c).execute("GET", "JSONObject", stringUrl);
-//    			} else {
-//    				textView.setText("No network connection available.");
-//    			}
-    		} else {
-    			this.gotMenu();
-    		}
-    	} else {
-    		System.out.println("AAAAAAAAAAAAAAA");
-    	}
-    }
-    
-    protected void gotMenu() {
-		Button menu_btn = (Button)findViewById(R.id.menus_menu_button);
-		menu_btn.setEnabled(true);
-    }
     
     private class JSONShopsCallback implements Callback {
 		@Override
@@ -156,7 +127,6 @@ public class MainActivity extends Activity {
 					
 					/*String currentShop = dialog.getCorrectShop();
 					System.out.println(currentShop);*/
-				    locationFound(true);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -165,32 +135,4 @@ public class MainActivity extends Activity {
 		}
 	}
         
-    private class JSONMenuDownloadedCallback implements Callback {
-		@Override
-		public boolean handleMessage(Message msg) {
-			if (msg.obj == null){
-				Toast.makeText(getApplicationContext(), "Error downloading menu.", Toast.LENGTH_LONG).show();
-				return false;
-			}
-			
-    		JSONObject obj = (JSONObject)msg.obj;
-			try {
-				WiFastApp.types = obj.getJSONArray("types");
-				WiFastApp.menu_map = new HashMap<String, JSONObject>();
-				int items_len;
-				
-				JSONArray items = obj.getJSONArray("items");
-				items_len = items.length();
-				for (int i=0; i<items_len; i++) {
-					JSONObject tmp = items.getJSONObject(i);
-					WiFastApp.menu_map.put(tmp.getString("name"), tmp);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			
-			gotMenu();
-    		return true;
-		}
-	}
 }
