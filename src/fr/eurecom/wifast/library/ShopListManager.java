@@ -10,12 +10,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler.Callback;
 import android.provider.Settings;
+import android.util.Log;
 import fr.eurecom.wifast.WiFastApp;
 
 public class ShopListManager {
 	private String serverURL;
 	private Location lastLocation;
 	private Context myContext;
+	private String shopName;
 	
 	public ShopListManager(Context context) {
 		this.myContext = context;			
@@ -23,9 +25,6 @@ public class ShopListManager {
 	}
 
 	public boolean getJSONShops(Callback c) {
-		if (lastLocation == null)
-			return true;	// No location
-		
 		ConnectivityManager connMgr = (ConnectivityManager)this.myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isConnected()) {
@@ -33,7 +32,7 @@ public class ShopListManager {
 			if(lastLocation != null)
 				searchURL = serverURL+"?lat="+lastLocation.getLatitude()+"&lon="+lastLocation.getLongitude();
 			else {
-				System.out.println("ERROR: location null!!!");
+				Log.d("ERROR", "Location null!!!");
 				searchURL = serverURL;
 			}
 			System.out.println("Searching URL: "+searchURL);
@@ -130,5 +129,13 @@ public class ShopListManager {
         }
         // Showing Alert Message
         alertDialog.show();
+    }
+    
+    public void setShopName(String name){
+    	this.shopName = name;
+    }
+    
+    public String getShopName(){
+    	return this.shopName;
     }
 }

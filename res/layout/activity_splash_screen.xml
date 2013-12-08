@@ -1,8 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
+    android:orientation="vertical"
     tools:context=".SplashScreen" >
 
     <!--
@@ -10,46 +11,40 @@
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc.
     -->
-
-    <TextView
-        android:id="@+id/fullscreen_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="@string/loading"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold" />
-    
     <!--
          This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows.
     -->
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
-            style="?buttonBarStyle"
+        <TextView
+            android:id="@+id/fullscreen_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent" >
+            android:gravity="center"
+            android:keepScreenOn="true"
+            android:text="@string/wifast"
+            android:textColor="#33b5e5"
+            android:textSize="50sp"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/dummy_button"
-                style="?buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/dummy_button" />
-        </LinearLayout>
-    </FrameLayout>
+        <TextView
+            android:id="@+id/current_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:keepScreenOn="true"
+            android:text=""
+            android:textColor="#33b5e5"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
-</FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>

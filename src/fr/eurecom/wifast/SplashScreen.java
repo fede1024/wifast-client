@@ -1,6 +1,10 @@
 package fr.eurecom.wifast;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,17 +13,14 @@ import org.json.JSONObject;
 import fr.eurecom.wifast.library.JSONDownload;
 import fr.eurecom.wifast.util.SystemUiHider;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
-import android.view.MotionEvent;
-import android.view.View;
+import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -29,33 +30,7 @@ import android.widget.Toast;
  * @see SystemUiHider
  */
 public class SplashScreen extends Activity {
-	/**
-	 * Whether or not the system UI should be auto-hidden after
-	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-	 */
-	private static final boolean AUTO_HIDE = true;
-
-	/**
-	 * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-	 * user interaction before hiding the system UI.
-	 */
-	private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-	/**
-	 * If set, will toggle the system UI visibility upon interaction. Otherwise,
-	 * will show the system UI visibility upon interaction.
-	 */
-	private static final boolean TOGGLE_ON_CLICK = true;
-
-	/**
-	 * The flags to pass to {@link SystemUiHider#getInstance}.
-	 */
-	private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
-
-	/**
-	 * The instance of the {@link SystemUiHider} for this activity.
-	 */
-	private SystemUiHider mSystemUiHider;
+	private static TextView currentAction;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,154 +38,104 @@ public class SplashScreen extends Activity {
 
 		setContentView(R.layout.activity_splash_screen);
 		
-		final Handler handler = new Handler();
-		handler.postDelayed(new StartMainActivity(this), 5000);
+		currentAction = (TextView)findViewById(R.id.current_action);
 
-		final View controlsView = findViewById(R.id.fullscreen_content_controls);
-		final View contentView = findViewById(R.id.fullscreen_content);
-
-		// Set up an instance of SystemUiHider to control the system UI for
-		// this activity.
-		mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
-		mSystemUiHider.setup();
-		mSystemUiHider.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
-			// Cached values.
-			int mControlsHeight;
-			int mShortAnimTime;
-
-			@Override
-			@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-			public void onVisibilityChange(boolean visible) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-					// If the ViewPropertyAnimator API is available
-					// (Honeycomb MR2 and later), use it to animate the
-					// in-layout UI controls at the bottom of the
-					// screen.
-					if (mControlsHeight == 0) {
-						mControlsHeight = controlsView.getHeight();
-					}
-					if (mShortAnimTime == 0) {
-						mShortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-					}
-					controlsView.animate().translationY(visible ? 0 : mControlsHeight).setDuration(mShortAnimTime);
-				} else {
-					// If the ViewPropertyAnimator APIs aren't
-					// available, simply show or hide the in-layout UI
-					// controls.
-					controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
-				}
-
-				if (visible && AUTO_HIDE) {
-					// Schedule a hide().
-					delayedHide(AUTO_HIDE_DELAY_MILLIS);
-				}
-			}
-		});
-
-		// Set up the user interaction to manually show or hide the system UI.
-		contentView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (TOGGLE_ON_CLICK) {
-					mSystemUiHider.toggle();
-				} else {
-					mSystemUiHider.show();
-				}
-			}
-		});
-
-		// Upon interacting with UI controls, delay any scheduled hide()
-		// operations to prevent the jarring behavior of controls going away
-		// while interacting with the UI.
-		findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+		//final Handler handler = new Handler();
+		//handler.postDelayed(new StartMainActivity(this), 5000);
+		
+		WiFastApp.splashScreenActivity = this;
 	}
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-
-		// Trigger the initial hide() shortly after the activity has been
-		// created, to briefly hint to the user that UI controls
-		// are available.
-		delayedHide(100);
-	}
-
-	/**
-	 * Touch listener to use for in-layout UI controls to delay hiding the
-	 * system UI. This is to prevent the jarring behavior of controls going away
-	 * while interacting with activity UI.
-	 */
-	View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-		@Override
-		public boolean onTouch(View view, MotionEvent motionEvent) {
-			if (AUTO_HIDE) {
-				delayedHide(AUTO_HIDE_DELAY_MILLIS);
-			}
-			return false;
-		}
-	};
-
-	Handler mHideHandler = new Handler();
-	Runnable mHideRunnable = new Runnable() {
-		@Override
-		public void run() {
-			mSystemUiHider.hide();
-		}
-	};
-
-	/**
-	 * Schedules a call to hide() in [delay] milliseconds, canceling any
-	 * previously scheduled calls.
-	 */
-	private void delayedHide(int delayMillis) {
-		mHideHandler.removeCallbacks(mHideRunnable);
-		mHideHandler.postDelayed(mHideRunnable, delayMillis);
-	}
-	
-	class StartMainActivity implements Runnable {
-		Activity oldActivity;
-
-        StartMainActivity(Activity thisActivity){ 
-        	oldActivity = thisActivity;
-        }
-        
-        public void run() {
-		    Intent intent = new Intent(oldActivity, MainActivity.class);
-		    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		    oldActivity.startActivity(intent);
-		    oldActivity.finish();
-        }
-    }
-
-    public void locationFound(boolean found) {
-    	if (found) {
-    		if (WiFastApp.menu_map == null) {
-//    			ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-//    			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-    			String stringUrl = WiFastApp.getProperty("get_menu_url");
-//    			if (networkInfo != null && networkInfo.isConnected()) {
-    			Callback c = new JSONMenuDownloadedCallback();
-    			new JSONDownload(c).execute("GET", "JSONObject", stringUrl);
-//    			} else {
-//    				textView.setText("No network connection available.");
-//    			}
-    		} else {
-    			this.gotMenu();
-    		}
-    	} else {
-    		System.out.println("AAAAAAAAAAAAAAA");
-    	}
+    public void onResume(){
+    	super.onResume();
+    	continueCheckin();
     }
     
-    protected void gotMenu() {
-    	
+    public void continueCheckin(){
+        if(WiFastApp.shopManager.checkLocationEnabled() == false){
+		    Intent intent = new Intent(this, EnableSettingsDialog.class);
+		    this.startActivity(intent);
+        }
+        else{
+		    /* Get the nearest shops depending on the GPS position */
+	    	if(WiFastApp.shopManager.getShopName() == null){
+				currentAction.setText("Getting position");
+		    	if (WiFastApp.shopManager.locationIsValid() == false)
+					WiFastApp.shopManager.updateLocation();
+			    JSONShopsCallback c = new JSONShopsCallback();    
+		        WiFastApp.shopManager.getJSONShops(c);
+	        }
+	        else if(WiFastApp.menu_map == null){
+				currentAction.setText("Downloading menu");
+	        	downloadMenu();
+	        }
+	        else {
+				currentAction.setText("Done");
+			    Intent intent = new Intent(this, MainActivity.class);
+			    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			    startActivity(intent);
+			    finish();
+	        }
+    	}
     }
 
+    private class JSONShopsCallback implements Callback {
+		@Override
+		public boolean handleMessage(Message msg) {
+			
+			if(msg.obj == null){ 
+				Log.d("ERROR", "Shop list not downloaded.");
+				currentAction.setText("Error getting shop list");
+				return false;
+			}
+			
+			WiFastApp.shops  = (JSONArray) msg.obj;
+			
+			if(WiFastApp.shops.length() > 1) {
+	        	Context c = getApplicationContext();
+			    Intent intent = new Intent(c, ShopListActivity.class);
+			    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			    c.startActivity(intent);
+			}
+			else {
+				String shopName = null;
+				try {
+					shopName = WiFastApp.shops.get(0).toString();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				WiFastApp.shopManager.setShopName(shopName);
+				continueCheckin();
+			}
+
+    		return true;
+		}
+	}
+
+    public void downloadMenu() {
+//  	ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+//  	NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+		String stringUrl = WiFastApp.getProperty("get_menu_url");
+//  	if (networkInfo != null && networkInfo.isConnected()) {
+		Callback c = new JSONMenuDownloadedCallback();
+		try {
+			new JSONDownload(c).execute("GET", "JSONObject", stringUrl + "?shop=" + 
+					URLEncoder.encode(WiFastApp.shopManager.getShopName(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//  	} else {
+//  	textView.setText("No network connection available.");
+    }
+    
     private class JSONMenuDownloadedCallback implements Callback {
 		@Override
 		public boolean handleMessage(Message msg) {
 			if (msg.obj == null){
 				Toast.makeText(getApplicationContext(), "Error downloading menu.", Toast.LENGTH_LONG).show();
+				currentAction.setText("Menu dowanload error.");
 				return false;
 			}
 			
@@ -230,7 +155,8 @@ public class SplashScreen extends Activity {
 				e.printStackTrace();
 			}
 			
-			gotMenu();
+			continueCheckin();
+			
     		return true;
 		}
 	}
