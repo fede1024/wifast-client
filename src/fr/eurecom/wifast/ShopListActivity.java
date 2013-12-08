@@ -14,7 +14,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 public class ShopListActivity extends Activity {
 
@@ -25,28 +27,32 @@ public class ShopListActivity extends Activity {
 		
 		final ListView listview = (ListView) findViewById(R.id.shopListView);
 
-		final ArrayList<String> list = new ArrayList<String>();
+		final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		
 		for (int i = 0; i < WiFastApp.shops.length(); ++i) {
 			try {
 				JSONObject item = (JSONObject)WiFastApp.shops.get(i);
-				list.add(item.getString("name"));
+				HashMap<String, String> map = new HashMap<String, String>();
+	            map.put("rowid", "" + i);
+	            map.put("name", item.getString("name"));
+	            map.put("dist", "Distance: " + Integer.toString(item.getInt("dist")) + "m");
+	            list.add(map);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		final StableArrayAdapter adapter = new StableArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+		ListAdapter adapter = new SimpleAdapter(this, list, android.R.layout.two_line_list_item,
+				new String[] { "name", "dist" },
+				new int[] { android.R.id.text1, android.R.id.text2 });
 		listview.setAdapter(adapter);
 
 		listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-				final String item = (String) parent.getItemAtPosition(position);
-				System.out.println("CLICCATOOOOO" + item);
-				//WiFastApp.splashScreenActivity.downloadMenu();
-				WiFastApp.shopManager.setShopName(item);
+				HashMap<String, String> item = (HashMap<String, String>) parent.getItemAtPosition(position);
+				WiFastApp.shopManager.setShopName(item.get("name"));
 				finish();
 			}
 		});
@@ -57,27 +63,5 @@ public class ShopListActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.shop_list, menu);
 		return true;
-	}
-
-	private class StableArrayAdapter extends ArrayAdapter<String> {
-		HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-
-		public StableArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
-			super(context, textViewResourceId, objects);
-			for (int i = 0; i < objects.size(); ++i) {
-				mIdMap.put(objects.get(i), i);
-			}
-		}
-
-		@Override
-		public long getItemId(int position) {
-			String item = getItem(position);
-			return mIdMap.get(item);
-		}
-
-		@Override
-		public boolean hasStableIds() {
-			return true;
-		}
 	}
 }

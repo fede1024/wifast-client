@@ -14,6 +14,9 @@ import fr.eurecom.wifast.library.ShopListManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class WiFastApp extends Application {
 	public static JSONArray types, shops;
@@ -45,4 +48,24 @@ public class WiFastApp extends Application {
 	public static String getProperty(String propertyName){
 		return properties.getProperty(propertyName);
 	}
+
+    public boolean checkLocationEnabled(){
+		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+				locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+			return true;
+		return false;
+	}
+	
+	public boolean checkNetworkEnabled(){
+		ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+		if (networkInfo != null && networkInfo.isConnected()) 
+			return true;
+		else
+			return false;
+	}
+
 }

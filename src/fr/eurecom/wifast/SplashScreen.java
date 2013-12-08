@@ -2,9 +2,7 @@ package fr.eurecom.wifast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +14,11 @@ import fr.eurecom.wifast.util.SystemUiHider;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.util.Log;
@@ -52,8 +54,16 @@ public class SplashScreen extends Activity {
     }
     
     public void continueCheckin(){
-        if(WiFastApp.shopManager.checkLocationEnabled() == false){
+    	WiFastApp app = (WiFastApp)getApplicationContext();
+    	
+        if(app.checkLocationEnabled() == false){
 		    Intent intent = new Intent(this, EnableSettingsDialog.class);
+		    intent.putExtra(EnableSettingsDialog.MISSING_ARG_NAME, EnableSettingsDialog.MISSING_LOCATION);
+		    this.startActivity(intent);
+        }
+        if(app.checkNetworkEnabled() == false){
+		    Intent intent = new Intent(this, EnableSettingsDialog.class);
+		    intent.putExtra(EnableSettingsDialog.MISSING_ARG_NAME, EnableSettingsDialog.MISSING_NETWORK);
 		    this.startActivity(intent);
         }
         else{
@@ -78,7 +88,7 @@ public class SplashScreen extends Activity {
 	        }
     	}
     }
-
+    
     private class JSONShopsCallback implements Callback {
 		@Override
 		public boolean handleMessage(Message msg) {
@@ -116,11 +126,11 @@ public class SplashScreen extends Activity {
     public void downloadMenu() {
 //  	ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 //  	NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		String stringUrl = WiFastApp.getProperty("get_menu_url");
+		String serverURL = WiFastApp.getProperty("get_menu_url");
 //  	if (networkInfo != null && networkInfo.isConnected()) {
 		Callback c = new JSONMenuDownloadedCallback();
 		try {
-			new JSONDownload(c).execute("GET", "JSONObject", stringUrl + "?shop=" + 
+			new JSONDownload(c).execute("GET", "JSONObject", serverURL + "?shop=" + 
 					URLEncoder.encode(WiFastApp.shopManager.getShopName(), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -136,6 +146,15 @@ public class SplashScreen extends Activity {
 			if (msg.obj == null){
 				Toast.makeText(getApplicationContext(), "Error downloading menu.", Toast.LENGTH_LONG).show();
 				currentAction.setText("Menu dowanload error.");
+				Log.d("ERROR", "Download menu error.");
+				final Handler handler = new Handler();
+				handler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						Log.d("ERROR", "Download menu error - retry.");
+						continueCheckin();
+					}
+				}, 1000);
 				return false;
 			}
 			

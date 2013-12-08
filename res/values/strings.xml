@@ -10,14 +10,14 @@
     <string name="profile_button_string">Profile</string>
     <string name="cart_button_string">Cart</string>
     <string name="finish_order_button_string">Pay</string>
-    <string name="title_activity_shopslist_dialog">Select a Shop</string>
     <string name="title_enable_settings_dialog">Enable localization/connection</string>
     <string name="location_disabled">Location is not enabled.\nPlease enable location and try again.</string>
+    <string name="network_disabled">Network is not enabled.\nPlease enable network and try again.</string>
     <string name="exit_app">Exit app</string>
     <string name="settings">Settings</string>
     <string name="done">Done</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="wifast">WiFast</string>
-    <string name="title_activity_shop_list">ShopListActivity</string>
+    <string name="title_activity_shop_list">Select your Shop:</string>
 
 </resources>

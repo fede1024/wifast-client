@@ -21,27 +21,20 @@ public class ShopListManager {
 	
 	public ShopListManager(Context context) {
 		this.myContext = context;			
-		serverURL = WiFastApp.getProperty("server_url")+"getShops";
+		serverURL = WiFastApp.getProperty("get_shops_url");
 	}
 
 	public boolean getJSONShops(Callback c) {
-		ConnectivityManager connMgr = (ConnectivityManager)this.myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		if (networkInfo != null && networkInfo.isConnected()) {
-			String searchURL  = "";
-			if(lastLocation != null)
-				searchURL = serverURL+"?lat="+lastLocation.getLatitude()+"&lon="+lastLocation.getLongitude();
-			else {
-				Log.d("ERROR", "Location null!!!");
-				searchURL = serverURL;
-			}
-			System.out.println("Searching URL: "+searchURL);
-			new JSONDownload(c).execute("GET", "JSONArray", searchURL);
-			return false;	// Ok
-		} else{
-			showSettingsAlert("Network");
-			return true;	// No JSON object
+		String searchURL  = "";
+		if(lastLocation != null)
+			searchURL = serverURL+"?lat="+lastLocation.getLatitude()+"&lon="+lastLocation.getLongitude();
+		else {
+			Log.d("ERROR", "Location null!!!");
+			searchURL = serverURL;
 		}
+		System.out.println("Searching URL: "+searchURL);
+		new JSONDownload(c).execute("GET", "JSONArray", searchURL);
+		return false;
 	}
 
 	public Location updateLocation() {
@@ -63,15 +56,6 @@ public class ShopListManager {
 			System.out.println("Location from: none");
 		
 		return location;
-	}
-	
-	public boolean checkLocationEnabled(){
-		LocationManager locationManager = (LocationManager) this.myContext.getSystemService(Context.LOCATION_SERVICE);
-
-		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-				locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-			return true;
-		return false;
 	}
 	
 	public Location getLastLocation(){

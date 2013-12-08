@@ -8,16 +8,35 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 
-// TODO: use this dialog also for network connection
 public class EnableSettingsDialog extends Activity {
+	public static String MISSING_ARG_NAME = "MISSING";
+	public static int MISSING_LOCATION = 0;
+	public static int MISSING_NETWORK = 1;
+	private int missing;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Bundle extras = getIntent().getExtras();
+
 		setContentView(R.layout.enable_settings_dialog);
 		setFinishOnTouchOutside(false);
-		setTitle("Location disabled");
+
+		if (extras != null) {
+		    missing = extras.getInt(MISSING_ARG_NAME);
+		}
+		TextView description = (TextView)this.findViewById(R.id.enable_setting_description);
+		
+		if (missing == MISSING_LOCATION){
+			setTitle("Location disabled");
+			description.setText(R.string.location_disabled);
+		}
+		else if (missing == MISSING_NETWORK){
+			setTitle("Network disabled");
+			description.setText(R.string.network_disabled);
+		}
 	}
 
 	@Override
@@ -33,7 +52,14 @@ public class EnableSettingsDialog extends Activity {
 	}
 	
 	public void showSettings(View v) {
-        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		Intent intent;
+		if (missing == MISSING_LOCATION)
+	        intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		else if (missing == MISSING_NETWORK)
+	        intent = new Intent(Settings.ACTION_SETTINGS);
+		else
+			return;
+
         this.startActivity(intent);
 	}
 
@@ -47,18 +73,4 @@ public class EnableSettingsDialog extends Activity {
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
-
-    public void showNoLocationAlertAndExit(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-
-        alertDialog.setTitle("Localization missing")
-		    .setMessage("WiFast needs localization.")
-            .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-		            public void onClick(DialogInterface dialog,int which) {
-		                //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		                //myContext.startActivity(intent);
-		            }
-		       });
-        alertDialog.show();
-    }
 }

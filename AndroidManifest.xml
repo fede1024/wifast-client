@@ -29,10 +29,6 @@
         <activity android:name="fr.eurecom.wifast.CartActivity" >
         </activity>
         <activity
-            android:name="fr.eurecom.wifast.ShopsListDialog"
-            android:label="@string/title_activity_shopslist_dialog" >
-        </activity>
-        <activity
             android:name="fr.eurecom.wifast.EnableSettingsDialog"
             android:label="@string/title_enable_settings_dialog"
             android:theme="@android:style/Theme.Holo.Light.Dialog" >

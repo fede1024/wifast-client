@@ -10,7 +10,7 @@
     tools:context=".EnableSettingsDialog" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/enable_setting_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/location_disabled" />
