@@ -5,13 +5,20 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
 
+    <TextView
+        android:id="@+id/welcomeTitle"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wifast"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <Button
         android:id="@+id/menus_menu_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:enabled="false"
-        android:onClick="buttonPressed"
+        android:onClick="menuButtonPressed"
         android:text="@string/menus_button_string" />
 
     <Button
@@ -19,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:onClick="buttonPressed"
+        android:onClick="ordersButtonPressed"
         android:text="@string/orders_button_string" />
 
     <Button
@@ -27,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:onClick="buttonPressed"
+        android:onClick="profileButtonPressed"
         android:text="@string/profile_button_string" />
 
     <Button
@@ -35,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:onClick="buttonPressed"
+        android:onClick="cartButtonPressed"
         android:text="@string/cart_button_string" />
 
 </LinearLayout>

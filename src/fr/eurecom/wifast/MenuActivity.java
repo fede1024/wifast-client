@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.eurecom.wifast.library.Order;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;

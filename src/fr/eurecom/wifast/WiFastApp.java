@@ -21,6 +21,7 @@ public class WiFastApp extends Application {
 	public static Properties properties;
 	public static Context context;
 	public static ShopListManager shopManager;
+	public static SplashScreen splashScreenActivity;
 
     @Override public void onCreate() {
         super.onCreate();
