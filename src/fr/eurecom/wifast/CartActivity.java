@@ -107,6 +107,7 @@ public class CartActivity extends FragmentActivity {
             case R.id.finish_order_menu_button:
             	System.out.println("Finish order menu button");
         		Toast.makeText(this, "Order finished. Sending to server.", Toast.LENGTH_SHORT).show();
+        		item.setEnabled(false);
         		Order.getCurrentOrder().sendToServer();
         		final Handler handler = new Handler();
         		handler.postDelayed(new Runnable() {

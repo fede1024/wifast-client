@@ -9,14 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.eurecom.wifast.library.JSONDownload;
-import fr.eurecom.wifast.util.SystemUiHider;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -44,8 +40,6 @@ public class SplashScreen extends Activity {
 
 		//final Handler handler = new Handler();
 		//handler.postDelayed(new StartMainActivity(this), 5000);
-		
-		WiFastApp.splashScreenActivity = this;
 	}
 
     public void onResume(){
