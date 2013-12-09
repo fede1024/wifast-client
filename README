@@ -1,0 +1,10 @@
+INSTALLATION
+
+From Android SDK manager, download:
+* google play services
+* google api ver 17
+
+From Eclipse:
+File > Import > Existing Android code into w.
+Select the google-play-services_lib folder inside this folder, don't copy to w. > finish.
+Go to the project properties > Android > Add new project as library.
