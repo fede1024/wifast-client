@@ -21,6 +21,7 @@ public class WiFastApp extends Application {
 	public static Properties properties;
 	public static Context context;
 	public static ShopListManager shopManager;
+	public static String id;
 
     @Override public void onCreate() {
         super.onCreate();
