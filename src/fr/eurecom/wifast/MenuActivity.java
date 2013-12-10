@@ -66,7 +66,8 @@ public class MenuActivity extends FragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
