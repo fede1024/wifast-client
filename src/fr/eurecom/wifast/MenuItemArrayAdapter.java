@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
@@ -30,18 +31,14 @@ import fr.eurecom.wifast.library.Order;
 public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	private final Context context;
 	private boolean ready[];
-	private ImageButton cart_icon;
-	private ImageView animationImage;
+	public static ImageButton cart_icon;
+	public static ImageView animationImage;
 	
 	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values) {
 		super(context, R.layout.list_item, values);
 		this.context = context;
 		ready = new boolean[getCount()];
 		for(int i = 0; i < getCount(); i++) ready[i] = false;
-	}
-
-	public void setCartIcon(ImageButton cart_icon) {
-		this.cart_icon = cart_icon;
 	}
 	
 	@Override
@@ -147,7 +144,14 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		public void onClick(View v) {
 			System.out.println("Add this " + id);
 			
-			//TODO perform animation
+			//Perform animation
+			/* Copying the image */
+			animationImage.setImageBitmap(((BitmapDrawable)icon.getDrawable()).getBitmap());
+			/* Adjusting the size */
+			animationImage.setAdjustViewBounds(true);
+			animationImage.setMaxHeight(icon.getHeight());
+			animationImage.setMaxWidth(icon.getWidth());
+			
 			int animPos[] = new int[2];
 			int iconPos[] = new int[2];
 			int cartPos[] = new int[2];
@@ -155,23 +159,28 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			icon.getLocationOnScreen(iconPos);
 			cart_icon.getLocationOnScreen(cartPos);
 			
+			TranslateAnimation translateAnim1 = new TranslateAnimation(iconPos[0]-animPos[0],
+																	   (cartPos[0]-animPos[0])*2,	// (deltaX)/0.5 0.5 = scaling factor
+																	   iconPos[1]-animPos[1],
+																	   (cartPos[1]-animPos[1])*2);	// (deltaY)/0.5
+			translateAnim1.setInterpolator(new AccelerateInterpolator());
+			translateAnim1.setDuration(2000);
+			ScaleAnimation scaleAnim1 = new ScaleAnimation(1.0f, 0.5f, 1.0f, 0.5f,
+															Animation.RELATIVE_TO_SELF, 0.5f,
+															Animation.RELATIVE_TO_SELF, 0.5f);
+			scaleAnim1.setDuration(2000);
+			/*ScaleAnimation scaleAnim2 = new ScaleAnimation(1.0f, 2.0f, 1.0f, 2.0f,
+															Animation.RELATIVE_TO_SELF, 0.5f,
+															Animation.RELATIVE_TO_SELF, 0.5f);
+			scaleAnim2.setDuration(1000);
+			scaleAnim2.setStartOffset(1000);*/
 			
-			AnimationSet anim = new AnimationSet(true);
-			//TranslateAnimation translateAnim = new TranslateAnimation(iconPos[0] - animPos[0], cartPos[0]-animPos[0], iconPos[1]-animPos[1], cartPos[1]-animPos[1]);
-			TranslateAnimation translateAnim = new TranslateAnimation(iconPos[0] - animPos[0], 400, iconPos[1]-animPos[1], -200);
-			translateAnim.setDuration(5000);
-			anim.addAnimation(translateAnim);
-			ScaleAnimation scaleAnim1 = new ScaleAnimation(1.0f, 1.0f, 1.0f, 1.0f);
-			scaleAnim1.setDuration(2500);
-			/*ScaleAnimation scaleAnim2 = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f);
-			scaleAnim2.setDuration(2500);
-			scaleAnim2.setStartTime(0);
-			scaleAnim2.setStartOffset(2500);
-			*/
+			/* Combine animations */
+			AnimationSet anim = new AnimationSet(false);
+			anim.addAnimation(translateAnim1);
 			anim.addAnimation(scaleAnim1);
 			//anim.addAnimation(scaleAnim2);
-			anim.setZAdjustment(AnimationSet.ZORDER_TOP);
-			
+			anim.setZAdjustment(AnimationSet.ZORDER_TOP);	
 			anim.setAnimationListener(new AnimationListener() {
 				@Override
 				public void onAnimationStart(Animation animation) {
@@ -179,23 +188,16 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 				}
 				@Override
 				public void onAnimationRepeat(Animation animation) {
-					// TODO Auto-generated method stub
-					
 				}
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					animationImage.setVisibility(ImageView.INVISIBLE);
 				}
 			});
-			/* Copying the image */
-			animationImage.setImageBitmap(((BitmapDrawable)icon.getDrawable()).getBitmap());
-			/* Adjusting the size */
-			animationImage.setAdjustViewBounds(true);
-			animationImage.setMaxHeight(icon.getHeight());
-			animationImage.setMaxWidth(icon.getWidth());
-			/* Setting visibility and putting the image in front of all */
+			/* Putting the image in front of all */
 			animationImage.bringToFront();
 			animationImage.startAnimation(anim);
+			/* Add order to cart */
 			Order.getCurrentOrder().addItem(this.id);
 		}
 	}
@@ -212,8 +214,4 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			System.out.println("More info on this " + id);
 		}
 	  }
-
-	public void setAnimationImage(ImageView animationImage) {
-		this.animationImage = animationImage;
-	}
 }

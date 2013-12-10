@@ -30,8 +30,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -74,15 +72,10 @@ public class SwipeFragment extends Fragment {
         });
         
         listView = (ListView) rootView.findViewById(R.id.listview);
-        ImageButton cart_icon = (ImageButton) rootView.findViewById(R.id.cartButton);
-        ImageView animationImage = (ImageView) rootView.findViewById(R.id.hidden_image);
         
 		Context context = getActivity();
 		if (context != null) {
-			MenuItemArrayAdapter menuAdapter = new MenuItemArrayAdapter(getActivity(), items);
-			menuAdapter.setCartIcon(cart_icon);
-			menuAdapter.setAnimationImage(animationImage);
-			ListAdapter adapter = menuAdapter;
+			ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), items);
 			listView.setAdapter(adapter);
 	
 			listView.setTextFilterEnabled(true);
