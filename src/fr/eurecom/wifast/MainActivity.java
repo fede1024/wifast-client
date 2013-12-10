@@ -25,6 +25,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +53,9 @@ public class MainActivity extends Activity {
 	public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
+    private static final String PROPERTY_UUID = "uuid";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private final String server_url = "http://192.168.1.76:5000"; 
 
     /**
      * Substitute you own sender ID here. This is the project number you got
@@ -195,7 +200,7 @@ public class MainActivity extends Activity {
                     // message using the 'from' address in the message.
 
                     // Persist the regID - no need to register again.
-                    storeRegistrationId(context, regid);
+//                    storeRegistrationId(context, regid);
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
@@ -216,8 +221,17 @@ public class MainActivity extends Activity {
      */
     private void sendRegistrationIdToBackend() {
     	Log.i(TAG, "sendRegistrationIdToBackend");
-    	HTTPRequest r = new HTTPRequest(new GetIdCallback(), "GET", "http://192.168.1.76:5000/api/getId", null);
-		r.execute();
+    	final SharedPreferences prefs = getGCMPreferences(context);
+        String uuid = prefs.getString(PROPERTY_UUID, "");
+        if (uuid.isEmpty()) {
+        	HTTPRequest r = new HTTPRequest(new GetIdCallback(), "GET", this.server_url+"/api/getId", null);
+    		r.execute();
+        } else {
+        	String data = "id="+uuid+"&token="+this.regid;
+			HTTPRequest r = new HTTPRequest(new SendTokenCallback(), "POST", this.server_url+"/api/setToken", data);
+			r.execute();
+        }
+    	
         // Your implementation here.
     }
     
@@ -285,10 +299,17 @@ public class MainActivity extends Activity {
 		@Override
 		public boolean handleMessage(Message msg) {
 			Log.d("TOKEN", "handle message");
-			if(msg.obj == null)
-				return false;
-			
-    		return true;
+			if(msg.obj != null) {
+				try {
+					JSONObject o = new JSONObject((String)msg.obj);
+					if (o.getInt("code") == 0 && regid != null) {
+						storeRegistrationId(context, regid);
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+    		return false;
 		}
 	}
     
@@ -296,13 +317,17 @@ public class MainActivity extends Activity {
 		@Override
 		public boolean handleMessage(Message msg) {
 			
-			if(msg.obj == null)
+			if(msg.obj == null || msg.obj.equals(""))
 				return false;
 			String id = (String)msg.obj;
 			Log.d("ID", "get id: "+id);
-			WiFastApp.id = id;
+			final SharedPreferences prefs = getGCMPreferences(context);
+	        SharedPreferences.Editor editor = prefs.edit();
+	        editor.putString(PROPERTY_UUID, id);
+	        editor.commit();
+	        
 			String data = "id="+id+"&token="+MainActivity.this.getRegistrationId(MainActivity.this);
-			HTTPRequest r = new HTTPRequest(new SendTokenCallback(), "POST", "http://192.168.1.76:5000/api/setToken", data);
+			HTTPRequest r = new HTTPRequest(new SendTokenCallback(), "POST", MainActivity.this.server_url+"/api/setToken", data);
 			r.execute();
     		return true;
 		}
