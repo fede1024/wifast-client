@@ -20,6 +20,8 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class MenuActivity extends FragmentActivity {
 
@@ -56,6 +58,8 @@ public class MenuActivity extends FragmentActivity {
         // Set up the ViewPager, attaching the adapter.
         mViewPager = (ViewPager) this.findViewById(R.id.pager);
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+        MenuItemArrayAdapter.cart_icon = (ImageButton) this.findViewById(R.id.cartButton);
+        MenuItemArrayAdapter.animationImage = (ImageView) this.findViewById(R.id.hidden_image);
         //return inflater.inflate(R.layout.fragment_swipe, container, false);
     }
 
@@ -66,7 +70,8 @@ public class MenuActivity extends FragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

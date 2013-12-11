@@ -3,7 +3,9 @@
     android:layout_width="fill_parent"
     android:background="?android:selectableItemBackground"
     android:layout_height="100dp"
-    android:padding="6dip" >
+    android:padding="6dip"
+	android:clipChildren="false"
+	android:clipToPadding="false" >
 
     <!-- android:layout_height="?android:attr/listPreferredItemHeight" -->
 
@@ -75,8 +77,6 @@
             android:layout_height="56dp"
             android:scaleType="fitCenter"
             android:visibility="gone" />
-        
-
     </LinearLayout>
 
 </RelativeLayout>

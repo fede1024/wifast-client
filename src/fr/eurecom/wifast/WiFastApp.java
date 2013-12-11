@@ -9,14 +9,13 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import fr.eurecom.wifast.library.ShopListManager;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import fr.eurecom.wifast.library.ShopListManager;
 
 public class WiFastApp extends Application {
 	public static JSONArray types, shops;

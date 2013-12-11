@@ -1,5 +1,6 @@
 package fr.eurecom.wifast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,7 @@ public class ShopListActivity extends Activity {
 				HashMap<String, String> map = new HashMap<String, String>();
 	            map.put("rowid", "" + i);
 	            map.put("name", item.getString("name"));
-	            map.put("dist", "Distance: " + Integer.toString(item.getInt("dist")) + "m");
+	            map.put("dist", "Distance: " + new DecimalFormat("#.##").format(item.getDouble("dist")) + " km");
 	            list.add(map);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

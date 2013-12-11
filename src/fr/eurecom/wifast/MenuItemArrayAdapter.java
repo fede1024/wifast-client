@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -13,6 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,14 +31,16 @@ import fr.eurecom.wifast.library.Order;
 public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	private final Context context;
 	private boolean ready[];
-
+	public static ImageButton cart_icon;
+	public static ImageView animationImage;
+	
 	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values) {
 		super(context, R.layout.list_item, values);
 		this.context = context;
 		ready = new boolean[getCount()];
 		for(int i = 0; i < getCount(); i++) ready[i] = false;
 	}
-
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if(convertView == null){
@@ -43,10 +52,9 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		TextView flv = (TextView) convertView.findViewById(R.id.firstLine);
 		TextView slv = (TextView) convertView.findViewById(R.id.secondLine);
 		ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
-		
+		ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
 		
 		RelativeLayout item = (RelativeLayout) convertView.findViewById(R.id.list_item);
-		
 		
 		String name = "";
 		String image = "";
@@ -73,7 +81,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			add.setVisibility(View.INVISIBLE);
 		} catch (JSONException e1) {
 			//count is not present --> menu view
-			add.setOnClickListener(new AddCartOnClickListener(name));
+			add.setOnClickListener(new AddCartOnClickListener(name, icon));
 		}
 		
 		item.setOnClickListener(new MoreInfoOnClickListener(name));
@@ -125,14 +133,71 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 
 	private class AddCartOnClickListener implements OnClickListener {
 		String id;
-
-		public AddCartOnClickListener(String id) {
+		ImageView icon;
+		
+		public AddCartOnClickListener(String id, ImageView icon) {
 			this.id = id;
+			this.icon = icon;
 		}
 
 		@Override
 		public void onClick(View v) {
 			System.out.println("Add this " + id);
+			
+			//Perform animation
+			/* Copying the image */
+			animationImage.setImageBitmap(((BitmapDrawable)icon.getDrawable()).getBitmap());
+			/* Adjusting the size */
+			animationImage.setAdjustViewBounds(true);
+			animationImage.setMaxHeight(icon.getHeight());
+			animationImage.setMaxWidth(icon.getWidth());
+			
+			int animPos[] = new int[2];
+			int iconPos[] = new int[2];
+			int cartPos[] = new int[2];
+			animationImage.getLocationOnScreen(animPos);
+			icon.getLocationOnScreen(iconPos);
+			cart_icon.getLocationOnScreen(cartPos);
+			
+			TranslateAnimation translateAnim1 = new TranslateAnimation(iconPos[0]-animPos[0],
+																	   (cartPos[0]-animPos[0])*2,	// (deltaX)/0.5 0.5 = scaling factor
+																	   iconPos[1]-animPos[1],
+																	   (cartPos[1]-animPos[1])*2);	// (deltaY)/0.5
+			translateAnim1.setInterpolator(new AccelerateInterpolator());
+			translateAnim1.setDuration(2000);
+			ScaleAnimation scaleAnim1 = new ScaleAnimation(1.0f, 0.5f, 1.0f, 0.5f,
+															Animation.RELATIVE_TO_SELF, 0.5f,
+															Animation.RELATIVE_TO_SELF, 0.5f);
+			scaleAnim1.setDuration(2000);
+			/*ScaleAnimation scaleAnim2 = new ScaleAnimation(1.0f, 2.0f, 1.0f, 2.0f,
+															Animation.RELATIVE_TO_SELF, 0.5f,
+															Animation.RELATIVE_TO_SELF, 0.5f);
+			scaleAnim2.setDuration(1000);
+			scaleAnim2.setStartOffset(1000);*/
+			
+			/* Combine animations */
+			AnimationSet anim = new AnimationSet(false);
+			anim.addAnimation(translateAnim1);
+			anim.addAnimation(scaleAnim1);
+			//anim.addAnimation(scaleAnim2);
+			anim.setZAdjustment(AnimationSet.ZORDER_TOP);	
+			anim.setAnimationListener(new AnimationListener() {
+				@Override
+				public void onAnimationStart(Animation animation) {
+					animationImage.setVisibility(ImageView.VISIBLE);				
+				}
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+				}
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					animationImage.setVisibility(ImageView.INVISIBLE);
+				}
+			});
+			/* Putting the image in front of all */
+			animationImage.bringToFront();
+			animationImage.startAnimation(anim);
+			/* Add order to cart */
 			Order.getCurrentOrder().addItem(this.id);
 		}
 	}

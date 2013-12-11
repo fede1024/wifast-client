@@ -72,7 +72,7 @@ public class SwipeFragment extends Fragment {
         });
         
         listView = (ListView) rootView.findViewById(R.id.listview);
-	
+        
 		Context context = getActivity();
 		if (context != null) {
 			ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), items);
