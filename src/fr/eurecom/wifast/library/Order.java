@@ -110,7 +110,7 @@ public class Order {
 			System.out.println("in doInBackground");
 			// params comes from the execute() call: params[0] is the url.
 			try {
-				URL url = new URL(WiFastApp.getProperty("send_order_url"));
+				URL url = new URL(WiFastApp.getProperty("server_url")+"/api/newOrder");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setReadTimeout(10000 /* milliseconds */);
 				conn.setConnectTimeout(15000 /* milliseconds */);

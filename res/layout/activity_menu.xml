@@ -58,10 +58,10 @@
 
 		<RelativeLayout
 		    android:layout_width="wrap_content"
-		    android:layout_height="23dp"
+		    android:layout_height="40dp"
 		    android:layout_gravity="bottom"
-		    android:padding="0dp"
-		    android:orientation="horizontal" >
+		    android:orientation="horizontal"
+		    android:padding="0dp" >
 		    
 		    <TextView
 		        android:id="@+id/price"
@@ -70,9 +70,10 @@
 		        android:layout_alignParentBottom="true"
 		        android:layout_alignParentTop="true"
 		        android:layout_toLeftOf="@+id/cartButton"
+		        android:paddingRight="10dp"
 		        android:gravity="center"
 		        android:text="@string/initial_price"
-		        android:textSize="15sp" />
+		        android:textSize="25sp" />
 
 		    <ImageButton
 	            android:id="@+id/cartButton"

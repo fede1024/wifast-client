@@ -33,10 +33,14 @@ public class ShopListActivity extends Activity {
 		for (int i = 0; i < WiFastApp.shops.length(); ++i) {
 			try {
 				JSONObject item = (JSONObject)WiFastApp.shops.get(i);
+				double distance = item.getDouble("dist");
 				HashMap<String, String> map = new HashMap<String, String>();
 	            map.put("rowid", "" + i);
 	            map.put("name", item.getString("name"));
-	            map.put("dist", "Distance: " + new DecimalFormat("#.##").format(item.getDouble("dist")) + " km");
+	            if (distance < 0)
+		            map.put("dist", "");
+	            else
+		            map.put("dist", "Distance: " + new DecimalFormat("#.##").format(distance) + " km");
 	            list.add(map);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

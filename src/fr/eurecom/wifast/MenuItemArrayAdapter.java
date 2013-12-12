@@ -33,12 +33,14 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	private boolean ready[];
 	public static ImageButton cart_icon;
 	public static ImageView animationImage;
+	private boolean buttonEnabled;
 	
 	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values) {
 		super(context, R.layout.list_item, values);
 		this.context = context;
 		ready = new boolean[getCount()];
 		for(int i = 0; i < getCount(); i++) ready[i] = false;
+		buttonEnabled = true;
 	}
 	
 	@Override
@@ -144,6 +146,9 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		public void onClick(View v) {
 			System.out.println("Add this " + id);
 			
+			if(buttonEnabled == false)
+				return;
+			
 			//Perform animation
 			/* Copying the image */
 			animationImage.setImageBitmap(((BitmapDrawable)icon.getDrawable()).getBitmap());
@@ -164,11 +169,11 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 																	   iconPos[1]-animPos[1],
 																	   (cartPos[1]-animPos[1])*2);	// (deltaY)/0.5
 			translateAnim1.setInterpolator(new AccelerateInterpolator());
-			translateAnim1.setDuration(2000);
+			translateAnim1.setDuration(500);
 			ScaleAnimation scaleAnim1 = new ScaleAnimation(1.0f, 0.5f, 1.0f, 0.5f,
 															Animation.RELATIVE_TO_SELF, 0.5f,
 															Animation.RELATIVE_TO_SELF, 0.5f);
-			scaleAnim1.setDuration(2000);
+			scaleAnim1.setDuration(500);
 			/*ScaleAnimation scaleAnim2 = new ScaleAnimation(1.0f, 2.0f, 1.0f, 2.0f,
 															Animation.RELATIVE_TO_SELF, 0.5f,
 															Animation.RELATIVE_TO_SELF, 0.5f);
@@ -184,7 +189,8 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			anim.setAnimationListener(new AnimationListener() {
 				@Override
 				public void onAnimationStart(Animation animation) {
-					animationImage.setVisibility(ImageView.VISIBLE);				
+					animationImage.setVisibility(ImageView.VISIBLE);
+					buttonEnabled = false;
 				}
 				@Override
 				public void onAnimationRepeat(Animation animation) {
@@ -192,6 +198,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					animationImage.setVisibility(ImageView.INVISIBLE);
+					buttonEnabled = true;
 				}
 			});
 			/* Putting the image in front of all */

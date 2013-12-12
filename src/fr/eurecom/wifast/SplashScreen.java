@@ -120,7 +120,7 @@ public class SplashScreen extends Activity {
     public void downloadMenu() {
 //  	ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 //  	NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		String serverURL = WiFastApp.getProperty("get_menu_url");
+		String serverURL = WiFastApp.getProperty("server_url")+"/api/getMenu";
 //  	if (networkInfo != null && networkInfo.isConnected()) {
 		Callback c = new JSONMenuDownloadedCallback();
 		try {
