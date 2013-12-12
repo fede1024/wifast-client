@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -16,19 +17,10 @@ import android.os.AsyncTask;
 import fr.eurecom.wifast.WiFastApp;
 
 public class Order {
-	private static Order current_order;
-	
 	Hashtable<String, Integer> items;
 	
-	private Order(){
+	public Order(){
 		 items = new Hashtable<String,Integer>();
-	}
-	
-	public static Order getCurrentOrder() {
-		if (Order.current_order == null) {
-			Order.current_order = new Order();
-		}
-		return Order.current_order;
 	}
 	
 	public Integer get(String key){
@@ -47,11 +39,24 @@ public class Order {
 		return items.keySet();
 	}
 	
-	public int getTotalCost(){
-		Integer total = 0;
+	public Double getTotalCost(){
+		Double total = 0.0;
 		
-		for (Integer value : items.values())
-			total += value;
+		for (Entry<String, Integer> entry : items.entrySet()) {
+			JSONObject item = WiFastApp.menu_map.get(entry.getKey());
+			Double price = 0.0;
+			if (item == null) {
+				System.out.println("ERROR: item doee not exists.");
+				continue;
+			}
+			try {
+				price = item.getDouble("price");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			total += price * entry.getValue();
+		}
 		
 		return total;
 	}
@@ -110,7 +115,7 @@ public class Order {
 			System.out.println("in doInBackground");
 			// params comes from the execute() call: params[0] is the url.
 			try {
-				URL url = new URL(WiFastApp.getProperty("send_order_url"));
+				URL url = new URL(WiFastApp.getProperty("server_url")+"/api/newOrder");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setReadTimeout(10000 /* milliseconds */);
 				conn.setConnectTimeout(15000 /* milliseconds */);
@@ -131,11 +136,12 @@ public class Order {
 				return "Unable to retrieve web page. URL may be invalid.";
 			}
 		}
+
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(String result) {
 			System.out.println("Order sent!");
-			Order.current_order = null;
+			WiFastApp.current_order = null; // TODO remove from here?
 			Order.this.items = null;
 		}
 	}

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
@@ -59,6 +60,10 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
                 mBuilder.setContentIntent(contentIntent);
                 mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                
+                long[] pattern = {0, 500, 500, 500, 500, 500, 500, 500};
+                Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(pattern, -1); // Only once
             }
         }
     	

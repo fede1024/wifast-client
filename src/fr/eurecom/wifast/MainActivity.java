@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final String PROPERTY_UUID = "uuid";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private final String server_url = "http://192.168.1.76:5000"; 
+    private String server_url; 
 
     /**
      * Substitute you own sender ID here. This is the project number you got
@@ -86,6 +86,7 @@ public class MainActivity extends Activity {
         
         title.setText("Welcome to " + WiFastApp.shopManager.getShopName());
 
+        server_url = WiFastApp.getProperty("server_url");
 	    context = getApplicationContext();
 	    if(checkPlayServices()) {
 	    	gcm = GoogleCloudMessaging.getInstance(this);
@@ -326,7 +327,7 @@ public class MainActivity extends Activity {
 	        editor.putString(PROPERTY_UUID, id);
 	        editor.commit();
 	        
-			String data = "id="+id+"&token="+MainActivity.this.getRegistrationId(MainActivity.this);
+			String data = "id="+id+"&token="+MainActivity.this.regid;
 			HTTPRequest r = new HTTPRequest(new SendTokenCallback(), "POST", MainActivity.this.server_url+"/api/setToken", data);
 			r.execute();
     		return true;
@@ -358,17 +359,6 @@ public class MainActivity extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.cart_menu_button:
-            	System.out.println("Cart menu button");
-            	Intent intent = new Intent(this, CartActivity.class);
-            	startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    
     public void menuButtonPressed(View view) {
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);

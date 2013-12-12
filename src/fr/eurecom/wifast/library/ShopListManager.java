@@ -19,13 +19,14 @@ public class ShopListManager {
 	
 	public ShopListManager(Context context) {
 		this.myContext = context;			
-		serverURL = WiFastApp.getProperty("get_shops_url");
+		serverURL = WiFastApp.getProperty("server_url") + "/api/getShops";
 	}
 
 	public boolean getJSONShops(Callback c) {
 		String searchURL  = "";
 		if(lastLocation != null)
-			searchURL = serverURL+"?lat="+lastLocation.getLatitude()+"&lon="+lastLocation.getLongitude();
+			searchURL = serverURL+"?lat="+lastLocation.getLatitude()+"&lon="+lastLocation.getLongitude() + 
+			"&acc=" + lastLocation.getAccuracy();
 		else {
 			Log.d("ERROR", "Location null!!!");
 			searchURL = serverURL;
