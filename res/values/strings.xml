@@ -19,6 +19,6 @@
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="wifast">WiFast</string>
     <string name="title_activity_shop_list">Select your Shop:</string>
-    <string name="initial_price">0.00 €</string>
+    <string name="initial_price">0,00 €</string>
 
 </resources>

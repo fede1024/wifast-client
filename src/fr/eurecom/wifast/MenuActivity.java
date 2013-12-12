@@ -1,5 +1,6 @@
 package fr.eurecom.wifast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -8,8 +9,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler.Callback;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -20,8 +24,12 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import fr.eurecom.wifast.library.Order;
 
 public class MenuActivity extends FragmentActivity {
 
@@ -60,6 +68,12 @@ public class MenuActivity extends FragmentActivity {
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         MenuItemArrayAdapter.cart_icon = (ImageButton) this.findViewById(R.id.cartButton);
         MenuItemArrayAdapter.animationImage = (ImageView) this.findViewById(R.id.hidden_image);
+        
+        TextView priceTV = (TextView) this.findViewById(R.id.priceTV);
+        
+        Callback updatePrices = new newItemCallback(priceTV);
+        MenuItemArrayAdapter.newItemCallback = updatePrices;
+        updatePrices.handleMessage(null);
         //return inflater.inflate(R.layout.fragment_swipe, container, false);
     }
 
@@ -68,6 +82,11 @@ public class MenuActivity extends FragmentActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+    
+    public void cartButtonPressed(View view) {
+    	Intent intent = new Intent(this, CartActivity.class);
+    	startActivity(intent);
     }
     
     @SuppressWarnings("deprecation")
@@ -158,5 +177,20 @@ public class MenuActivity extends FragmentActivity {
         }
     }
     
+    
+	private class newItemCallback implements Callback {
+		TextView priceTV;
+		
+		public newItemCallback(TextView priceTV){
+			this.priceTV = priceTV;
+		}
+		
+		@Override
+		public boolean handleMessage(Message msg) {
+			Double cost = WiFastApp.current_order.getTotalCost();
 
+			priceTV.setText(new DecimalFormat("0.00 €").format(cost));
+			return false;
+		}
+	}
 }

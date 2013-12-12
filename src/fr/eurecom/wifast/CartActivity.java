@@ -45,7 +45,7 @@ public class CartActivity extends FragmentActivity {
         // Transform a JSONArray into a ArrayList<JSONObject>
 		ArrayList<JSONObject> items = new ArrayList<JSONObject>();
         try {
-			JSONArray tmpArray = Order.getCurrentOrder().getOrderArray();
+			JSONArray tmpArray = WiFastApp.current_order.getOrderArray();
 			for (int i = 0; i < tmpArray.length(); i++)
 				items.add((JSONObject)tmpArray.get(i));
 		} catch (JSONException e) {
@@ -109,7 +109,7 @@ public class CartActivity extends FragmentActivity {
             	System.out.println("Finish order menu button");
         		Toast.makeText(this, "Order finished. Sending to server.", Toast.LENGTH_SHORT).show();
         		item.setEnabled(false);
-        		Order.getCurrentOrder().sendToServer();
+        		WiFastApp.current_order.sendToServer();
         		final Handler handler = new Handler();
         		handler.postDelayed(new Runnable() {
         			@Override

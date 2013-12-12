@@ -15,6 +15,7 @@ import android.content.res.Resources;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import fr.eurecom.wifast.library.Order;
 import fr.eurecom.wifast.library.ShopListManager;
 
 public class WiFastApp extends Application {
@@ -23,6 +24,7 @@ public class WiFastApp extends Application {
 	public static Properties properties;
 	public static Context context;
 	public static ShopListManager shopManager;
+	public static Order current_order;
 	public static String id;
 
     @Override public void onCreate() {
@@ -41,6 +43,7 @@ public class WiFastApp extends Application {
 		}
 	    properties.list(System.out);
 
+		current_order = new Order();
         shopManager = new ShopListManager(context);	// Start getting shop list
     }
 

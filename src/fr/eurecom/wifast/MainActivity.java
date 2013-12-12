@@ -359,17 +359,6 @@ public class MainActivity extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.cart_menu_button:
-            	System.out.println("Cart menu button");
-            	Intent intent = new Intent(this, CartActivity.class);
-            	startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    
     public void menuButtonPressed(View view) {
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
