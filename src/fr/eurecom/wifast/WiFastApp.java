@@ -27,7 +27,8 @@ public class WiFastApp extends Application {
 	public static Order current_order;
 	public static String id;
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
         properties = new Properties();
