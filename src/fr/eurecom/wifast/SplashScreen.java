@@ -55,7 +55,7 @@ public class SplashScreen extends Activity {
 		    intent.putExtra(EnableSettingsDialog.MISSING_ARG_NAME, EnableSettingsDialog.MISSING_LOCATION);
 		    this.startActivity(intent);
         }
-        if(app.checkNetworkEnabled() == false){
+        else if(app.checkNetworkEnabled() == false){
 		    Intent intent = new Intent(this, EnableSettingsDialog.class);
 		    intent.putExtra(EnableSettingsDialog.MISSING_ARG_NAME, EnableSettingsDialog.MISSING_NETWORK);
 		    this.startActivity(intent);

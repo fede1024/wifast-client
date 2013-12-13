@@ -1,11 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_item"
+    android:id="@+id/cart_list_item"
     android:layout_width="fill_parent"
-    android:background="?android:selectableItemBackground"
     android:layout_height="100dp"
-    android:padding="6dip"
-	android:clipChildren="false"
-	android:clipToPadding="false" >
+    android:background="@drawable/menu_item"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="6dip" >
 
     <!-- android:layout_height="?android:attr/listPreferredItemHeight" -->
 
@@ -33,50 +33,61 @@
             android:minWidth="16dip" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/firstLine"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/icon"
-        android:gravity="center_vertical"
-        android:text="Example application"
-        android:textSize="16sp" />
+        android:layout_toRightOf="@id/icon" >
+
+        <TextView
+            android:id="@+id/firstLine"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="Example application long text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="3dp"
+            android:text="1.25 €"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/icon"
-        android:layout_alignLeft="@+id/firstLine"
-        android:layout_alignRight="@+id/firstLine"
-        android:layout_below="@+id/firstLine"
+        android:layout_alignLeft="@+id/linearLayout2"
+        android:layout_alignRight="@+id/linearLayout2"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/secondLine"
-            android:layout_width="0dp"
-            android:layout_height="58dp"
-            android:layout_weight="0.61"
-            android:text="Description"
-            android:textSize="12sp" />
+            android:id="@+id/countCartLabel"
+            android:layout_width="0dip"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:text="Qt: 0"
+            android:layout_weight="1"
+	        android:textSize="26sp" />
 
         <ImageButton
             android:id="@+id/addToCartButton"
-            android:background="?android:selectableItemBackground"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="56dp"
+            android:background="?android:selectableItemBackground"
             android:scaleType="fitCenter"
             android:src="@drawable/shopping_trolley_add" />
-        
-        <TextView
-            android:id="@+id/countCartLabel"
-            android:layout_width="50dp"
-            android:layout_height="56dp"
-            android:scaleType="fitCenter"
-            android:visibility="gone" />
+
     </LinearLayout>
 
 </RelativeLayout>

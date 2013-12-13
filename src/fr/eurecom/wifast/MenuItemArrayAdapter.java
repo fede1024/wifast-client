@@ -1,5 +1,6 @@
 package fr.eurecom.wifast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.json.JSONException;
@@ -38,7 +39,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	private boolean buttonEnabled;
 	
 	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values) {
-		super(context, R.layout.list_item, values);
+		super(context, R.layout.menu_list_item, values);
 		this.context = context;
 		ready = new boolean[getCount()];
 		for(int i = 0; i < getCount(); i++) ready[i] = false;
@@ -47,45 +48,61 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		JSONObject obj = getItem(position);
+		boolean cart;
+		RelativeLayout item;
+		
+		cart = obj.has("count");
+
 		if(convertView == null){
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.list_item, parent, false);
+			if (cart)
+				convertView = inflater.inflate(R.layout.cart_list_item, parent, false);
+			else
+				convertView = inflater.inflate(R.layout.menu_list_item, parent, false);
 		}
 		
-		JSONObject curr = getItem(position);
 		TextView flv = (TextView) convertView.findViewById(R.id.firstLine);
-		TextView slv = (TextView) convertView.findViewById(R.id.secondLine);
-		ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
 		ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
+		TextView pr = (TextView) convertView.findViewById(R.id.price);
 		
-		RelativeLayout item = (RelativeLayout) convertView.findViewById(R.id.list_item);
+		if(cart)
+			item = (RelativeLayout) convertView.findViewById(R.id.cart_list_item);
+		else
+			item = (RelativeLayout) convertView.findViewById(R.id.menu_list_item);
 		
 		String name = "";
 		String image = "";
 		String descr = "";
+		int count = 0;
+		double price = 0;
+		
 		try {
-			name = curr.getString("name");
-			image = curr.getString("image");
-			descr = curr.getString("description");
+			name = obj.getString("name");
+			image = obj.getString("image");
+			descr = obj.getString("description");
+			price = obj.getDouble("price");
 			flv.setText(name);
-			if(descr.length() > 60)
-				descr = descr.substring(0, 57) + "...";
-			slv.setText(descr);
+			pr.setText(new DecimalFormat("0.00 €").format(price));
+			count = 0;
+			
+			if(cart)
+				count = obj.getInt("count");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
-		try {
-			int count = Integer.parseInt(curr.get("count").toString());
+			
+		if(cart){
 			//count is present --> order view 
 			TextView cnt = (TextView) convertView.findViewById(R.id.countCartLabel);
-			cnt.setText(Integer.toString(count));
-			cnt.setVisibility(View.VISIBLE);
-			slv.setVisibility(View.INVISIBLE);
-			add.setVisibility(View.INVISIBLE);
-		} catch (JSONException e1) {
-			//count is not present --> menu view
+			cnt.setText("Qt: " + Integer.toString(count));
+		}
+		else {
+			ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
+			TextView slv = (TextView) convertView.findViewById(R.id.secondLine);
+
 			add.setOnClickListener(new AddCartOnClickListener(name, icon));
+			slv.setText(descr);
 		}
 		
 		item.setOnClickListener(new MoreInfoOnClickListener(name));
