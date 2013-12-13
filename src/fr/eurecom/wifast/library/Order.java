@@ -141,7 +141,7 @@ public class Order {
 		@Override
 		protected void onPostExecute(String result) {
 			System.out.println("Order sent!");
-			WiFastApp.current_order = null; // TODO remove from here?
+			WiFastApp.current_order = new Order(); // TODO remove from here?
 			Order.this.items = null;
 		}
 	}
