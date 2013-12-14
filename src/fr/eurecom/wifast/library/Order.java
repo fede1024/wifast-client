@@ -13,14 +13,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.AsyncTask;
+import fr.eurecom.wifast.CartActivity;
 import fr.eurecom.wifast.WiFastApp;
 
 public class Order {
-	Hashtable<String, Integer> items;
+	private Hashtable<String, Integer> items;
+	private CartActivity caller;
 	
 	public Order(){
 		 items = new Hashtable<String,Integer>();
+		 this.caller = null;
 	}
 	
 	public Integer get(String key){
@@ -77,37 +81,40 @@ public class Order {
 		return arr;
 	}
 	
-	public void sendToServer() {
+	public void sendToServer(CartActivity caller, String uuid) {
+		this.caller = caller;
 		System.out.println("sendToServer");
-		JSONArray arr = new JSONArray();
-		Enumeration<String> en = this.items.keys();
-		while (en.hasMoreElements()) {
-			String key = en.nextElement();
-			try {
+		try {
+			JSONObject order = new JSONObject();
+			order.put("uuid", uuid);
+			JSONArray arr = new JSONArray();
+			Enumeration<String> en = this.items.keys();
+			while (en.hasMoreElements()) {
+				String key = en.nextElement();
 				JSONObject obj = new JSONObject();
 				obj.put("name", key);
 				obj.put("count", this.get(key));
 				arr.put(obj);
-			} catch (JSONException e) {
-				e.printStackTrace();
 			}
+			if (arr.length() > 0) {
+				order.put("items", arr);
+				PostRequest p = new PostRequest(order);
+				p.execute();
+			} else {
+				System.out.println("Error creting jsonarray in sendToServer");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		if (arr.length() > 0) {
-			PostRequest p = new PostRequest(arr);
-			p.execute();
-		} else {
-			System.out.println("Error creting jsonarray in sendToServer");
-		}
-		
 	}
 
 	public class PostRequest extends AsyncTask<String, Void, String> {
 //		private Callback callback;
-		private JSONArray array;
+		private JSONObject order;
 
-		public PostRequest(/*Callback callback, */JSONArray array) {
+		public PostRequest(/*Callback callback, */JSONObject order) {
 //			this.callback = callback;
-			this.array = array;
+			this.order = order;
 		}
 
 		@Override
@@ -124,7 +131,7 @@ public class Order {
 				conn.setRequestProperty("Content-Type", "application/json");
 		        conn.setRequestProperty("Accept", "application/json");
 		        OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
-		        osw.write(this.array.toString());
+		        osw.write(this.order.toString());
 		        osw.flush();
 		        osw.close();
 				// Starts the query
@@ -143,6 +150,9 @@ public class Order {
 			System.out.println("Order sent!");
 			WiFastApp.current_order = new Order(); // TODO remove from here?
 			Order.this.items = null;
+			if (Order.this.caller != null) {
+				caller.refresh();
+			}
 		}
 	}
 }

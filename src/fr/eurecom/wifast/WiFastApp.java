@@ -19,6 +19,7 @@ import fr.eurecom.wifast.library.Order;
 import fr.eurecom.wifast.library.ShopListManager;
 
 public class WiFastApp extends Application {
+	public static final String PROPERTY_UUID = "uuid";
 	public static JSONArray types, shops;
 	public static HashMap<String, JSONObject> menu_map;
 	public static Properties properties;

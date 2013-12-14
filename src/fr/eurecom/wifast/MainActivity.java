@@ -53,7 +53,6 @@ public class MainActivity extends Activity {
 	public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    private static final String PROPERTY_UUID = "uuid";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private String server_url; 
 
@@ -151,8 +150,7 @@ public class MainActivity extends Activity {
     private SharedPreferences getGCMPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
-        return getSharedPreferences(MainActivity.class.getSimpleName(),
-                Context.MODE_PRIVATE);
+        return getSharedPreferences("wifast", Context.MODE_PRIVATE);
     }
     
     /**
@@ -223,7 +221,7 @@ public class MainActivity extends Activity {
     private void sendRegistrationIdToBackend() {
     	Log.i(TAG, "sendRegistrationIdToBackend");
     	final SharedPreferences prefs = getGCMPreferences(context);
-        String uuid = prefs.getString(PROPERTY_UUID, "");
+        String uuid = prefs.getString(WiFastApp.PROPERTY_UUID, "");
         if (uuid.isEmpty()) {
         	HTTPRequest r = new HTTPRequest(new GetIdCallback(), "GET", this.server_url+"/api/getId", null);
     		r.execute();
@@ -324,7 +322,7 @@ public class MainActivity extends Activity {
 			Log.d("ID", "get id: "+id);
 			final SharedPreferences prefs = getGCMPreferences(context);
 	        SharedPreferences.Editor editor = prefs.edit();
-	        editor.putString(PROPERTY_UUID, id);
+	        editor.putString(WiFastApp.PROPERTY_UUID, id);
 	        editor.commit();
 	        
 			String data = "id="+id+"&token="+MainActivity.this.regid;

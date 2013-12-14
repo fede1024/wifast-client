@@ -9,7 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +27,7 @@ import fr.eurecom.wifast.library.Order;
 
 public class CartActivity extends FragmentActivity {
 	private ListView listView;
+	private MenuItemArrayAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +71,8 @@ public class CartActivity extends FragmentActivity {
         });
         
         listView = (ListView) this.findViewById(R.id.listview);
-		ListAdapter adapter = new MenuItemArrayAdapter(this, items);
-		listView.setAdapter(adapter);
+		this.adapter = new MenuItemArrayAdapter(this, items);
+		listView.setAdapter(this.adapter);
 
 		listView.setTextFilterEnabled(true);
     }
@@ -109,17 +112,16 @@ public class CartActivity extends FragmentActivity {
             	System.out.println("Finish order menu button");
         		Toast.makeText(this, "Order finished. Sending to server.", Toast.LENGTH_SHORT).show();
         		item.setEnabled(false);
-        		WiFastApp.current_order.sendToServer();
-        		final Handler handler = new Handler();
-        		handler.postDelayed(new Runnable() {
-        			@Override
-        		  	public void run() {
-        				finish();
-              			startActivity(getIntent());
-        			}
-        		}, 1500);
-        		
+        		final SharedPreferences pref = getSharedPreferences("wifast", Context.MODE_PRIVATE);
+        		String uuid = pref.getString(WiFastApp.PROPERTY_UUID, "");
+        		WiFastApp.current_order.sendToServer(this, uuid);
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    public void refresh() {
+		finish();
+		startActivity(getIntent());
+//    	this.adapter.notifyDataSetChanged();
     }
 }
