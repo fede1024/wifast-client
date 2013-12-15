@@ -63,7 +63,7 @@ public class MenuActivity extends FragmentActivity {
         // Set up the ViewPager, attaching the adapter.
         mViewPager = (ViewPager) this.findViewById(R.id.pager);
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
-        MenuItemArrayAdapter.cart_icon = (ImageButton) this.findViewById(R.id.cartButton);
+        MenuItemArrayAdapter.cart_icon = (ImageButton) this.findViewById(R.id.cart_menu_button);
         MenuItemArrayAdapter.animationImage = (ImageView) this.findViewById(R.id.hidden_image);
         
         TextView priceTV = (TextView) this.findViewById(R.id.priceTV);

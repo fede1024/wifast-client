@@ -1,48 +1,116 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
 
-    <TextView
-        android:id="@+id/welcomeTitle"
-        android:layout_marginTop="10dp"
+    <GridLayout
+        android:id="@+id/gridLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:columnCount="2" >
+
+        <ImageButton
+            android:id="@+id/menuButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_margin="17dp"
+            android:layout_row="0"
+            android:background="@drawable/menu_item"
+            android:onClick="menuButtonPressed"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/food" />
+
+        <ImageButton
+            android:id="@+id/cartButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_margin="17dp"
+            android:layout_row="0"
+            android:background="@drawable/menu_item"
+            android:onClick="cartButtonPressed"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/dish" />
+
+        <ImageButton
+            android:id="@+id/couponsButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_margin="17dp"
+            android:layout_row="1"
+            android:background="@drawable/menu_item"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/coupons" />
+
+        <ImageButton
+            android:id="@+id/userButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_margin="17dp"
+            android:layout_row="1"
+            android:background="@drawable/menu_item"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/users" />
+
+        <TextView
+            android:id="@+id/d_button2"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_row="0"
+            android:textSize="15sp"
+            android:text="Order" />
+
+        <TextView
+            android:id="@+id/d_button3"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_row="1"
+            android:textSize="15sp"
+            android:text="Promotions" />
+
+        <TextView
+            android:id="@+id/d_button4"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_row="1"
+            android:textSize="15sp"
+            android:text="Profile" />
+
+        <TextView
+            android:id="@+id/d_button1"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_row="0"
+            android:textSize="15sp"
+            android:text="Menu" />
+
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/welcomeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/gridLayout1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:text="@string/wifast"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp" />
 
-    <Button
-        android:id="@+id/menus_menu_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:onClick="menuButtonPressed"
-        android:text="@string/menus_button_string" />
-
-    <Button
-        android:id="@+id/orders_menu_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:onClick="ordersButtonPressed"
-        android:text="@string/orders_button_string" />
-
-    <Button
-        android:id="@+id/profile_menu_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:onClick="profileButtonPressed"
-        android:text="@string/profile_button_string" />
-
-    <Button
-        android:id="@+id/cart_menu_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:onClick="cartButtonPressed"
-        android:text="@string/cart_button_string" />
-
-</LinearLayout>
+</RelativeLayout>

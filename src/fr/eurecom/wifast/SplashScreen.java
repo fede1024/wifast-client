@@ -13,6 +13,7 @@ import fr.eurecom.wifast.library.JSONDownload;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -37,6 +38,11 @@ public class SplashScreen extends Activity {
 		setContentView(R.layout.activity_splash_screen);
 		
 		currentAction = (TextView)findViewById(R.id.current_action);
+		TextView wifast = (TextView)findViewById(R.id.wifast_splash);
+		
+		Typeface typface=Typeface.createFromAsset(getAssets(),"fonts/OleoScriptSwashCaps-Regular.ttf");
+		currentAction.setTypeface(typface);
+		wifast.setTypeface(typface);
 
 		// Be sure to reinitialize WiFastApp static members
 		WiFastApp status = (WiFastApp)getApplicationContext();

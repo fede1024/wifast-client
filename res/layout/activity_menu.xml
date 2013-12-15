@@ -61,7 +61,7 @@
 
 		<RelativeLayout
 		    android:layout_width="wrap_content"
-		    android:layout_height="40dp"
+		    android:layout_height="50dp"
 		    android:layout_gravity="bottom"
 		    android:orientation="horizontal"
 		    android:padding="0dp" >
@@ -72,22 +72,22 @@
 		        android:layout_height="wrap_content"
 		        android:layout_alignParentBottom="true"
 		        android:layout_alignParentTop="true"
-		        android:layout_toLeftOf="@+id/cartButton"
+		        android:layout_toLeftOf="@+id/cart_menu_button"
 		        android:paddingRight="10dp"
 		        android:gravity="center"
 		        android:text="@string/initial_price"
-		        android:textSize="25sp" />
+		        android:textSize="30sp" />
 
 		    <ImageButton
-	            android:id="@+id/cartButton"
-	            android:background="?android:selectableItemBackground"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:scaleType="centerInside"
-	            android:onClick="cartButtonPressed"
-	            android:padding="0dp"
-	            android:layout_alignParentRight="true"
-	            android:src="@drawable/shopping_trolley" />
+		        android:id="@+id/cart_menu_button"
+		        android:layout_width="50dp"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentRight="true"
+		        android:background="?android:selectableItemBackground"
+		        android:onClick="cartButtonPressed"
+		        android:padding="3dp"
+		        android:scaleType="centerInside"
+		        android:src="@drawable/dish" />
 		    
 		</RelativeLayout>
 	</LinearLayout>

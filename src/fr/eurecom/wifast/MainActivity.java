@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler.Callback;
@@ -82,9 +83,19 @@ public class MainActivity extends ReloadingActivity {
         setContentView(R.layout.activity_main);
         
         TextView title = (TextView) this.findViewById(R.id.welcomeTitle);
+		TextView d_button1 = (TextView)findViewById(R.id.d_button1);
+		TextView d_button2 = (TextView)findViewById(R.id.d_button2);
+		TextView d_button3 = (TextView)findViewById(R.id.d_button3);
+		TextView d_button4 = (TextView)findViewById(R.id.d_button4);
+		
+		Typeface typface=Typeface.createFromAsset(getAssets(),"fonts/OleoScriptSwashCaps-Regular.ttf");
+        title.setTypeface(typface);
+		d_button1.setTypeface(typface);
+		d_button2.setTypeface(typface);
+		d_button3.setTypeface(typface);
+		d_button4.setTypeface(typface);
+        title.setText(WiFastApp.shopManager.getShopName());
         
-        title.setText("Welcome to " + WiFastApp.shopManager.getShopName());
-
         server_url = WiFastApp.getProperty("server_url");
 	    context = getApplicationContext();
 	    if(checkPlayServices()) {
