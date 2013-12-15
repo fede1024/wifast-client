@@ -13,19 +13,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import fr.eurecom.wifast.library.Order;
+import fr.eurecom.wifast.library.ReloadingActivity;
 
-public class CartActivity extends FragmentActivity {
+public class CartActivity extends ReloadingActivity {
 	private ListView listView;
 	private MenuItemArrayAdapter adapter;
 

@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler.Callback;
@@ -28,8 +27,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import fr.eurecom.wifast.library.Order;
 
 public class MenuActivity extends FragmentActivity {
 
@@ -76,6 +73,16 @@ public class MenuActivity extends FragmentActivity {
         updatePrices.handleMessage(null);
         //return inflater.inflate(R.layout.fragment_swipe, container, false);
     }
+
+	@Override
+    public void onResume(){
+		if(WiFastApp.shopManager == null){
+	        Intent splash = new Intent(getApplicationContext(), SplashScreen.class);
+	        startActivity(splash);
+	        finish();
+		}
+		super.onResume();
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

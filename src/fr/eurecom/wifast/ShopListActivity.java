@@ -3,23 +3,20 @@ package fr.eurecom.wifast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Context;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import fr.eurecom.wifast.library.ReloadingActivity;
 
-public class ShopListActivity extends Activity {
+public class ShopListActivity extends ReloadingActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

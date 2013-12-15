@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import fr.eurecom.wifast.CartActivity;
 import fr.eurecom.wifast.WiFastApp;

@@ -38,6 +38,10 @@ public class SplashScreen extends Activity {
 		
 		currentAction = (TextView)findViewById(R.id.current_action);
 
+		// Be sure to reinitialize WiFastApp static members
+		WiFastApp status = (WiFastApp)getApplicationContext();
+		status.onCreate();
+
 		//final Handler handler = new Handler();
 		//handler.postDelayed(new StartMainActivity(this), 5000);
 	}
