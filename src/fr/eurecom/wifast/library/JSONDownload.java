@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -24,6 +25,7 @@ public class JSONDownload extends AsyncTask<String, Void, String> {
 	private Callback callback;
 	private JSONArray resultsArray;
 	private JSONObject resultObject;
+	private Object order;
 
 	public JSONDownload(Callback callback) {
 		this.callback = callback;
@@ -32,11 +34,14 @@ public class JSONDownload extends AsyncTask<String, Void, String> {
 	}
 
 	@Override
-	protected String doInBackground(String... urls) {
+	protected String doInBackground(String... params) {
 
 		// params comes from the execute() call: params[0] is the url.
 		try {
-			getJSON(urls[0], urls[1], urls[2]);
+			if (params[0] == "POST")
+				getJSON(params[0], params[1], params[2], params[3]); 
+			else
+				getJSON(params[0], params[1], params[2], "");
 			return "OK";
 		} catch (IOException e) {
 			return "Unable to retrieve web page. URL may be invalid.";
@@ -53,7 +58,7 @@ public class JSONDownload extends AsyncTask<String, Void, String> {
 		this.callback.handleMessage(m);
 	}
 
-	private Boolean getJSON(String HTTPRequest, String type, String myurl) throws IOException {
+	private Boolean getJSON(String method, String type, String myurl, String postContent) throws IOException {
 		InputStream is = null;
 
 		try {
@@ -61,10 +66,20 @@ public class JSONDownload extends AsyncTask<String, Void, String> {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(30000 /* milliseconds */);
 			conn.setConnectTimeout(45000 /* milliseconds */);
-			conn.setRequestMethod(HTTPRequest);
+			conn.setRequestMethod(method);
 			conn.setDoInput(true);
+	        conn.setRequestProperty("Accept", "application/json");
+
+	        if(method == "POST"){
+				conn.setRequestProperty("Content-Type", "application/json");
+		        OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+		        osw.write(postContent);
+		        osw.flush();
+		        osw.close();
+	        }
 			// Starts the query
 			conn.connect();
+
 			int response = conn.getResponseCode();
 			System.out.println("response code: "+response);
 			is = conn.getInputStream();

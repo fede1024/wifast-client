@@ -1,6 +1,9 @@
 package fr.eurecom.wifast.library;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -14,12 +17,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.os.Handler.Callback;
+import android.os.Message;
 import fr.eurecom.wifast.CartActivity;
 import fr.eurecom.wifast.WiFastApp;
 
 public class Order {
 	private Hashtable<String, Integer> items;
 	private CartActivity caller;
+	public Integer orderId;
 	
 	public Order(){
 		 items = new Hashtable<String,Integer>();
@@ -45,6 +51,9 @@ public class Order {
 	public Double getTotalCost(){
 		Double total = 0.0;
 		
+		if(items == null)
+			return total;
+		
 		for (Entry<String, Integer> entry : items.entrySet()) {
 			JSONObject item = WiFastApp.menu_map.get(entry.getKey());
 			Double price = 0.0;
@@ -66,6 +75,10 @@ public class Order {
 	
 	public JSONArray getOrderArray() {
 		JSONArray arr = new JSONArray();
+		
+		if(items == null)
+			return arr;
+
 		Enumeration<String> en = this.items.keys();
 		while (en.hasMoreElements()) {
 			String key = en.nextElement();
@@ -80,7 +93,7 @@ public class Order {
 		return arr;
 	}
 	
-	public void sendToServer(CartActivity caller, String uuid) {
+	public void sendToServer(CartActivity caller, String uuid, Callback done) {
 		this.caller = caller;
 		System.out.println("sendToServer");
 		try {
@@ -97,8 +110,13 @@ public class Order {
 			}
 			if (arr.length() > 0) {
 				order.put("items", arr);
-				PostRequest p = new PostRequest(order);
-				p.execute();
+				System.out.println("in sendOrder");
+		
+				String url = WiFastApp.getProperty("server_url")+"/api/newOrder";
+		
+				Callback c = new OrderSentCallback(done);
+				new JSONDownload(c).execute("POST", "JSONObject", url, order.toString());
+		
 			} else {
 				System.out.println("Error creting jsonarray in sendToServer");
 			}
@@ -107,51 +125,38 @@ public class Order {
 		}
 	}
 
-	public class PostRequest extends AsyncTask<String, Void, String> {
-//		private Callback callback;
-		private JSONObject order;
-
-		public PostRequest(/*Callback callback, */JSONObject order) {
-//			this.callback = callback;
-			this.order = order;
+	// Order sent callback
+	private class OrderSentCallback implements Callback {
+		Callback done;
+		
+		public OrderSentCallback(Callback done){
+			this.done = done;
 		}
-
+		
 		@Override
-		protected String doInBackground(String... urls) {
-			System.out.println("in doInBackground");
-			// params comes from the execute() call: params[0] is the url.
+		public boolean handleMessage(Message msg) {
+			if(msg == null || msg.obj == null){
+				System.out.println("SENDING ORDER ERROR");
+				this.done.handleMessage(null);
+				return true;
+			}
+
+			System.out.println("Order sent! > " + msg.obj.toString());
+			JSONObject obj = (JSONObject)msg.obj;
+			
 			try {
-				URL url = new URL(WiFastApp.getProperty("server_url")+"/api/newOrder");
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setReadTimeout(10000 /* milliseconds */);
-				conn.setConnectTimeout(15000 /* milliseconds */);
-				conn.setRequestMethod("POST");
-				conn.setDoInput(true);
-				conn.setRequestProperty("Content-Type", "application/json");
-		        conn.setRequestProperty("Accept", "application/json");
-		        OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
-		        osw.write(this.order.toString());
-		        osw.flush();
-		        osw.close();
-				// Starts the query
-				conn.connect();
-				int response = conn.getResponseCode();
-				System.out.println("response code: "+response);
-				return "OK";
-			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
+				orderId = obj.getInt("order_id");
+			} catch (JSONException e) {
+				System.out.println("MISSING ORDER ID");
+				this.done.handleMessage(null);
+				return true;
 			}
-		}
-
-		// onPostExecute displays the results of the AsyncTask.
-		@Override
-		protected void onPostExecute(String result) {
-			System.out.println("Order sent!");
-			WiFastApp.current_order = new Order(); // TODO remove from here?
-			Order.this.items = null;
-			if (Order.this.caller != null) {
-				caller.refresh();
-			}
+			
+			items = new Hashtable<String,Integer>();
+			Message m = new Message();
+			m.obj = orderId.toString();
+			this.done.handleMessage(m);
+			return false;
 		}
 	}
 }

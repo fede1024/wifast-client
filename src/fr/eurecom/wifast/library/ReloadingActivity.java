@@ -9,7 +9,7 @@ public class ReloadingActivity extends Activity {
 
 	@Override
     public void onResume(){
-		if(WiFastApp.shopManager == null){
+		if(WiFastApp.initialized != "ok"){ // App status data is not initialized, reboot
 	        Intent splash = new Intent(getApplicationContext(), SplashScreen.class);
 	        startActivity(splash);
 	        finish();

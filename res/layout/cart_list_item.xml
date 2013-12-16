@@ -86,6 +86,7 @@
             android:layout_height="56dp"
             android:background="?android:selectableItemBackground"
             android:scaleType="fitCenter"
+            android:visibility="invisible"
             android:src="@drawable/shopping_trolley_add" />
 
     </LinearLayout>

@@ -1,5 +1,6 @@
 package fr.eurecom.wifast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,32 +14,42 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler.Callback;
+import android.os.Message;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+import fr.eurecom.wifast.library.Order;
 import fr.eurecom.wifast.library.ReloadingActivity;
 
 public class CartActivity extends ReloadingActivity {
 	private ListView listView;
 	private MenuItemArrayAdapter adapter;
+	protected ImageButton payBt;
+	protected ProgressBar progBar;
+	protected TextView priceTV;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_cart);
 
-        // Create an adapter that when requested, will return a fragment representing an object in the collection.
-        //
-        // ViewPager and its adapters use support library fragments, so we must use getSupportFragmentManager.
-
-        // Set up action bar.
         final ActionBar actionBar = this.getActionBar();
+        
+        payBt = (ImageButton)findViewById(R.id.pay_button);
+        priceTV = (TextView)findViewById(R.id.priceTV);
+        progBar = (ProgressBar)findViewById(R.id.cartProgressBar);
+        
+        Callback updatePrices = new newItemCallback();
+        updatePrices.handleMessage(null);
 
-        // Specify that the Home button should show an "Up" caret, indicating that touching the
-        // button will take the user one step up in the application's hierarchy.
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Set up the ViewPager, attaching the adapter.
@@ -76,8 +87,8 @@ public class CartActivity extends ReloadingActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.order, menu);
+        /* MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.order, menu); */
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -105,20 +116,56 @@ public class CartActivity extends ReloadingActivity {
                 }
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
                 return true;
-            case R.id.finish_order_menu_button:
-            	System.out.println("Finish order menu button");
-        		Toast.makeText(this, "Order finished. Sending to server.", Toast.LENGTH_SHORT).show();
-        		item.setEnabled(false);
-        		final SharedPreferences pref = getSharedPreferences("wifast", Context.MODE_PRIVATE);
-        		String uuid = pref.getString(WiFastApp.PROPERTY_UUID, "");
-        		WiFastApp.current_order.sendToServer(this, uuid);
         }
         return super.onOptionsItemSelected(item);
     }
     
-    public void refresh() {
-		finish();
-		startActivity(getIntent());
-//    	this.adapter.notifyDataSetChanged();
+    public void payButtonPressed(View view){
+    	System.out.println("Finish order menu button");
+    	if(WiFastApp.current_order.getItems().isEmpty()){
+			Toast.makeText(this, "Your shop list is empty.", Toast.LENGTH_SHORT).show();
+			return;
+    	}
+		payBt.setEnabled(false);
+		progBar.setVisibility(View.VISIBLE);
+		Toast.makeText(this, "Order finished. Sending to server.", Toast.LENGTH_SHORT).show();
+		final SharedPreferences pref = getSharedPreferences("wifast", Context.MODE_PRIVATE);
+		String uuid = pref.getString(WiFastApp.PROPERTY_UUID, "");
+
+		Callback c = new orderSentCallback();
+		WiFastApp.current_order.sendToServer(this, uuid, c);
     }
+    
+    public void refresh(String result) {
+		WiFastApp.current_order = new Order();
+		payBt.setEnabled(true);
+    }
+
+	private class newItemCallback implements Callback {
+		@Override
+		public boolean handleMessage(Message msg) {
+			Double cost = WiFastApp.current_order.getTotalCost();
+
+			priceTV.setText(new DecimalFormat("0.00 €").format(cost));
+			return false;
+		}
+	}
+
+	private class orderSentCallback implements Callback {
+		@Override
+		public boolean handleMessage(Message msg) {
+			payBt.setEnabled(true);
+			if(msg == null || msg.obj == null){
+				Toast.makeText(getApplicationContext(), "Order error, please try again.", Toast.LENGTH_SHORT).show();
+				payBt.setEnabled(true);
+				progBar.setVisibility(View.INVISIBLE);
+				return true;
+			}
+			Toast.makeText(getApplicationContext(), "Order: " + msg.obj.toString(), Toast.LENGTH_SHORT).show();
+	        Intent intent = new Intent(getApplicationContext(), CashRegister.class);
+	        startActivity(intent);
+			finish();
+			return false;
+		}
+	}
 }

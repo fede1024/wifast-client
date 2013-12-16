@@ -1,3 +1,4 @@
 images_url=http://s3-eu-west-1.amazonaws.com/fede1024-app/images/
 server_url=http://wifast.herokuapp.com
+server_url_local=http://10.0.3.2:5000
 server_url_fede=http://192.168.1.89:5000

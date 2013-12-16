@@ -1,9 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="fill_parent" >
+<RelativeLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
+
+    <TextView
+        android:id="@+id/welcomeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/wifast"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp" />
 
     <GridLayout
         android:id="@+id/gridLayout1"
@@ -11,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_below="@+id/welcomeTitle"
         android:columnCount="2" >
 
         <ImageButton
@@ -101,16 +117,6 @@
 
     </GridLayout>
 
-    <TextView
-        android:id="@+id/welcomeTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/gridLayout1"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:text="@string/wifast"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="40sp" />
 
 </RelativeLayout>
+</ScrollView>

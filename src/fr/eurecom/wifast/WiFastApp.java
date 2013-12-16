@@ -27,6 +27,7 @@ public class WiFastApp extends Application {
 	public static ShopListManager shopManager;
 	public static Order current_order;
 	public static String id;
+	public static String initialized;
 
     @Override
     public void onCreate() {
@@ -47,6 +48,7 @@ public class WiFastApp extends Application {
 
 		current_order = new Order();
         shopManager = new ShopListManager(context);	// Start getting shop list
+        initialized = "ok";
     }
 
 	public static String getProperty(String propertyName){

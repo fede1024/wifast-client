@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MenuActivity extends FragmentActivity {
+	private Callback updatePrices;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments representing
@@ -68,20 +69,20 @@ public class MenuActivity extends FragmentActivity {
         
         TextView priceTV = (TextView) this.findViewById(R.id.priceTV);
         
-        Callback updatePrices = new newItemCallback(priceTV);
+        updatePrices = new newItemCallback(priceTV);
         MenuItemArrayAdapter.newItemCallback = updatePrices;
-        updatePrices.handleMessage(null);
         //return inflater.inflate(R.layout.fragment_swipe, container, false);
     }
 
 	@Override
     public void onResume(){
-		if(WiFastApp.shopManager == null){
+		if(WiFastApp.initialized != "ok"){ // App status data is not initialized, reboot
 	        Intent splash = new Intent(getApplicationContext(), SplashScreen.class);
 	        startActivity(splash);
 	        finish();
 		}
 		super.onResume();
+        updatePrices.handleMessage(null);
 	}
 
     @Override
