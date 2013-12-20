@@ -78,7 +78,8 @@
         </activity>
         <activity
             android:name="fr.eurecom.wifast.CashRegister"
-            android:label="@string/pay_activity_title" >
+            android:label="@string/pay_activity_title" 
+            android:launchMode="singleTask" >
         </activity>
     </application>
 

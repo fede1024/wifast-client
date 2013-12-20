@@ -1,12 +1,5 @@
 package fr.eurecom.wifast.library;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map.Entry;
@@ -16,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
 import android.os.Handler.Callback;
 import android.os.Message;
 import fr.eurecom.wifast.CartActivity;
@@ -24,12 +16,12 @@ import fr.eurecom.wifast.WiFastApp;
 
 public class Order {
 	private Hashtable<String, Integer> items;
-	private CartActivity caller;
 	public Integer orderId;
+	public boolean ready;
 	
 	public Order(){
 		 items = new Hashtable<String,Integer>();
-		 this.caller = null;
+		 ready = false;
 	}
 	
 	public Integer get(String key){
@@ -93,8 +85,7 @@ public class Order {
 		return arr;
 	}
 	
-	public void sendToServer(CartActivity caller, String uuid, Callback done) {
-		this.caller = caller;
+	public void sendToServer(String uuid, Callback done) {
 		System.out.println("sendToServer");
 		try {
 			JSONObject order = new JSONObject();
@@ -153,6 +144,7 @@ public class Order {
 			}
 			
 			items = new Hashtable<String,Integer>();
+			ready = false;
 			Message m = new Message();
 			m.obj = orderId.toString();
 			this.done.handleMessage(m);

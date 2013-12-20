@@ -13,8 +13,10 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import fr.eurecom.wifast.CashRegister;
 import fr.eurecom.wifast.MainActivity;
 import fr.eurecom.wifast.R;
+import fr.eurecom.wifast.WiFastApp;
 
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 	static final String TAG = "GCMDemo";
@@ -49,7 +51,9 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
                 Log.i(TAG, "Received: " + extras.toString());
                 mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
+                Intent i = new Intent(context, CashRegister.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, 0);
+                WiFastApp.current_order.ready = true;
                 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.hamburger_icon)

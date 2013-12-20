@@ -34,7 +34,7 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 		String outFile = null;
 
 		try {
-			URL url = new URL(imagesUrl + imageCode[0] + ".jpg");
+			URL url = new URL(imagesUrl + imageCode[0] + ".png");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(30000);
 			conn.setConnectTimeout(15000);
@@ -53,7 +53,7 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 	            baf.append((byte) current);
 	        }
 
-	        outFile = context.getExternalFilesDir(null) + "/" + imageCode[0] + ".jpg";
+	        outFile = context.getExternalFilesDir(null) + "/" + imageCode[0] + ".png";
 	        
 	        FileOutputStream fos = new FileOutputStream(outFile);
 	        fos.write(baf.toByteArray());
@@ -78,7 +78,7 @@ public class ImageManager extends AsyncTask<String, Void, String> {
 	}
 	
 	public static String getCachedImage(String image, Context context){
-		String path = context.getExternalFilesDir(null) + "/" + image + ".jpg";
+		String path = context.getExternalFilesDir(null) + "/" + image + ".png";
 		File f = new File(path);
 		if (f.exists())
 			return path;

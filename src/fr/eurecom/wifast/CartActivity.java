@@ -133,7 +133,7 @@ public class CartActivity extends ReloadingActivity {
 		String uuid = pref.getString(WiFastApp.PROPERTY_UUID, "");
 
 		Callback c = new orderSentCallback();
-		WiFastApp.current_order.sendToServer(this, uuid, c);
+		WiFastApp.current_order.sendToServer(uuid, c);
     }
     
     public void refresh(String result) {
@@ -161,7 +161,6 @@ public class CartActivity extends ReloadingActivity {
 				progBar.setVisibility(View.INVISIBLE);
 				return true;
 			}
-			Toast.makeText(getApplicationContext(), "Order: " + msg.obj.toString(), Toast.LENGTH_SHORT).show();
 	        Intent intent = new Intent(getApplicationContext(), CashRegister.class);
 	        startActivity(intent);
 			finish();
