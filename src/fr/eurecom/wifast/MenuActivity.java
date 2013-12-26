@@ -47,6 +47,13 @@ public class MenuActivity extends FragmentActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        WiFastApp app = (WiFastApp) getApplicationContext();
+        if(app.doCheckinIfNeeded()){
+        	this.finish();
+        	return;
+        }
+
         this.setContentView(R.layout.activity_menu);
 
         // Create an adapter that when requested, will return a fragment representing an object in the collection.
@@ -76,11 +83,6 @@ public class MenuActivity extends FragmentActivity {
 
 	@Override
     public void onResume(){
-		if(WiFastApp.initialized != "ok"){ // App status data is not initialized, reboot
-	        Intent splash = new Intent(getApplicationContext(), SplashScreen.class);
-	        startActivity(splash);
-	        finish();
-		}
 		super.onResume();
         updatePrices.handleMessage(null);
 	}

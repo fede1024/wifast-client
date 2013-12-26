@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +20,6 @@ import android.os.Message;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,9 +28,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import fr.eurecom.wifast.library.Order;
-import fr.eurecom.wifast.library.ReloadingActivity;
 
-public class CartActivity extends ReloadingActivity {
+public class CartActivity extends Activity {
 	private ListView listView;
 	private MenuItemArrayAdapter adapter;
 	protected ImageButton payBt;
@@ -39,6 +38,13 @@ public class CartActivity extends ReloadingActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        WiFastApp app = (WiFastApp) getApplicationContext();
+        if(app.doCheckinIfNeeded()){
+        	this.finish();
+        	return;
+        }
+
         this.setContentView(R.layout.activity_cart);
 
         final ActionBar actionBar = this.getActionBar();

@@ -74,7 +74,8 @@
         <activity
             android:name="fr.eurecom.wifast.ShopListActivity"
             android:label="@string/title_activity_shop_list"
-            android:theme="@android:style/Theme.Holo.Light.Dialog" >
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name="fr.eurecom.wifast.CashRegister"

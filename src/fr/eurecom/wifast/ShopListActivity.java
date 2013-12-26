@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -14,9 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import fr.eurecom.wifast.library.ReloadingActivity;
 
-public class ShopListActivity extends ReloadingActivity {
+public class ShopListActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

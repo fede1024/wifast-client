@@ -1,9 +1,8 @@
 package fr.eurecom.wifast;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 
@@ -12,6 +11,13 @@ public class CashRegister extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        WiFastApp app = (WiFastApp) getApplicationContext();
+        if(app.doCheckinIfNeeded()){
+        	this.finish();
+        	return;
+        }
+
 		setContentView(R.layout.activity_cash_register);
 		
 		TextView order = (TextView)findViewById(R.id.order_num);
@@ -30,7 +36,7 @@ public class CashRegister extends Activity {
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 	    super.onResume();
 
 		TextView info = (TextView)findViewById(R.id.order_info);

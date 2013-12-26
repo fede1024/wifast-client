@@ -1,6 +1,7 @@
 package fr.eurecom.wifast.library;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -14,7 +15,6 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import fr.eurecom.wifast.CashRegister;
-import fr.eurecom.wifast.MainActivity;
 import fr.eurecom.wifast.R;
 import fr.eurecom.wifast.WiFastApp;
 
@@ -63,7 +63,9 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
                 .setContentText(extras.getString("text"));
 
                 mBuilder.setContentIntent(contentIntent);
-                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                Notification n = mBuilder.build();
+                n.flags |= Notification.FLAG_AUTO_CANCEL;
+                mNotificationManager.notify(NOTIFICATION_ID, n);
                 
                 long[] pattern = {0, 500, 500, 500, 500, 500, 500, 500};
                 Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);

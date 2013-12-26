@@ -11,10 +11,12 @@ import org.json.JSONObject;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import fr.eurecom.wifast.library.Order;
 import fr.eurecom.wifast.library.ShopListManager;
 
@@ -27,11 +29,12 @@ public class WiFastApp extends Application {
 	public static ShopListManager shopManager;
 	public static Order current_order;
 	public static String id;
-	public static String initialized;
+	public static Boolean checkedIn;
 
     @Override
     public void onCreate() {
         super.onCreate();
+    	Log.d("DEBUG", "Application start.");
         context = getApplicationContext();
         properties = new Properties();
 		try {
@@ -48,7 +51,7 @@ public class WiFastApp extends Application {
 
 		current_order = new Order();
         shopManager = new ShopListManager(context);	// Start getting shop list
-        initialized = "ok";
+        checkedIn = false;
     }
 
 	public static String getProperty(String propertyName){
@@ -72,6 +75,17 @@ public class WiFastApp extends Application {
 			return true;
 		else
 			return false;
+	}
+	
+	public boolean doCheckinIfNeeded(){
+		if(WiFastApp.checkedIn == false){ // App status data is not initialized, reboot
+			Log.d("WARNING", "Reloading app!");
+	        Intent splash = new Intent(getApplicationContext(), SplashScreen.class);
+	        splash.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        startActivity(splash);
+	        return true;
+		}
+		return false;
 	}
 
 }

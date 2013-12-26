@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,9 +49,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import fr.eurecom.wifast.library.ReloadingActivity;
-
-public class MainActivity extends ReloadingActivity {
+public class MainActivity extends Activity {
 	public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -79,6 +78,12 @@ public class MainActivity extends ReloadingActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        WiFastApp app = (WiFastApp) getApplicationContext();
+        if(app.doCheckinIfNeeded()){
+        	this.finish();
+        	return;
+        }
         
         setContentView(R.layout.activity_main);
         

@@ -85,6 +85,7 @@ public class SplashScreen extends Activity {
 	        }
 	        else {
 				currentAction.setText("Done");
+				WiFastApp.checkedIn = true;
 			    Intent intent = new Intent(this, MainActivity.class);
 			    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			    startActivity(intent);
