@@ -37,26 +37,25 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	public static Callback newItemCallback;
 	public static Callback removeItemCallback;
 	private boolean buttonEnabled;
+	private final boolean cartList; // if true this is not the menu list but the cart list
 	
-	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values) {
+	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values, boolean cartList) {
 		super(context, R.layout.menu_list_item, values);
 		this.context = context;
 		ready = new boolean[getCount()];
 		for(int i = 0; i < getCount(); i++) ready[i] = false;
 		buttonEnabled = true;
+		this.cartList = cartList;
 	}
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		JSONObject obj = getItem(position);
-		boolean cart;
 		RelativeLayout item;
-		
-		cart = obj.has("count");
 
 		if(convertView == null){
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			if (cart)
+			if (cartList)
 				convertView = inflater.inflate(R.layout.cart_list_item, parent, false);
 			else
 				convertView = inflater.inflate(R.layout.menu_list_item, parent, false);
@@ -66,7 +65,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
 		TextView pr = (TextView) convertView.findViewById(R.id.price);
 		
-		if(cart)
+		if(cartList)
 			item = (RelativeLayout) convertView.findViewById(R.id.cart_list_item);
 		else
 			item = (RelativeLayout) convertView.findViewById(R.id.menu_list_item);
@@ -74,7 +73,6 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		String name = "";
 		String image = "";
 		String descr = "";
-		int count = 0;
 		double price = 0;
 		
 		try {
@@ -84,18 +82,14 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			price = obj.getDouble("price");
 			flv.setText(name);
 			pr.setText(new DecimalFormat("0.00 €").format(price));
-			count = 0;
-			
-			if(cart) {
-				count = obj.getInt("count");
-			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
-		if(cart){
+		if(cartList){
 			//count is present --> order view 
 			TextView cnt = (TextView) convertView.findViewById(R.id.countCartLabel);
+			Integer count = WiFastApp.current_order.get(name);
 			cnt.setText("Qt: " + Integer.toString(count));
 			ImageButton rm = (ImageButton) convertView.findViewById(R.id.rmFromCartButton);
 			rm.setOnClickListener(new RemoveCartOnClickListener(name, cnt, this, position));
@@ -146,16 +140,10 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			else
 				cnt.setText("Qt: " + Integer.toString(n));		// update the quantity
 
-			// Execute price update
-			final Handler handler = new Handler();
-			handler.post(new Runnable() {	
-				@Override
-				public void run() {
-					removeItemCallback.handleMessage(null);
-				}
-			});
-			
 			WiFastApp.current_order.removeItem(this.id);
+
+			// Execute price update
+			removeItemCallback.handleMessage(null);
 		}
 	}
 	

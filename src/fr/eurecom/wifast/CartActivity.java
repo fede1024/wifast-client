@@ -26,7 +26,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import fr.eurecom.wifast.library.Order;
 import fr.eurecom.wifast.library.ReloadingActivity;
 
 public class CartActivity extends ReloadingActivity {
@@ -80,7 +79,7 @@ public class CartActivity extends ReloadingActivity {
         });
         
         listView = (ListView) this.findViewById(R.id.listview);
-		this.adapter = new MenuItemArrayAdapter(this, items);
+		this.adapter = new MenuItemArrayAdapter(this, items, true);
 		listView.setAdapter(this.adapter);
 
 		listView.setTextFilterEnabled(true);
@@ -137,11 +136,6 @@ public class CartActivity extends ReloadingActivity {
 		WiFastApp.current_order.sendToServer(uuid, c);
     }
     
-    public void refresh(String result) {
-		WiFastApp.current_order = new Order();
-		payBt.setEnabled(true);
-    }
-
     private class newItemCallback implements Callback {
 		TextView priceTV;
 		

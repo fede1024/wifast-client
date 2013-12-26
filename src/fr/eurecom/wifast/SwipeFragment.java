@@ -75,7 +75,7 @@ public class SwipeFragment extends Fragment {
         
 		Context context = getActivity();
 		if (context != null) {
-			ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), items);
+			ListAdapter adapter = new MenuItemArrayAdapter(getActivity(), items, false);
 			listView.setAdapter(adapter);
 	
 			listView.setTextFilterEnabled(true);
