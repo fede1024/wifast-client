@@ -35,6 +35,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	public static ImageButton cart_icon;
 	public static ImageView animationImage;
 	public static Callback newItemCallback;
+	public static Callback removeItemCallback;
 	private boolean buttonEnabled;
 	
 	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values) {
@@ -85,21 +86,23 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			pr.setText(new DecimalFormat("0.00 €").format(price));
 			count = 0;
 			
-			if(cart)
+			if(cart) {
 				count = obj.getInt("count");
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-			
+		
 		if(cart){
 			//count is present --> order view 
 			TextView cnt = (TextView) convertView.findViewById(R.id.countCartLabel);
 			cnt.setText("Qt: " + Integer.toString(count));
+			ImageButton rm = (ImageButton) convertView.findViewById(R.id.rmFromCartButton);
+			rm.setOnClickListener(new RemoveCartOnClickListener(name, cnt, this, position));
 		}
 		else {
-			ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
 			TextView slv = (TextView) convertView.findViewById(R.id.secondLine);
-
+			ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
 			add.setOnClickListener(new AddCartOnClickListener(name, icon));
 			slv.setText(descr);
 		}
@@ -116,6 +119,44 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			new ImageManager(c, context).execute(image);
 		}
 		return convertView;
+	}
+	
+	private class RemoveCartOnClickListener implements OnClickListener {
+		String id;
+		TextView cnt;
+		MenuItemArrayAdapter adapter;
+		int position;
+		
+		public RemoveCartOnClickListener(String id, TextView cnt, MenuItemArrayAdapter adapter, int position) {
+			this.id = id;
+			this.cnt = cnt;
+			this.adapter = adapter;
+			this.position = position;	// used to remove the object when quantity <= 0
+		}
+
+		@Override
+		public void onClick(View v) {
+			System.out.println("Remove this " + id);
+			
+			// TODO: update quantity and if 0 remove from list view
+			Integer n = WiFastApp.current_order.get(this.id);
+			n--;
+			if(n == 0)
+				adapter.remove(adapter.getItem(this.position));	// remove the item from the list
+			else
+				cnt.setText("Qt: " + Integer.toString(n));		// update the quantity
+
+			// Execute price update
+			final Handler handler = new Handler();
+			handler.post(new Runnable() {	
+				@Override
+				public void run() {
+					removeItemCallback.handleMessage(null);
+				}
+			});
+			
+			WiFastApp.current_order.removeItem(this.id);
+		}
 	}
 	
 	private void hideImage(View rowView){
@@ -193,17 +234,11 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 															Animation.RELATIVE_TO_SELF, 0.5f,
 															Animation.RELATIVE_TO_SELF, 0.5f);
 			scaleAnim1.setDuration(500);
-			/*ScaleAnimation scaleAnim2 = new ScaleAnimation(1.0f, 2.0f, 1.0f, 2.0f,
-															Animation.RELATIVE_TO_SELF, 0.5f,
-															Animation.RELATIVE_TO_SELF, 0.5f);
-			scaleAnim2.setDuration(1000);
-			scaleAnim2.setStartOffset(1000);*/
 			
 			/* Combine animations */
 			AnimationSet anim = new AnimationSet(false);
 			anim.addAnimation(translateAnim1);
 			anim.addAnimation(scaleAnim1);
-			//anim.addAnimation(scaleAnim2);
 			anim.setZAdjustment(AnimationSet.ZORDER_TOP);	
 			anim.setAnimationListener(new AnimationListener() {
 				@Override

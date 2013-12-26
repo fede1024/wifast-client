@@ -19,7 +19,6 @@ import android.os.Message;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -47,8 +46,10 @@ public class CartActivity extends ReloadingActivity {
         priceTV = (TextView)findViewById(R.id.priceTV);
         progBar = (ProgressBar)findViewById(R.id.cartProgressBar);
         
-        Callback updatePrices = new newItemCallback();
+        Callback updatePrices = new newItemCallback(priceTV);
         updatePrices.handleMessage(null);
+        
+        MenuItemArrayAdapter.removeItemCallback = updatePrices;
 
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -141,7 +142,13 @@ public class CartActivity extends ReloadingActivity {
 		payBt.setEnabled(true);
     }
 
-	private class newItemCallback implements Callback {
+    private class newItemCallback implements Callback {
+		TextView priceTV;
+		
+		public newItemCallback(TextView priceTV){
+			this.priceTV = priceTV;
+		}
+		
 		@Override
 		public boolean handleMessage(Message msg) {
 			Double cost = WiFastApp.current_order.getTotalCost();
