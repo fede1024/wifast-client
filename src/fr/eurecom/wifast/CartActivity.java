@@ -27,7 +27,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import fr.eurecom.wifast.library.Order;
 
 public class CartActivity extends Activity {
 	private ListView listView;
@@ -53,8 +52,10 @@ public class CartActivity extends Activity {
         priceTV = (TextView)findViewById(R.id.priceTV);
         progBar = (ProgressBar)findViewById(R.id.cartProgressBar);
         
-        Callback updatePrices = new newItemCallback();
+        Callback updatePrices = new newItemCallback(priceTV);
         updatePrices.handleMessage(null);
+        
+        MenuItemArrayAdapter.removeItemCallback = updatePrices;
 
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -85,7 +86,7 @@ public class CartActivity extends Activity {
         });
         
         listView = (ListView) this.findViewById(R.id.listview);
-		this.adapter = new MenuItemArrayAdapter(this, items);
+		this.adapter = new MenuItemArrayAdapter(this, items, true);
 		listView.setAdapter(this.adapter);
 
 		listView.setTextFilterEnabled(true);
@@ -142,12 +143,13 @@ public class CartActivity extends Activity {
 		WiFastApp.current_order.sendToServer(uuid, c);
     }
     
-    public void refresh(String result) {
-		WiFastApp.current_order = new Order();
-		payBt.setEnabled(true);
-    }
-
-	private class newItemCallback implements Callback {
+    private class newItemCallback implements Callback {
+		TextView priceTV;
+		
+		public newItemCallback(TextView priceTV){
+			this.priceTV = priceTV;
+		}
+		
 		@Override
 		public boolean handleMessage(Message msg) {
 			Double cost = WiFastApp.current_order.getTotalCost();

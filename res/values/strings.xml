@@ -24,5 +24,6 @@
     <string name="menu_activity_title">Your products:</string>
     <string name="cart_activity_title">Your purchases:</string>
     <string name="pay_activity_title">Payment method:</string>
+    <string name="quantity">Qt: 0</string>
 
 </resources>

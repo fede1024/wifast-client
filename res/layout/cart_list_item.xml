@@ -76,18 +76,17 @@
             android:layout_width="0dip"
             android:layout_height="56dp"
             android:gravity="center"
-            android:text="Qt: 0"
+            android:text="@string/quantity"
             android:layout_weight="1"
 	        android:textSize="26sp" />
 
         <ImageButton
-            android:id="@+id/addToCartButton"
+            android:id="@+id/rmFromCartButton"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
             android:background="?android:selectableItemBackground"
             android:scaleType="fitCenter"
-            android:visibility="invisible"
-            android:src="@drawable/shopping_trolley_add" />
+            android:src="@drawable/shopping_trolley_rm" />
 
     </LinearLayout>
 

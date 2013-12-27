@@ -25,7 +25,6 @@ public class JSONDownload extends AsyncTask<String, Void, String> {
 	private Callback callback;
 	private JSONArray resultsArray;
 	private JSONObject resultObject;
-	private Object order;
 
 	public JSONDownload(Callback callback) {
 		this.callback = callback;

@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import android.os.Handler.Callback;
 import android.os.Message;
-import fr.eurecom.wifast.CartActivity;
 import fr.eurecom.wifast.WiFastApp;
 
 public class Order {
@@ -26,7 +25,7 @@ public class Order {
 	
 	public Integer get(String key){
 		Integer n = items.get(key);
-		
+
 		if(n == null)
 			return 0;
 		return n;
@@ -34,6 +33,16 @@ public class Order {
 	
 	public void addItem(String key){
 		items.put(key, 1 + get(key));
+	}
+	
+	public void removeItem(String key) {
+		Integer n = get(key);
+		
+		n--;
+		if(n == 0)
+			items.remove(key);
+		else
+			items.put(key, n);
 	}
 	
 	public Set<String> getItems(){
