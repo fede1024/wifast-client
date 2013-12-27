@@ -25,5 +25,10 @@
     <string name="cart_activity_title">Your purchases:</string>
     <string name="pay_activity_title">Payment method:</string>
     <string name="quantity">Qt: 0</string>
+    <string name="title_activity_description">DescriptionActivity</string>
+    <string name="description">Long description of the product</string>
+    <string name="calorie">Calorie</string>
+    <string name="zuccheri">Zuccheri</string>
+    <string name="vitamins">Vitamins</string>
 
 </resources>

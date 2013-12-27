@@ -99,6 +99,12 @@ public class MenuActivity extends FragmentActivity {
     	startActivity(intent);
     }
     
+    public void productRowPressed(View view) {
+    	Intent intent = new Intent(this, DescriptionActivity.class);
+    	// intent.putExtra("product", value);
+    	startActivity(intent);
+    }
+    
     @SuppressWarnings("deprecation")
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
