@@ -7,8 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -101,7 +103,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			slv.setText(descr);
 		}
 		
-		item.setOnClickListener(new MoreInfoOnClickListener(name));
+		item.setOnClickListener(new MoreInfoOnClickListener(name, position));
 		
 		String path = ImageManager.getCachedImage(image, context);
 		
@@ -132,7 +134,6 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		public void onClick(View v) {
 			System.out.println("Remove this " + id);
 			
-			// TODO: update quantity and if 0 remove from list view
 			Integer n = WiFastApp.current_order.get(this.id);
 			n--;
 			if(n == 0)
@@ -260,14 +261,39 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 
 	private class MoreInfoOnClickListener implements OnClickListener {
 		String id;
+		int position;
 
-		public MoreInfoOnClickListener(String id) {
+		public MoreInfoOnClickListener(String id, int position) {
 			this.id = id;
+			this.position = position;
 		}
 
 		@Override
 		public void onClick(View v) {
 			System.out.println("More info on this " + id);
+			
+			JSONObject obj = getItem(position);
+			
+			String name = "";
+			String desc = "";
+			String nutr_values = "";
+			String image = "";
+			
+			try {
+				name = obj.getString("name");
+				image = obj.getString("image");
+				desc = obj.getString("description");
+				nutr_values = obj.getString("nutrients");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		    Intent intent = new Intent(context, DescriptionActivity.class);
+		    intent.putExtra("name", name);
+		    intent.putExtra("image", image);
+		    intent.putExtra("description", desc);
+		    intent.putExtra("nutrients", nutr_values);
+		    context.startActivity(intent);
 		}
 	  }
 }
