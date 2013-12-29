@@ -25,5 +25,15 @@
     <string name="cart_activity_title">Your purchases:</string>
     <string name="pay_activity_title">Payment method:</string>
     <string name="quantity">Qt: 0</string>
+    <string name="title_activity_description">DescriptionActivity</string>
+    <string name="prod_name">Name of the product</string>
+    <string name="description">Long description of the product</string>
+    <string name="calories">Calories (kcal)</string>
+    <string name="cal_val"> 2000 </string>
+    <string name="carb">Carb (g)</string>
+    <string name="carb_val">20</string>
+    <string name="proteins">Proteins (g)</string>
+    <string name="fat">Fat (g)</string>
+    <string name="desc_price">Price: 0.00 €</string>
 
 </resources>

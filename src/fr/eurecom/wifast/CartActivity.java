@@ -107,7 +107,7 @@ public class CartActivity extends Activity {
                 // This is called when the Home (Up) button is pressed in the action bar.
                 // Create a simple intent that starts the hierarchical parent activity and
                 // use NavUtils in the Support Package to ensure proper handling of Up.
-                Intent upIntent = new Intent(this, MainActivity.class);
+                Intent upIntent = new Intent(this, MenuActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                     // This activity is not part of the application's task, so create a new task
                     // with a synthesized back stack.

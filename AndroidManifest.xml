@@ -46,13 +46,15 @@
 
         <activity
             android:name="fr.eurecom.wifast.MainActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
-        <activity android:name="fr.eurecom.wifast.MenuActivity"
+        <activity
+            android:name="fr.eurecom.wifast.MenuActivity"
             android:label="@string/menu_activity_title" >
         </activity>
-        <activity android:name="fr.eurecom.wifast.CartActivity" 
+        <activity
+            android:name="fr.eurecom.wifast.CartActivity"
             android:label="@string/cart_activity_title" >
         </activity>
         <activity
@@ -74,13 +76,17 @@
         <activity
             android:name="fr.eurecom.wifast.ShopListActivity"
             android:label="@string/title_activity_shop_list"
-            android:theme="@android:style/Theme.Holo.Light.Dialog"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Holo.Light.Dialog" >
         </activity>
         <activity
             android:name="fr.eurecom.wifast.CashRegister"
-            android:label="@string/pay_activity_title" 
+            android:label="@string/pay_activity_title"
             android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="fr.eurecom.wifast.DescriptionActivity"
+            android:label="@string/title_activity_description" >
         </activity>
     </application>
 

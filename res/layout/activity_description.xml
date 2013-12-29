@@ -1,0 +1,170 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".DescriptionActivity" >
+
+    <TextView
+        android:id="@+id/prod_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/prod_name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="27sp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/long_desc"
+        android:orientation="vertical"
+        android:paddingTop="10dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp" >
+
+            <TextView
+                android:id="@+id/calories"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/calories"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/cal_val"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBaseline="@+id/calories"
+                android:layout_alignBottom="@+id/calories"
+                android:layout_alignParentRight="true"
+                android:text="@string/cal_val"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp" >
+
+            <TextView
+                android:id="@+id/carb"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/carb"
+                android:textSize="17sp" />
+
+            <fr.eurecom.wifast.library.TextProgressBar
+                android:id="@+id/carb_progr"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:progressDrawable="@drawable/progr_bar" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp" >
+
+            <TextView
+                android:id="@+id/proteins"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/proteins"
+                android:textSize="17sp" />
+
+            <fr.eurecom.wifast.library.TextProgressBar
+                android:id="@+id/prot_progr"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:progressDrawable="@drawable/progr_bar" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp" >
+
+            <TextView
+                android:id="@+id/fat"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/fat"
+                android:textSize="17sp" />
+
+            <fr.eurecom.wifast.library.TextProgressBar
+                android:id="@+id/fat_progr"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:progressDrawable="@drawable/progr_bar" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/long_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/prod_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="145dp"
+        android:text="@string/description"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/big_icon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/prod_name"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/hamburger_icon" />
+
+    <TextView
+        android:id="@+id/desc_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/long_desc"
+        android:text="@string/desc_price"
+        android:textSize="17sp" />
+
+    <RelativeLayout
+        android:id="@+id/desc_loadingPanel"
+        style="@style/ImageProgressBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@+id/big_icon"
+        android:layout_alignLeft="@+id/big_icon"
+        android:layout_alignRight="@+id/big_icon"
+        android:layout_alignTop="@+id/big_icon" >
+
+        <ProgressBar
+            style="@style/ImageProgressIndicator"
+            android:minWidth="16dip" />
+    </RelativeLayout>
+
+</RelativeLayout>
