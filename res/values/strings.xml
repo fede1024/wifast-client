@@ -34,5 +34,6 @@
     <string name="carb_val">20</string>
     <string name="proteins">Proteins (g)</string>
     <string name="fat">Fat (g)</string>
+    <string name="desc_price">Price: 0.00 €</string>
 
 </resources>

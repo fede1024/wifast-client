@@ -277,12 +277,14 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			String desc = "";
 			String nutr_values = "";
 			String image = "";
+			double price = 0;
 			
 			try {
 				name = obj.getString("name");
 				image = obj.getString("image");
 				desc = obj.getString("description");
 				nutr_values = obj.getString("nutrients");
+				price = obj.getDouble("price");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -292,6 +294,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		    intent.putExtra("image", image);
 		    intent.putExtra("description", desc);
 		    intent.putExtra("nutrients", nutr_values);
+		    intent.putExtra("price", price);
 		    context.startActivity(intent);
 		}
 	  }

@@ -1,7 +1,10 @@
 package fr.eurecom.wifast;
 
+import java.text.DecimalFormat;
+
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler.Callback;
@@ -11,7 +14,9 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fr.eurecom.wifast.library.ImageManager;
 import fr.eurecom.wifast.library.TextProgressBar;
@@ -25,7 +30,7 @@ public class DescriptionActivity extends FragmentActivity {
 		
 		final ActionBar actionBar = this.getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+		actionBar.setTitle("Product Description:");
 		
 		Bundle bundle = getIntent().getExtras(); 
 		
@@ -33,21 +38,26 @@ public class DescriptionActivity extends FragmentActivity {
 		String image = bundle.getString("image");
 		String desc = bundle.getString("description");
 		String nutr = bundle.getString("nutrients");
+		double desc_price = bundle.getDouble("price");
 		
 		TextView prod_name = (TextView) this.findViewById(R.id.prod_name);
+		Typeface typface=Typeface.createFromAsset(getAssets(),"fonts/OleoScriptSwashCaps-Regular.ttf");
+		prod_name.setTypeface(typface);
 		prod_name.setText(name);
 		
 		String path = ImageManager.getCachedImage(image, this);
 		
 		ImageView img = (ImageView) this.findViewById(R.id.big_icon);
 		if(path != null)
-			img.setImageURI(Uri.parse("file://"+path));
+			setImage(path, img);
 		else {
+			hideImage();
 			Callback c = new ImageCallBack(img);
 			new ImageManager(c, this).execute(image);
 		}
 		
 		TextView long_desc = (TextView) this.findViewById(R.id.long_desc);
+		long_desc.setTypeface(typface);
 		long_desc.setText(desc);
 		
 		String nutr_values[] = nutr.split(" ");
@@ -69,6 +79,9 @@ public class DescriptionActivity extends FragmentActivity {
 		fat_bar.setText(nutr_values[3]);
 		fat_bar.setMax(100);
 		fat_bar.setProgress(Integer.parseInt(nutr_values[3]));
+		
+		TextView price = (TextView) this.findViewById(R.id.desc_price);
+		price.setText("Price: "+new DecimalFormat("0.00 €").format(desc_price));
 	}
 
 	// Image loading callback
@@ -77,12 +90,11 @@ public class DescriptionActivity extends FragmentActivity {
 		
 		public ImageCallBack(ImageView img){
 			this.img = img;
-		}
-		
+		}	
 		@Override
 		public boolean handleMessage(Message msg) {
 			String path = (String) msg.obj;
-			img.setImageURI(Uri.parse("file://"+path));
+			setImage(path, this.img);
 			return false;
 		}
 	}
@@ -121,4 +133,15 @@ public class DescriptionActivity extends FragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+	
+	private void hideImage(){
+		RelativeLayout loading = (RelativeLayout) this.findViewById(R.id.desc_loadingPanel);
+		loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void setImage(String path, ImageView img){
+		RelativeLayout loading = (RelativeLayout) this.findViewById(R.id.desc_loadingPanel);
+		img.setImageURI(Uri.parse("file://"+path));
+		loading.setVisibility(View.INVISIBLE);
+	}
 }
