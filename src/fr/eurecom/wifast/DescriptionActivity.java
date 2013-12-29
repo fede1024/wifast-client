@@ -61,12 +61,12 @@ public class DescriptionActivity extends FragmentActivity {
 		prot_bar.setProgress(Integer.parseInt(nutr_values[1]));
 		
 		TextProgressBar carb_bar = (TextProgressBar) this.findViewById(R.id.carb_progr);
-		carb_bar.setText(nutr_values[1]);
+		carb_bar.setText(nutr_values[2]);
 		carb_bar.setMax(100);
 		carb_bar.setProgress(Integer.parseInt(nutr_values[2]));
 
 		TextProgressBar fat_bar = (TextProgressBar) this.findViewById(R.id.fat_progr);
-		fat_bar.setText(nutr_values[1]);
+		fat_bar.setText(nutr_values[3]);
 		fat_bar.setMax(100);
 		fat_bar.setProgress(Integer.parseInt(nutr_values[3]));
 	}
@@ -94,7 +94,7 @@ public class DescriptionActivity extends FragmentActivity {
 		return true;
 	}
 
-	 @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -102,7 +102,7 @@ public class DescriptionActivity extends FragmentActivity {
                 // This is called when the Home (Up) button is pressed in the action bar.
                 // Create a simple intent that starts the hierarchical parent activity and
                 // use NavUtils in the Support Package to ensure proper handling of Up.
-                Intent upIntent = new Intent(this, MainActivity.class);
+                Intent upIntent = new Intent(this, MenuActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                     // This activity is not part of the application's task, so create a new task
                     // with a synthesized back stack.
