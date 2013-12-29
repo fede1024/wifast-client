@@ -93,7 +93,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			Integer count = WiFastApp.current_order.get(name);
 			cnt.setText("Qt: " + Integer.toString(count));
 			ImageButton rm = (ImageButton) convertView.findViewById(R.id.rmFromCartButton);
-			rm.setOnClickListener(new RemoveCartOnClickListener(name, cnt, this, position));
+			rm.setOnClickListener(new RemoveCartOnClickListener(name, cnt, this, position, convertView));
 		}
 		else {
 			TextView slv = (TextView) convertView.findViewById(R.id.secondLine);
@@ -120,13 +120,15 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		String id;
 		TextView cnt;
 		MenuItemArrayAdapter adapter;
+		View view;
 		int position;
 		
-		public RemoveCartOnClickListener(String id, TextView cnt, MenuItemArrayAdapter adapter, int position) {
+		public RemoveCartOnClickListener(String id, TextView cnt, MenuItemArrayAdapter adapter, int position, View view) {
 			this.id = id;
 			this.cnt = cnt;
 			this.adapter = adapter;
 			this.position = position;	// used to remove the object when quantity <= 0
+			this.view = view;
 		}
 
 		@Override
@@ -135,15 +137,28 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			
 			Integer n = WiFastApp.current_order.get(this.id);
 			n--;
-			if(n == 0)
-				adapter.remove(adapter.getItem(this.position));	// remove the item from the list
-			else
+			if(n == 0){
+				TranslateAnimation anim = new TranslateAnimation(0, view.getWidth(), 0, 0);
+				anim.setInterpolator(new AccelerateInterpolator());
+				anim.setDuration(300);
+				anim.setAnimationListener(new AnimationListener() {
+					public void onAnimationStart(Animation animation) {}
+					@Override
+					public void onAnimationRepeat(Animation animation) {}
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						adapter.remove(adapter.getItem(position));	// remove the item from the list
+						removeItemCallback.handleMessage(null);// Execute price update
+					}
+				});
+				view.startAnimation(anim);
+			}
+			else{
 				cnt.setText("Qt: " + Integer.toString(n));		// update the quantity
+				removeItemCallback.handleMessage(null);// Execute price update
+			}
 
 			WiFastApp.current_order.removeItem(this.id);
-
-			// Execute price update
-			removeItemCallback.handleMessage(null);
 		}
 	}
 	
