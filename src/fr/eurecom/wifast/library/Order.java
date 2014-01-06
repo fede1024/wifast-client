@@ -59,7 +59,7 @@ public class Order {
 			JSONObject item = WiFastApp.menu_map.get(entry.getKey());
 			Double price = 0.0;
 			if (item == null) {
-				System.out.println("ERROR: item doee not exists.");
+				System.out.println("ERROR: item does not exists.");
 				continue;
 			}
 			try {
@@ -110,6 +110,7 @@ public class Order {
 			}
 			if (arr.length() > 0) {
 				order.put("items", arr);
+				order.put("shop", WiFastApp.shopManager.getShopName());
 				System.out.println("in sendOrder");
 		
 				String url = WiFastApp.getProperty("server_url")+"/api/newOrder";
