@@ -8,11 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.eurecom.wifast.library.JSONDownload;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +20,7 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import fr.eurecom.wifast.library.JSONDownload;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -129,28 +129,32 @@ public class SplashScreen extends Activity {
 	}
 
     public void downloadMenu() {
-//  	ConnectivityManager connMgr = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-//  	NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		String serverURL = WiFastApp.getProperty("server_url")+"/api/getMenu";
-//  	if (networkInfo != null && networkInfo.isConnected()) {
 		Callback c = new JSONMenuDownloadedCallback();
+
 		try {
-			new JSONDownload(c).execute("GET", "JSONObject", serverURL + "?shop=" + 
-					URLEncoder.encode(WiFastApp.shopManager.getShopName(), "UTF-8"));
+	    	final SharedPreferences prefs = getSharedPreferences("wifast", Context.MODE_PRIVATE);
+	        String uuid = prefs.getString(WiFastApp.PROPERTY_UUID, "");
+	        Log.d("DEBUG", "UUID: " + uuid);
+	        
+	        serverURL += "?shop=" + URLEncoder.encode(WiFastApp.shopManager.getShopName(), "UTF-8");
+
+			if(uuid != null)
+				serverURL += "&uuid=" + URLEncoder.encode(uuid, "UTF-8");
+
+			new JSONDownload(c).execute("GET", "JSONObject", serverURL);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//  	} else {
-//  	textView.setText("No network connection available.");
     }
     
     private class JSONMenuDownloadedCallback implements Callback {
 		@Override
 		public boolean handleMessage(Message msg) {
 			if (msg.obj == null){
-				Toast.makeText(getApplicationContext(), "Error downloading menu.", Toast.LENGTH_LONG).show();
-				currentAction.setText("Menu dowanload error.");
+				Toast.makeText(getApplicationContext(), "Error downloading menu - retry.", Toast.LENGTH_SHORT).show();
+				currentAction.setText("Menu download error.");
 				Log.d("ERROR", "Download menu error.");
 				final Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
@@ -159,13 +163,14 @@ public class SplashScreen extends Activity {
 						Log.d("ERROR", "Download menu error - retry.");
 						continueCheckin();
 					}
-				}, 1000);
+				}, 5000);
 				return false;
 			}
 			
     		JSONObject obj = (JSONObject)msg.obj;
 			try {
 				WiFastApp.types = obj.getJSONArray("types");
+				WiFastApp.points = obj.getInt("points");
 				WiFastApp.menu_map = new HashMap<String, JSONObject>();
 				int items_len;
 				

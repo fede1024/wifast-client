@@ -31,6 +31,7 @@ public class ShopListManager {
 			Log.d("ERROR", "Location null!!!");
 			searchURL = serverURL;
 		}
+		
 		System.out.println("Searching URL: "+searchURL);
 		new JSONDownload(c).execute("GET", "JSONArray", searchURL);
 		return false;

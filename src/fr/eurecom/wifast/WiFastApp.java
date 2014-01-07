@@ -28,8 +28,8 @@ public class WiFastApp extends Application {
 	public static Context context;
 	public static ShopListManager shopManager;
 	public static Order current_order;
-	public static String id;
 	public static Boolean checkedIn;
+	public static Integer points;
 
     @Override
     public void onCreate() {
@@ -52,6 +52,7 @@ public class WiFastApp extends Application {
 		current_order = new Order();
         shopManager = new ShopListManager(context);	// Start getting shop list
         checkedIn = false;
+        points = 0;
     }
 
 	public static String getProperty(String propertyName){

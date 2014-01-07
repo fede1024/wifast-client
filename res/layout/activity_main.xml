@@ -2,9 +2,15 @@
     android:id="@+id/ScrollView01"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-<RelativeLayout 
+
+<LinearLayout 
+    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    >
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
@@ -12,12 +18,13 @@
     <TextView
         android:id="@+id/welcomeTitle"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="90dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="@string/wifast"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="17dp"
         android:textSize="40sp" />
 
     <GridLayout
@@ -117,6 +124,17 @@
 
     </GridLayout>
 
-
 </RelativeLayout>
+
+<TextView
+    android:id="@+id/points"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:text="@string/points"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:layout_marginTop="10pt"
+    android:textSize="20sp" />
+
+</LinearLayout>
 </ScrollView>

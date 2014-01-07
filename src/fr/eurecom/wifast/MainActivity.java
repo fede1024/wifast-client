@@ -21,10 +21,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,12 +52,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import fr.eurecom.wifast.library.JSONDownload;
+
 public class MainActivity extends Activity {
 	public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private String server_url; 
+    
+    protected TextView pointsTV;
 
     /**
      * Substitute you own sender ID here. This is the project number you got
@@ -88,6 +95,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         TextView title = (TextView) this.findViewById(R.id.welcomeTitle);
+		this.pointsTV = (TextView)findViewById(R.id.points);
 		TextView d_button1 = (TextView)findViewById(R.id.d_button1);
 		TextView d_button2 = (TextView)findViewById(R.id.d_button2);
 		TextView d_button3 = (TextView)findViewById(R.id.d_button3);
@@ -95,11 +103,13 @@ public class MainActivity extends Activity {
 		
 		Typeface typface=Typeface.createFromAsset(getAssets(),"fonts/OleoScriptSwashCaps-Regular.ttf");
         title.setTypeface(typface);
+        pointsTV.setTypeface(typface);
 		d_button1.setTypeface(typface);
 		d_button2.setTypeface(typface);
 		d_button3.setTypeface(typface);
 		d_button4.setTypeface(typface);
         title.setText(WiFastApp.shopManager.getShopName());
+        pointsTV.setText("Points: loading");
         
         server_url = WiFastApp.getProperty("server_url");
 	    context = getApplicationContext();
@@ -113,6 +123,32 @@ public class MainActivity extends Activity {
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
 	    }
+    }
+    
+	@Override
+    public void onResume(){
+		super.onResume();
+
+        pointsTV.setText("Points: loading");
+
+		String serverURL = WiFastApp.getProperty("server_url")+"/api/getPoints";
+
+    	final SharedPreferences prefs = getSharedPreferences("wifast", Context.MODE_PRIVATE);
+        String uuid = prefs.getString(WiFastApp.PROPERTY_UUID, "");
+        Log.d("DEBUG", "UUID: " + uuid);
+	        
+		try {
+	        serverURL += "?shop=" + URLEncoder.encode(WiFastApp.shopManager.getShopName(), "UTF-8");
+
+			if(uuid != null)
+				serverURL += "&uuid=" + URLEncoder.encode(uuid, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		PointsCallback c = new PointsCallback();
+		new JSONDownload(c).execute("GET", "JSONObject", serverURL);
     }
     
     /**
@@ -364,6 +400,34 @@ public class MainActivity extends Activity {
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.commit();
     }
+
+    private class PointsCallback implements Callback {
+		@Override
+		public boolean handleMessage(Message msg) {
+			Integer p = 0;
+			
+			if(msg.obj == null)
+				Log.d("ERROR", "Error getting points.");
+			else{
+				JSONObject resp = (JSONObject)msg.obj;
+				
+				try {
+					p = resp.getInt("points");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (WiFastApp.points != p)
+				Log.d("DEBUG", "Points update " + WiFastApp.points + " => " + p);
+
+			WiFastApp.points = p;
+			pointsTV.setText("Points: " + p);
+
+    		return true;
+		}
+	}
     
 
     @Override
