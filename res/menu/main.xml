@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!-- <item
-        android:id="@+id/cart_menu_button"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:icon="@drawable/shopping_trolley"
-        android:title="@string/cart_button_string" /> -->
+    <item android:id="@+id/change_shop"
+          android:icon="@drawable/refresh"
+          android:title="Change shop" />
+    <item android:id="@+id/exit_app"
+          android:icon="@drawable/cancel"
+          android:title="Exit"/>
     
 </menu>

@@ -89,4 +89,7 @@ public class WiFastApp extends Application {
 		return false;
 	}
 
+	public void setToCheckinAgain(){
+		WiFastApp.checkedIn = false;	
+	}
 }

@@ -30,14 +30,15 @@ public class ShopListActivity extends Activity {
 		for (int i = 0; i < WiFastApp.shops.length(); ++i) {
 			try {
 				JSONObject item = (JSONObject)WiFastApp.shops.get(i);
-				double distance = item.getDouble("dist");
+				//double distance = item.getDouble("dist");
 				HashMap<String, String> map = new HashMap<String, String>();
+				String completeName = item.getString("name");
+				String[] parts = completeName.split(" - ");
+				
 	            map.put("rowid", "" + i);
-	            map.put("name", item.getString("name"));
-	            if (distance < 0)
-		            map.put("dist", "");
-	            else
-		            map.put("dist", "Distance: " + new DecimalFormat("#.##").format(distance) + " km");
+	            map.put("name", parts[0]);
+	            map.put("pos", parts[1]);
+	            map.put("completeName", completeName);
 	            list.add(map);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -45,16 +46,16 @@ public class ShopListActivity extends Activity {
 			}
 		}
 		
-		ListAdapter adapter = new SimpleAdapter(this, list, android.R.layout.two_line_list_item,
-				new String[] { "name", "dist" },
-				new int[] { android.R.id.text1, android.R.id.text2 });
+		ListAdapter adapter = new SimpleAdapter(this, list, android.R.layout.simple_list_item_2,
+				new String[] { "name", "pos" },
+				new int[] { android.R.id.text1 , android.R.id.text2 });
 		listview.setAdapter(adapter);
 
 		listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 				HashMap<String, String> item = (HashMap<String, String>) parent.getItemAtPosition(position);
-				WiFastApp.shopManager.setShopName(item.get("name"));
+				WiFastApp.shopManager.setShopName(item.get("completeName"));
 				finish();
 			}
 		});
