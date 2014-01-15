@@ -15,7 +15,7 @@ import java.util.Set;
 import fr.eurecom.wifast.WiFastApp;
 
 public class Order {
-	private Hashtable<String, Integer> items;
+	public Hashtable<String, Integer> items;
 	public Integer orderId;
 	public boolean ready;
 	

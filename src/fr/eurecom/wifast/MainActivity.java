@@ -27,7 +27,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -442,12 +441,9 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    public void ordersButtonPressed(View view) {
-        System.out.println("orders_button");
-    }
-
-    public void profileButtonPressed(View view) {
-        System.out.println("profile_button");
+    public void favoritesButtonPressed(View view) {
+        Intent intent = new Intent(this, Favorites.class);
+        startActivity(intent);
     }
 
     public void cartButtonPressed(View view) {

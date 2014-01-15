@@ -18,6 +18,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -40,6 +41,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 	public static Callback removeItemCallback;
 	private boolean buttonEnabled;
 	private final boolean cartList; // if true this is not the menu list but the cart list
+	private boolean buyDisabled=false; // if true add button is disabled
 	
 	public MenuItemArrayAdapter(Context context, ArrayList<JSONObject> values, boolean cartList) {
 		super(context, R.layout.menu_list_item, values);
@@ -48,6 +50,10 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		for(int i = 0; i < getCount(); i++) ready[i] = false;
 		buttonEnabled = true;
 		this.cartList = cartList;
+	}
+	
+	public void setBuyButtonDisabled(){
+		this.buyDisabled = true;
 	}
 	
 	@Override
@@ -99,7 +105,10 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		else {
 			TextView slv = (TextView) convertView.findViewById(R.id.secondLine);
 			ImageButton add = (ImageButton) convertView.findViewById(R.id.addToCartButton);
-			add.setOnClickListener(new AddCartOnClickListener(name, icon));
+			if (this.buyDisabled)
+				add.setVisibility(View.INVISIBLE);
+			else
+				add.setOnClickListener(new AddCartOnClickListener(name, icon));
 			slv.setText(descr);
 		}
 		
