@@ -17,15 +17,25 @@ public class CashRegister extends Activity {
         	this.finish();
         	return;
         }
+        setContentView(R.layout.activity_cash_register);
 
-		setContentView(R.layout.activity_cash_register);
+        TextView exp_time = (TextView)this.findViewById(R.id.exp_time_order_val);
+        String time;
+        time = this.getIntent().getStringExtra("EXP_TIME");
+        if (time == null) {
+            time = "02:00";
+        }
+        exp_time.setText(time);
 		
 		TextView order = (TextView)findViewById(R.id.order_num);
+        TextView time_label = (TextView)findViewById(R.id.exp_time_order);
 		TextView info = (TextView)findViewById(R.id.order_info);
 		
 		Typeface typface=Typeface.createFromAsset(getAssets(),"fonts/OleoScriptSwashCaps-Regular.ttf");
         order.setTypeface(typface);
         info.setTypeface(typface);
+        time_label.setTypeface(typface);
+        exp_time.setTypeface(typface);
 		
         if(WiFastApp.current_order.orderId == null){
         	order.setText("Order: error");

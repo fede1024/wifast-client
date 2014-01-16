@@ -1,11 +1,5 @@
 package fr.eurecom.wifast;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -28,6 +22,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
 import fr.eurecom.wifast.library.ImageManager;
 
 public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
@@ -292,6 +293,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			String desc = "";
 			String nutr_values = "";
 			String image = "";
+            String time = null;
 			double price = 0;
 			
 			try {
@@ -300,6 +302,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 				desc = obj.getString("description");
 				nutr_values = obj.getString("nutrients");
 				price = obj.getDouble("price");
+                time = obj.getString("expected_time");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -310,6 +313,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 		    intent.putExtra("description", desc);
 		    intent.putExtra("nutrients", nutr_values);
 		    intent.putExtra("price", price);
+            intent.putExtra("expected_time", time);
 		    context.startActivity(intent);
 		}
 	  }

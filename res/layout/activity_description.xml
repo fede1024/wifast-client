@@ -17,112 +17,138 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="27sp" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/long_desc"
-        android:orientation="vertical"
-        android:paddingTop="10dp" >
-
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal"
-            android:paddingBottom="1dp"
-            android:paddingTop="1dp" >
+            android:layout_height="match_parent"
+            android:layout_below="@+id/long_desc"
+            android:orientation="vertical"
+            android:paddingTop="10dp" >
 
-            <TextView
-                android:id="@+id/calories"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/calories"
-                android:textSize="17sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="1dp"
+                android:paddingTop="1dp" >
 
-            <TextView
-                android:id="@+id/cal_val"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignBaseline="@+id/calories"
-                android:layout_alignBottom="@+id/calories"
-                android:layout_alignParentRight="true"
-                android:text="@string/cal_val"
-                android:textSize="17sp" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/calories"
+                    android:textSize="17sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal"
-            android:paddingBottom="1dp"
-            android:paddingTop="1dp" >
+                <TextView
+                    android:id="@+id/cal_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBaseline="@+id/calories"
+                    android:layout_alignBottom="@+id/calories"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/cal_val"
+                    android:textSize="17sp" />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/carb"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/carb"
-                android:textSize="17sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="1dp"
+                android:paddingTop="1dp" >
 
-            <fr.eurecom.wifast.library.TextProgressBar
-                android:id="@+id/carb_progr"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:progressDrawable="@drawable/progr_bar" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/carb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/carb"
+                    android:textSize="17sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal"
-            android:paddingBottom="1dp"
-            android:paddingTop="1dp" >
+                <fr.eurecom.wifast.library.TextProgressBar
+                    android:id="@+id/carb_progr"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:progressDrawable="@drawable/progr_bar" />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/proteins"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/proteins"
-                android:textSize="17sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="1dp"
+                android:paddingTop="1dp" >
 
-            <fr.eurecom.wifast.library.TextProgressBar
-                android:id="@+id/prot_progr"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:progressDrawable="@drawable/progr_bar" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/proteins"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/proteins"
+                    android:textSize="17sp" />
 
-        <RelativeLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal"
-            android:paddingBottom="1dp"
-            android:paddingTop="1dp" >
+                <fr.eurecom.wifast.library.TextProgressBar
+                    android:id="@+id/prot_progr"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:progressDrawable="@drawable/progr_bar" />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/fat"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/fat"
-                android:textSize="17sp" />
+            <RelativeLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="1dp"
+                android:paddingTop="1dp" >
 
-            <fr.eurecom.wifast.library.TextProgressBar
-                android:id="@+id/fat_progr"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:progressDrawable="@drawable/progr_bar" />
-        </RelativeLayout>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/fat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/fat"
+                    android:textSize="17sp" />
+
+                <fr.eurecom.wifast.library.TextProgressBar
+                    android:id="@+id/fat_progr"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:progressDrawable="@drawable/progr_bar" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="1dp"
+                android:paddingTop="1dp" >
+
+                <TextView
+                    android:id="@+id/exp_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/expected_time"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/exp_time_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBaseline="@+id/exp_time"
+                    android:layout_alignBottom="@+id/exp_time"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/expected_time_val"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </LinearLayout>
 
     <TextView
         android:id="@+id/long_desc"
@@ -136,8 +162,8 @@
 
     <ImageView
         android:id="@+id/big_icon"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_below="@+id/prod_name"
         android:layout_centerHorizontal="true"
         android:scaleType="fitXY"

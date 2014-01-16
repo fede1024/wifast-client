@@ -1,14 +1,5 @@
 package fr.eurecom.wifast;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -17,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +17,15 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CartActivity extends Activity {
 	private ListView listView;
@@ -166,7 +167,16 @@ public class CartActivity extends Activity {
 				progBar.setVisibility(View.INVISIBLE);
 				return true;
 			}
-	        Intent intent = new Intent(getApplicationContext(), CashRegister.class);
+
+            Intent intent = new Intent(getApplicationContext(), CashRegister.class);
+            JSONObject obj = (JSONObject)msg.obj;
+            try {
+                String time = obj.getString("expected_time");
+                intent.putExtra("EXP_TIME", time);
+            } catch (JSONException e){
+                Log.e("ORDER", "Error decoding expected time");
+            }
+
 	        startActivity(intent);
 			finish();
 			return false;

@@ -36,5 +36,7 @@
     <string name="proteins">Proteins (g)</string>
     <string name="fat">Fat (g)</string>
     <string name="desc_price">Price: 0.00 €</string>
+    <string name="expected_time">Average waiting time:</string>
+    <string name="expected_time_val">02:00</string>
 
 </resources>

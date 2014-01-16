@@ -17,7 +17,7 @@
         android:layout_marginTop="22dp"
         android:gravity="center"
         android:text="Order: 0"
-        android:textSize="70sp" />
+        android:textSize="50sp" />
 
     <TextView
         android:id="@+id/order_info"
@@ -25,9 +25,30 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/order_num"
         android:layout_below="@+id/order_num"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="Your order is in preparation."
         android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/exp_time_order"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/order_num"
+        android:layout_below="@+id/order_info"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="@string/expected_time"
+        android:textSize="30sp" />
+    <TextView
+        android:id="@+id/exp_time_order_val"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/order_num"
+        android:layout_below="@+id/exp_time_order"
+        android:gravity="center"
+        android:text="@string/expected_time_val"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -1,16 +1,17 @@
 package fr.eurecom.wifast.library;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Map.Entry;
-import java.util.Set;
+import android.os.Handler.Callback;
+import android.os.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Handler.Callback;
-import android.os.Message;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import fr.eurecom.wifast.WiFastApp;
 
 public class Order {
@@ -119,7 +120,7 @@ public class Order {
 				new JSONDownload(c).execute("POST", "JSONObject", url, order.toString());
 		
 			} else {
-				System.out.println("Error creting jsonarray in sendToServer");
+				System.out.println("Error creating jsonarray in sendToServer");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -155,9 +156,9 @@ public class Order {
 			
 			items = new Hashtable<String,Integer>();
 			ready = false;
-			Message m = new Message();
-			m.obj = orderId.toString();
-			this.done.handleMessage(m);
+			//Message m = new Message();
+			//m.obj = orderId.toString();
+			this.done.handleMessage(msg);
 			return false;
 		}
 	}

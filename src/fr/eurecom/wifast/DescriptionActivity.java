@@ -1,7 +1,5 @@
 package fr.eurecom.wifast;
 
-import java.text.DecimalFormat;
-
 import android.app.ActionBar;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -15,6 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.text.DecimalFormat;
+
 import fr.eurecom.wifast.library.ImageManager;
 import fr.eurecom.wifast.library.TextProgressBar;
 
@@ -36,6 +37,7 @@ public class DescriptionActivity extends FragmentActivity {
 		String desc = bundle.getString("description");
 		String nutr = bundle.getString("nutrients");
 		double desc_price = bundle.getDouble("price");
+        String expect_time = bundle.getString("expected_time");
 		
 		TextView prod_name = (TextView) this.findViewById(R.id.prod_name);
 		Typeface typface=Typeface.createFromAsset(getAssets(),"fonts/OleoScriptSwashCaps-Regular.ttf");
@@ -79,6 +81,9 @@ public class DescriptionActivity extends FragmentActivity {
 		
 		TextView price = (TextView) this.findViewById(R.id.desc_price);
 		price.setText("Price: "+new DecimalFormat("0.00 €").format(desc_price));
+
+        TextView time = (TextView) this.findViewById(R.id.exp_time_val);
+        time.setText(expect_time);
 	}
 
 	// Image loading callback
