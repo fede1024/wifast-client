@@ -132,4 +132,9 @@ public class ShopListManager {
     public String getShopName(){
     	return this.shopName;
     }
+
+    public String getShopBrand(){
+    	String[] parts = this.shopName.split(" - ");
+	    return parts[0];
+    }
 }

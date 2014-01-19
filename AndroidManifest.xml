@@ -88,6 +88,10 @@
             android:name="fr.eurecom.wifast.DescriptionActivity"
             android:label="@string/title_activity_description" >
         </activity>
+        <activity
+            android:name="fr.eurecom.wifast.Favorites"
+            android:label="@string/title_activity_favorites" >
+        </activity>
     </application>
 
 </manifest>

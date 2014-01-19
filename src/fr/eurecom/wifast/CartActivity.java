@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -130,6 +131,7 @@ public class CartActivity extends Activity {
     
     public void payButtonPressed(View view){
     	System.out.println("Finish order menu button");
+    	addToFavorites();
     	if(WiFastApp.current_order.getItems().isEmpty()){
 			Toast.makeText(this, "Your shop list is empty.", Toast.LENGTH_SHORT).show();
 			return;
@@ -184,5 +186,36 @@ public class CartActivity extends Activity {
 			finish();
 			return false;
 		}
+	}
+	
+	private void addToFavorites(){
+    	final SharedPreferences prefs = getSharedPreferences("wifast", Context.MODE_PRIVATE);
+        String favorites[] = prefs.getString("FAVORITES:"+WiFastApp.shopManager.getShopBrand(), "").split(";");
+        HashSet<String> favSet = new LinkedHashSet<String>();
+        String favString = "";
+        int count = 0, i = 0;
+        
+		Enumeration<String> en = WiFastApp.current_order.items.keys();
+		while (en.hasMoreElements()) {
+			String key = en.nextElement();
+			favSet.add(key);
+			count++;
+		}
+		
+		for(i = 0; i < favorites.length && count < 20; i++)
+			if (!favSet.contains(favorites[i])){
+				favSet.add(favorites[i]);
+				count++;
+			}
+		
+		for(String f : favSet)
+			favString += ";" + f;
+		
+        //Log.d("BOH", "FAV:"+favString);
+        
+        // Writing data to SharedPreferences
+        Editor editor = prefs.edit();
+        editor.putString("FAVORITES:"+WiFastApp.shopManager.getShopBrand(), favString);
+        editor.commit();
 	}
 }
