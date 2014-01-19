@@ -1,20 +1,17 @@
 package fr.eurecom.wifast;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class Favorites extends Activity {
 
@@ -23,8 +20,12 @@ public class Favorites extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_favorites);
 
+        TextView title = (TextView) this.findViewById(R.id.textView1);
+		Typeface typface=Typeface.createFromAsset(getAssets(),"fonts/OleoScriptSwashCaps-Regular.ttf");
+        title.setTypeface(typface);
+
     	final SharedPreferences prefs = getSharedPreferences("wifast", Context.MODE_PRIVATE);
-        String favorites[] = prefs.getString("FAVORITES:"+WiFastApp.shopManager.getShopName(), "").split(";");
+        String favorites[] = prefs.getString("FAVORITES:"+WiFastApp.shopManager.getShopBrand(), "").split(";");
 
         // Set up the ViewPager, attaching the adapter.
         // Transform a JSONArray into a ArrayList<JSONObject>

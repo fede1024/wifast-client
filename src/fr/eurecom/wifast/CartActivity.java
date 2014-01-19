@@ -187,27 +187,32 @@ public class CartActivity extends Activity {
 	
 	private void addToFavorites(){
     	final SharedPreferences prefs = getSharedPreferences("wifast", Context.MODE_PRIVATE);
-        String favorites[] = prefs.getString("FAVORITES:"+WiFastApp.shopManager.getShopName(), "").split(";");
-        String fString = "";
+        String favorites[] = prefs.getString("FAVORITES:"+WiFastApp.shopManager.getShopBrand(), "").split(";");
+        HashSet<String> favSet = new LinkedHashSet<String>();
+        String favString = "";
         int count = 0, i = 0;
         
 		Enumeration<String> en = WiFastApp.current_order.items.keys();
 		while (en.hasMoreElements()) {
 			String key = en.nextElement();
-			fString += ";" + key;
+			favSet.add(key);
 			count++;
 		}
 		
-		for(i = 0; i < favorites.length && count < 20; i++){
-			fString += ";" + favorites[i];
-			count++;
-		}
+		for(i = 0; i < favorites.length && count < 20; i++)
+			if (!favSet.contains(favorites[i])){
+				favSet.add(favorites[i]);
+				count++;
+			}
 		
-        //Log.d("BOH", "FAV:"+fString);
+		for(String f : favSet)
+			favString += ";" + f;
+		
+        //Log.d("BOH", "FAV:"+favString);
         
         // Writing data to SharedPreferences
         Editor editor = prefs.edit();
-        editor.putString("FAVORITES:"+WiFastApp.shopManager.getShopName(), fString);
+        editor.putString("FAVORITES:"+WiFastApp.shopManager.getShopBrand(), favString);
         editor.commit();
 	}
 }
