@@ -16,20 +16,30 @@ public class ShopListManager {
 	private Location lastLocation;
 	private Context myContext;
 	private String shopName;
+	private String forcedCoords;
 	
 	public ShopListManager(Context context) {
 		this.myContext = context;			
 		serverURL = WiFastApp.getProperty("server_url") + "/api/getShops";
+		forcedCoords = WiFastApp.getProperty("forced_coordinates");
 	}
 
 	public boolean getJSONShops(Callback c) {
 		String searchURL  = "";
-		if(lastLocation != null)
-			searchURL = serverURL+"?lat="+lastLocation.getLatitude()+"&lon="+lastLocation.getLongitude() + 
-			"&acc=" + lastLocation.getAccuracy();
+
+		if(forcedCoords != null){
+	        String part[] = forcedCoords.split(";");
+			searchURL = serverURL+"?lat="+part[0]+"&lon="+part[1]+"&acc=" + part[2];		
+			Log.d("WARNING", "Forced location: " + forcedCoords);
+		}
 		else {
-			Log.d("ERROR", "Location null!!!");
-			searchURL = serverURL;
+			if(lastLocation != null)
+				searchURL = serverURL+"?lat="+lastLocation.getLatitude()+"&lon="+lastLocation.getLongitude() + 
+				"&acc=" + lastLocation.getAccuracy();
+			else {
+				Log.d("ERROR", "Location null!!!");
+				searchURL = serverURL;
+			}
 		}
 		
 		System.out.println("Searching URL: "+searchURL);
