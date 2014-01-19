@@ -89,7 +89,7 @@
             android:padding="5dp"
             android:scaleType="centerInside"
             android:onClick="favoritesButtonPressed"
-            android:src="@drawable/users" />
+            android:src="@drawable/favorites" />
 
         <TextView
             android:id="@+id/d_button2"
