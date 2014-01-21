@@ -36,5 +36,6 @@
     <string name="proteins">Proteins (g)</string>
     <string name="fat">Fat (g)</string>
     <string name="desc_price">Price: 0.00 €</string>
+    <string name="title_activity_shop_detail">ShopDetail</string>
 
 </resources>

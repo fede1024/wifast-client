@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/shopListView"
         android:layout_centerHorizontal="true"
-        android:text="Open map" />
+        android:text="Open map"
+        android:onClick="openMap"/>
 
 </RelativeLayout>
