@@ -44,6 +44,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -434,6 +435,34 @@ public class MainActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+        
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	WiFastApp app;
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.change_shop:
+				Intent i = getBaseContext().getPackageManager()
+						.getLaunchIntentForPackage(getBaseContext().getPackageName());
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			        app = (WiFastApp) getApplicationContext();
+			        app.setToCheckinAgain();
+			        finish();
+				startActivity(i);
+				return true;
+            case R.id.exit_app:
+            	Intent intent = new Intent(Intent.ACTION_MAIN);
+            	intent.addCategory(Intent.CATEGORY_HOME);
+            	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		        app = (WiFastApp) getApplicationContext();
+		        app.setToCheckinAgain();
+		        finish();
+            	startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void menuButtonPressed(View view) {

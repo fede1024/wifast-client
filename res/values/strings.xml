@@ -21,7 +21,7 @@
     <string name="title_activity_shop_list">Select your Shop:</string>
     <string name="initial_price">0,00 €</string>
     <string name="title_activity_cash_register">CashRegister</string>
-    <string name="menu_activity_title">Your products:</string>
+    <string name="menu_activity_title">Products:</string>
     <string name="cart_activity_title">Your purchases:</string>
     <string name="pay_activity_title">Payment method:</string>
     <string name="quantity">Qt: 0</string>
@@ -39,5 +39,6 @@
     <string name="expected_time">Average waiting time:</string>
     <string name="expected_time_val">02:00</string>
     <string name="title_activity_favorites">Favorites</string>
+    <string name="title_activity_shop_detail">ShopDetail</string>
 
 </resources>
