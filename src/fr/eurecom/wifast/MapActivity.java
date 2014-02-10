@@ -3,11 +3,14 @@ package fr.eurecom.wifast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +29,9 @@ public class MapActivity extends Activity {
         setContentView(R.layout.activity_map);
         
         MapFragment mapFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+
+        final ActionBar actionBar = this.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         map = mapFrag.getMap();
         
@@ -70,14 +76,29 @@ public class MapActivity extends Activity {
         }
     }
     
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.map, menu);
+		return true;
+	}
+    
     protected class myClickListener implements OnInfoWindowClickListener {
-
 		@Override
 		public void onInfoWindowClick(Marker arg0) {
 			Intent intent = new Intent(MapActivity.this, ShopDetail.class);
 			intent.putExtra("NAME", arg0.getTitle());
 			MapActivity.this.startActivity(intent);
 		}
-    	
+    }
+    
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

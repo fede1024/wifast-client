@@ -118,14 +118,17 @@ public class CartActivity extends Activity {
 			Toast.makeText(this, "Your shop list is empty.", Toast.LENGTH_SHORT).show();
 			return;
     	}
-		payBt.setEnabled(false);
-		progBar.setVisibility(View.VISIBLE);
-		Toast.makeText(this, "Order finished. Sending to server.", Toast.LENGTH_SHORT).show();
-		final SharedPreferences pref = getSharedPreferences("wifast", Context.MODE_PRIVATE);
-		String uuid = pref.getString(WiFastApp.PROPERTY_UUID, "");
-
-		Callback c = new orderSentCallback();
-		WiFastApp.current_order.sendToServer(uuid, c);
+//		payBt.setEnabled(false);
+//		progBar.setVisibility(View.VISIBLE);
+//		Toast.makeText(this, "Order finished. Sending to server.", Toast.LENGTH_SHORT).show();
+//		final SharedPreferences pref = getSharedPreferences("wifast", Context.MODE_PRIVATE);
+//		String uuid = pref.getString(WiFastApp.PROPERTY_UUID, "");
+//
+//		Callback c = new orderSentCallback();
+//		WiFastApp.current_order.sendToServer(uuid, c);
+		Intent intent = new Intent(this, PaymentActivity.class);
+		startActivity(intent);
+		finish();
     }
     
     private class newItemCallback implements Callback {
@@ -170,7 +173,7 @@ public class CartActivity extends Activity {
             try {
                 String time = obj.getString("expected_time");
                 intent.putExtra("EXP_TIME", time);
-            } catch (JSONException e){
+            } catch (JSONException e) {
                 Log.e("ORDER", "Error decoding expected time");
             }
             

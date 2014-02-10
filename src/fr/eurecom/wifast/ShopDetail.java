@@ -25,6 +25,7 @@ public class ShopDetail extends Activity {
 		this.name = intent.getStringExtra("NAME");
 		String brand = this.name.split(" ")[0];
 		JSONObject shop = this.getShopFromName(this.name);
+		setTitle(brand);
 		
 		ImageView picture = (ImageView) findViewById(R.id.shop_image);
 		if (brand.equals("Subway"))

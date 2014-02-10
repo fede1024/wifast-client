@@ -99,7 +99,7 @@
         </activity>
         <activity
             android:name="fr.eurecom.wifast.MapActivity"
-            android:label="@string/title_activity_description" >
+            android:label="@string/title_activity_map" >
         </activity>
         <activity
             android:name="fr.eurecom.wifast.ShopDetail"
@@ -121,6 +121,10 @@
             android:label="@string/title_activity_promotion"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Holo.Light.Dialog" >
+        </activity>
+        <activity
+            android:name="fr.eurecom.wifast.PaymentActivity"
+            android:label="@string/title_activity_payment" >
         </activity>
     </application>
 
