@@ -30,6 +30,8 @@ public class WiFastApp extends Application {
 	public static Order current_order;
 	public static Boolean checkedIn;
 	public static Integer points;
+	public static Integer promotion_id = -1;
+	public static JSONArray promotions = null;
 
     @Override
     public void onCreate() {

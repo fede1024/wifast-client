@@ -97,20 +97,31 @@
             android:name="fr.eurecom.wifast.Favorites"
             android:label="@string/title_activity_favorites" >
         </activity>
+        <activity
             android:name="fr.eurecom.wifast.MapActivity"
             android:label="@string/title_activity_description" >
         </activity>
         <activity
             android:name="fr.eurecom.wifast.ShopDetail"
-            android:label="@string/title_activity_shop_detail" 
+            android:label="@string/title_activity_shop_detail"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Holo.Light.Dialog" >
         </activity>
-        
-        
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBvpxoTSTdpYiLeBi56bj-fDOY2nru_tgs" />
+
+        <activity
+            android:name="fr.eurecom.wifast.PromotionActivity"
+            android:label="@string/title_activity_promotion" >
+        </activity>
+        <activity
+            android:name="fr.eurecom.wifast.PromotionActivityDialog"
+            android:label="@string/title_activity_promotion"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Holo.Light.Dialog" >
+        </activity>
     </application>
 
 </manifest>

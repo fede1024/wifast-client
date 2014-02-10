@@ -40,5 +40,6 @@
     <string name="expected_time_val">02:00</string>
     <string name="title_activity_favorites">Favorites</string>
     <string name="title_activity_shop_detail">ShopDetail</string>
+    <string name="title_activity_promotion">PromotionActivity</string>
 
 </resources>

@@ -29,11 +29,57 @@
 		   android:background="#4fa5d5" />
 
 		<RelativeLayout
+		    android:id="@+id/bar_layout"
 		    android:layout_width="wrap_content"
 		    android:layout_height="50dp"
 		    android:layout_gravity="bottom"
 		    android:orientation="horizontal"
 		    android:padding="0dp" >
+		    
+		    <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentBottom="true"
+		        android:layout_alignParentTop="true"
+		        android:layout_alignParentLeft="true"
+		        android:paddingRight="7dp"
+		        android:gravity="center"
+		        android:text="Promotions"
+		        android:onClick="promotionsButton"
+		        android:clickable="true"
+		        android:layout_marginLeft="10dp"
+		        android:textStyle="bold"
+		        android:id="@+id/promotion_text"
+		        android:textColor="@android:color/holo_blue_light"
+		        android:textSize="20sp" />
+			<LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="5dp"
+		        android:paddingBottom="5dp"
+		        android:layout_marginTop="5dp"
+		        android:id="@+id/promotion_layout"
+		        android:onClick="promotionsButton"
+		        android:visibility="gone" >
+		        <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="25dp"
+		        android:text="40 points"
+		        android:singleLine="true"
+		        android:id="@+id/promotion_points"
+		        android:layout_marginLeft="5dp" />
+		        <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="25dp"
+		        android:textColor="@android:color/holo_green_dark"
+		        android:textStyle="bold"
+		        android:text="-5€"
+		        android:id="@+id/promotion_euro"
+		        android:layout_marginLeft="5dp" />
+		    </LinearLayout>
 		    
 		    <TextView
 		        android:id="@+id/priceTV"

@@ -75,6 +75,7 @@
             android:background="@drawable/menu_item"
             android:padding="5dp"
             android:scaleType="centerInside"
+            android:onClick="promotionButtonPressed"
             android:src="@drawable/coupons" />
 
         <ImageButton

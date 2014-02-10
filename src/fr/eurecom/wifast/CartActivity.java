@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -97,8 +98,6 @@ public class CartActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /* MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.order, menu); */
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -106,24 +105,7 @@ public class CartActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // This is called when the Home (Up) button is pressed in the action bar.
-                // Create a simple intent that starts the hierarchical parent activity and
-                // use NavUtils in the Support Package to ensure proper handling of Up.
-                /* Intent upIntent = new Intent(this, MenuActivity.class);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is not part of the application's task, so create a new task
-                    // with a synthesized back stack.
-                    TaskStackBuilder.from(this)
-                            // If there are ancestor activities, they should be added here.
-                            .addNextIntent(upIntent)
-                            .startActivities();*/
-                    this.finish();
-                /*} else {
-                    // This activity is part of the application's task, so simply
-                    // navigate up to the hierarchical parent activity.
-                    NavUtils.navigateUpTo(this, upIntent);
-                }*/
-                overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+                this.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -156,7 +138,17 @@ public class CartActivity extends Activity {
 		@Override
 		public boolean handleMessage(Message msg) {
 			Double cost = WiFastApp.current_order.getTotalCost();
-
+			if (WiFastApp.promotion_id != -1) {
+				try {
+    				JSONObject promo = WiFastApp.promotions.getJSONObject(WiFastApp.promotion_id);
+    				int euro = promo.getInt("euro");
+    				cost -= euro;
+    				if (cost < 0) cost = 0.0; //You mustn't have a negative total!
+    			} catch (JSONException e) {
+    				e.printStackTrace();
+    			}
+			}
+				
 			priceTV.setText(new DecimalFormat("0.00 €").format(cost));
 			return false;
 		}
@@ -180,6 +172,21 @@ public class CartActivity extends Activity {
                 intent.putExtra("EXP_TIME", time);
             } catch (JSONException e){
                 Log.e("ORDER", "Error decoding expected time");
+            }
+            
+            if (WiFastApp.promotion_id != -1) {
+            	try {
+    				JSONObject promo = WiFastApp.promotions.getJSONObject(WiFastApp.promotion_id);
+    				int points = promo.getInt("points");
+    				
+    				WiFastApp.points -= points;
+                	if (WiFastApp.points < 0) WiFastApp.points = 0;
+                	
+                	WiFastApp.promotion_id = -1;    				
+    			} catch (JSONException e) {
+    				e.printStackTrace();
+    			}
+            	
             }
 
 	        startActivity(intent);
@@ -217,5 +224,37 @@ public class CartActivity extends Activity {
         Editor editor = prefs.edit();
         editor.putString("FAVORITES:"+WiFastApp.shopManager.getShopBrand(), favString);
         editor.commit();
+	}
+	
+	public void promotionsButton(View view){
+		Intent intent = new Intent(this, PromotionActivityDialog.class);
+		startActivity(intent);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (WiFastApp.promotion_id != -1 && WiFastApp.promotions != null) {
+			try {
+				JSONObject promo = WiFastApp.promotions.getJSONObject(WiFastApp.promotion_id);
+				int points = promo.getInt("points");
+				int euro = promo.getInt("euro");
+				
+				((LinearLayout) findViewById(R.id.promotion_layout)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.promotion_text)).setVisibility(View.GONE);
+				((TextView) findViewById(R.id.promotion_points)).setText(points+" points: ");
+				((TextView) findViewById(R.id.promotion_euro)).setText("-"+euro+"€");
+			} catch (JSONException e) {
+				e.printStackTrace();
+				((LinearLayout) findViewById(R.id.promotion_layout)).setVisibility(View.GONE);
+				((TextView) findViewById(R.id.promotion_text)).setVisibility(View.VISIBLE);
+			}
+			
+		} else {
+			((LinearLayout) findViewById(R.id.promotion_layout)).setVisibility(View.GONE);
+			((TextView) findViewById(R.id.promotion_text)).setVisibility(View.VISIBLE);
+		}
+		Callback updatePrices = new newItemCallback(priceTV);
+        updatePrices.handleMessage(null);
 	}
 }

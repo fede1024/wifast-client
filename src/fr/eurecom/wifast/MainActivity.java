@@ -408,7 +408,7 @@ public class MainActivity extends Activity {
 			
 			if(msg.obj == null)
 				Log.d("ERROR", "Error getting points.");
-			else{
+			else {
 				JSONObject resp = (JSONObject)msg.obj;
 				
 				try {
@@ -472,6 +472,11 @@ public class MainActivity extends Activity {
 
     public void favoritesButtonPressed(View view) {
         Intent intent = new Intent(this, Favorites.class);
+        startActivity(intent);
+    }
+    
+    public void promotionButtonPressed(View view) {
+    	Intent intent = new Intent(this, PromotionActivity.class);
         startActivity(intent);
     }
 

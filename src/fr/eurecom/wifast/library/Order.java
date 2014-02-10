@@ -112,6 +112,7 @@ public class Order {
 			if (arr.length() > 0) {
 				order.put("items", arr);
 				order.put("shop", WiFastApp.shopManager.getShopName());
+				order.put("promotion_id", WiFastApp.promotion_id+1);
 				System.out.println("in sendOrder");
 		
 				String url = WiFastApp.getProperty("server_url")+"/api/newOrder";
@@ -145,6 +146,13 @@ public class Order {
 
 			System.out.println("Order sent! > " + msg.obj.toString());
 			JSONObject obj = (JSONObject)msg.obj;
+			
+			try {
+				int points = obj.getInt("points");
+				WiFastApp.points = points;
+			} catch (JSONException e) {
+				System.out.println("MISSING POINTS");
+			}
 			
 			try {
 				orderId = obj.getInt("order_id");

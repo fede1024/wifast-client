@@ -172,6 +172,7 @@ public class SplashScreen extends Activity {
 				WiFastApp.types = obj.getJSONArray("types");
 				WiFastApp.points = obj.getInt("points");
 				WiFastApp.menu_map = new HashMap<String, JSONObject>();
+				WiFastApp.promotions = obj.getJSONArray("promotions");
 				int items_len;
 				
 				JSONArray items = obj.getJSONArray("items");
