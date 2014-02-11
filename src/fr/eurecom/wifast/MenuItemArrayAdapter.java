@@ -146,6 +146,7 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			
 			Integer n = WiFastApp.current_order.get(this.id);
 			n--;
+			WiFastApp.current_order.removeItem(this.id);
 			if(n == 0){
 				TranslateAnimation anim = new TranslateAnimation(0, view.getWidth(), 0, 0);
 				anim.setInterpolator(new AccelerateInterpolator());
@@ -164,10 +165,8 @@ public class MenuItemArrayAdapter extends ArrayAdapter<JSONObject> {
 			}
 			else{
 				cnt.setText("Qt: " + Integer.toString(n));		// update the quantity
-				removeItemCallback.handleMessage(null);// Execute price update
+				removeItemCallback.handleMessage(null);			// Execute price update
 			}
-
-			WiFastApp.current_order.removeItem(this.id);
 		}
 	}
 	

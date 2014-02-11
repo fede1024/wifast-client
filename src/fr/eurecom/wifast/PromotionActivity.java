@@ -2,6 +2,7 @@ package fr.eurecom.wifast;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,10 @@ public class PromotionActivity extends Activity {
 		
 		TextView points_view = (TextView) findViewById(R.id.points_view);
 		points_view.setText("Points: "+points);
+
+		Typeface typface=Typeface.createFromAsset(getAssets(),"fonts/OleoScriptSwashCaps-Regular.ttf");
+        TextView title = (TextView) this.findViewById(R.id.textView1);
+        title.setTypeface(typface);
 		
 		final ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true); 

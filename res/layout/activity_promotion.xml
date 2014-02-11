@@ -9,6 +9,15 @@
     tools:context=".PromotionActivity"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="283dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:text="Promotions" />
+
     <TextView 
         android:id="@+id/points_view"
         android:layout_width="wrap_content"
@@ -25,24 +34,15 @@
         android:paddingBottom="5dp"
         android:background="@drawable/menu_item"
         android:id="@+id/points0_layout" >
+
         <TextView
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:text="0 points"
-        android:layout_marginLeft="5dp"
-        android:id="@+id/points0_1" />
-        <TextView
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:textColor="@android:color/holo_green_dark"
-        android:textStyle="bold"
-        android:text="0€"
-        android:layout_marginLeft="5dp"
-        android:id="@+id/points0_2" />
+            android:id="@+id/points0_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1.35"
+            android:text="No promotion"
+            android:textSize="25dp" />
     </LinearLayout>
     <LinearLayout 
         android:orientation="horizontal"
@@ -69,6 +69,7 @@
         android:textColor="@android:color/holo_green_dark"
         android:textStyle="bold"
         android:text="-1€"
+        android:gravity="right"
         android:layout_marginLeft="5dp"
         android:id="@+id/points10_2" />
     </LinearLayout>
@@ -97,6 +98,7 @@
         android:textColor="@android:color/holo_green_dark"
         android:textStyle="bold"
         android:text="-5€"
+        android:gravity="right"
         android:layout_marginLeft="5dp"
         android:id="@+id/points40_2" />
     </LinearLayout>
@@ -126,6 +128,7 @@
         android:textStyle="bold"
         android:text="-10€"
         android:layout_marginLeft="5dp"
+        android:gravity="right"
         android:id="@+id/points70_2" />
     </LinearLayout>
     <LinearLayout 
@@ -150,6 +153,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:textSize="25dp"
+        android:gravity="right"
         android:textColor="@android:color/holo_green_dark"
         android:textStyle="bold"
         android:text="-15€"

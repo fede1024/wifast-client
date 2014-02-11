@@ -2,6 +2,7 @@ package fr.eurecom.wifast;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,7 +63,7 @@ public class PromotionActivityDialog extends Activity {
 		}
 		
 		l = (LinearLayout) findViewById(R.id.points0_layout);
-		l.setOnClickListener(new MyClickListener(4));
+		l.setOnClickListener(new MyClickListener(-1));
 	}
 
 	@Override

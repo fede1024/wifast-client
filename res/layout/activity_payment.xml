@@ -9,6 +9,15 @@
     android:orientation="vertical"
     tools:context=".PaymentActivity" >
 
+	<TextView
+        android:id="@+id/textView1"
+        android:layout_width="283dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:text="Confirm:" />
+
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -48,6 +57,27 @@
         android:textColor="@android:color/darker_gray"
         android:text="Credit Card" />
     </LinearLayout>
-    
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/menu_item"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:src="@drawable/google_wallet_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Google"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

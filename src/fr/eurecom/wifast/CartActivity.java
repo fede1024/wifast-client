@@ -141,6 +141,7 @@ public class CartActivity extends Activity {
 		@Override
 		public boolean handleMessage(Message msg) {
 			Double cost = WiFastApp.current_order.getTotalCost();
+			Log.d("kjkjkjk", cost.toString());
 			if (WiFastApp.promotion_id != -1) {
 				try {
     				JSONObject promo = WiFastApp.promotions.getJSONObject(WiFastApp.promotion_id);
@@ -151,12 +152,14 @@ public class CartActivity extends Activity {
     				e.printStackTrace();
     			}
 			}
+			Log.d("kjkjkjk", cost.toString());
 				
 			priceTV.setText(new DecimalFormat("0.00 €").format(cost));
 			return false;
 		}
 	}
 
+    /*
 	private class orderSentCallback implements Callback {
 		@Override
 		public boolean handleMessage(Message msg) {
@@ -186,7 +189,7 @@ public class CartActivity extends Activity {
                 	if (WiFastApp.points < 0) WiFastApp.points = 0;
                 	
                 	WiFastApp.promotion_id = -1;    				
-    			} catch (JSONException e) {
+    			} catch (JSONException e) { 
     				e.printStackTrace();
     			}
             	
@@ -196,7 +199,7 @@ public class CartActivity extends Activity {
 			finish();
 			return false;
 		}
-	}
+	} */
 	
 	private void addToFavorites(){
     	final SharedPreferences prefs = getSharedPreferences("wifast", Context.MODE_PRIVATE);
